@@ -611,7 +611,7 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [ico-scrutinizer-build]: https://scrutinizer-ci.com/g/mostafamaklad/laravel-permission-mongodb/badges/build.png?b=master
 [ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
 [ico-code-quality]: https://img.shields.io/scrutinizer/g/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
-[ico-styleci]: https://styleci.io/repos/100890051/shield
+[ico-styleci]: https://styleci.io/repos/100894062/shield
 [ico-downloads]: https://img.shields.io/packagist/dt/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
 [ico-code-climate]:https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb/badges/gpa.svg
 [ico-test-coverage]:https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb/badges/coverage.svg
@@ -623,7 +623,7 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [link-scrutinizer-build]: https://scrutinizer-ci.com/g/mostafamaklad/laravel-permission-mongodb/build-status/master
 [link-scrutinizer]: https://scrutinizer-ci.com/g/mostafamaklad/laravel-permission-mongodb/code-structure
 [link-code-quality]: https://scrutinizer-ci.com/g/mostafamaklad/laravel-permission-mongodb
-[link-styleci]: https://styleci.io/repos/100890051
+[link-styleci]: https://styleci.io/repos/100894062
 [link-downloads]: https://packagist.org/packages/mostafamaklad/laravel-permission-mongodb
 [link-code-climate]: https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb
 [link-test-coverage]: https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb/coverage
