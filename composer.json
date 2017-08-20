@@ -2,8 +2,14 @@
     "name": "mostafamaklad/laravel-permission-mongodb",
     "description": "Permission handling for Laravel 5.4 and up using mongodb",
     "keywords": [
-        "Maklad",
-        "Permission"
+        "laravel",
+        "security",
+        "mongodb",
+        "permission",
+        "acl",
+        "mostafamaklad",
+        "maklad",
+        "mostafa"
     ],
     "homepage": "https://github.com/mostafamaklad/laravel-permission-mongodb",
     "license": "MIT",
