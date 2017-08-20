@@ -1,0 +1,41 @@
+language: php
+
+php:
+  - 7
+  - 7.1
+
+matrix:
+  fast_finish: true
+
+env:
+  matrix:
+    - COMPOSER_FLAGS="--prefer-lowest"
+    - COMPOSER_FLAGS=""
+
+sudo: false
+
+services:
+  - mongodb
+  - mysql
+
+addons:
+  apt:
+    sources:
+    - mongodb-3.0-precise
+    packages:
+    - mongodb-org-server
+
+before_script:
+  - pecl install mongodb
+  - mysql -e 'create database unittest;'
+  - travis_retry composer self-update
+  - travis_retry composer install --no-interaction
+  - travis_retry composer self-update
+  - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
+
+script:
+  - mkdir -p build/logs
+  - vendor/bin/phpunit --coverage-text --coverage-clover build/logs/clover.xml
+
+after_success:
+  - sh -c 'php vendor/bin/coveralls -v'
