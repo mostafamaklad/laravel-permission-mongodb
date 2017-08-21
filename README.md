@@ -152,12 +152,16 @@ return [
 First add the `Maklad\Permission\Traits\HasRoles` trait to your User model(s):
 
 ```php
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Auth\Authenticatable;
+use Jenssegers\Mongodb\Eloquent\Model as Model;
+use Illuminate\Foundation\Auth\Access\Authorizable;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Maklad\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Model implements AuthenticatableContract, AuthorizableContract
 {
-    use HasRoles;
+    use Authenticatable, Authorizable, HasRoles;
 
     // ...
 }
@@ -166,7 +170,7 @@ class User extends Authenticatable
 - note that if you need to use `HasRoles` trait with another model ex.`Page` you will also need to add `protected $guard_name = 'web';` as well to that model or you would get an error
 
 ```php
-use Illuminate\Database\Eloquent\Model;
+use Jenssegers\Mongodb\Eloquent\Model as Model;
 use Maklad\Permission\Traits\HasRoles;
 
 class Page extends Model
