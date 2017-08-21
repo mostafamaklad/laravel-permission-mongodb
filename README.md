@@ -45,7 +45,7 @@ $user->can('edit articles');
 * [Database Seeding](#database-seeding)
 * [Extending](#extending)
 * [Troubleshooting](#troubleshooting)
-    * [Cache](#Cache)
+    * [Cache](#cache)
 * [Need a UI?](#need-a-ui)
 * [Change log](#change-log)
 * [Testing](#testing)
