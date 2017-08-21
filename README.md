@@ -30,6 +30,30 @@ Because all permissions will be registered on [Laravel's gate](https://laravel.c
 $user->can('edit articles');
 ```
 
+## Table of contents
+* [Installation](#installation)
+* [Usage](#usage)
+    * [Using permissions](#using-permissions)
+    * [Using permissions and roles](#using-permissions-and-roles)
+    * [Using Blade directives](#using-blade-directives)
+* [Using multiple guards](#using-multiple-guards)
+    * [Using permissions and roles with multiple guards](#using-permissions-and-roles-with-multiple-guards)
+    * [Assigning permissions and roles to guard users](#assigning-permissions-and-roles-to-guard-users)
+    * [Using blade directives with multiple guards](#using-blade-directives-with-multiple-guards)
+* [Using a middleware](#using-a-middleware)
+* [Using artisan commands](#using-artisan-commands)
+* [Database Seeding](#database-seeding)
+* [Extending](#extending)
+* [Troubleshooting](#troubleshooting)
+    * [Cache](#Cache)
+* [Need a UI?](#need-a-ui?)
+* [Change log](#changelog)
+* [Testing](#testing)
+* [Contributing](#contributing)
+* [Security](#security)
+* [Credits](#credits)
+* [License](#license)
+
 ## Installation
 
 This package can be used in Laravel 5.4 or higher.
