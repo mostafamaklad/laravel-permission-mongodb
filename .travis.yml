@@ -39,3 +39,4 @@ script:
 
 after_success:
   - sh -c 'php vendor/bin/coveralls -v'
+  
