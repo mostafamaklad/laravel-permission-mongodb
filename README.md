@@ -566,33 +566,33 @@ Two notes about Database Seeding:
 
 2. Here's a sample seeder, which clears the cache, creates permissions, and then assigns permissions to roles:
 ```php
-	use Illuminate\Database\Seeder;
-	use Maklad\Permission\Models\Role;
-	use Maklad\Permission\Models\Permission;
+use Illuminate\Database\Seeder;
+use Maklad\Permission\Models\Role;
+use Maklad\Permission\Models\Permission;
 
-	class RolesAndPermissionsSeeder extends Seeder
-	{
-	    public function run()
-    	{
-        	// Reset cached roles and permissions
-	        app()['cache']->forget('maklad.permission.cache');
-
-	        // create permissions
-	        Permission::create(['name' => 'edit articles']);
-	        Permission::create(['name' => 'delete articles']);
-	        Permission::create(['name' => 'publish articles']);
-            Permission::create(['name' => 'unpublish articles']);
-
-	        // create roles and assign existing permissions
-	        $role = Role::create(['name' => 'writer']);
-	        $role->givePermissionTo('edit articles');
-	        $role->givePermissionTo('delete articles');
-
-	        $role = Role::create(['name' => 'admin']);
-	        $role->givePermissionTo('publish articles');
-            $role->givePermissionTo('unpublish articles');
-	    }
-	}
+class RolesAndPermissionsSeeder extends Seeder
+{
+    public function run()
+    {
+        // Reset cached roles and permissions
+        app()['cache']->forget('maklad.permission.cache');
+        
+        // create permissions
+        Permission::create(['name' => 'edit articles']);
+        Permission::create(['name' => 'delete articles']);
+        Permission::create(['name' => 'publish articles']);
+        Permission::create(['name' => 'unpublish articles']);
+        
+        // create roles and assign existing permissions
+        $role = Role::create(['name' => 'writer']);
+        $role->givePermissionTo('edit articles');
+        $role->givePermissionTo('delete articles');
+        
+        $role = Role::create(['name' => 'admin']);
+        $role->givePermissionTo('publish articles');
+        $role->givePermissionTo('unpublish articles');
+    }
+}
 ```
 
 ## Extending
