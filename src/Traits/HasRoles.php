@@ -277,7 +277,7 @@ trait HasRoles
     public function getPermissionsViaRoles(): Collection
     {
         return $this->load('roles', 'roles.permissions')
-            ->roles->flatMap(function ($role) {
+            ->roles->flatMap(function (Role $role) {
                 return $role->permissions;
             })->sort()->values();
     }
