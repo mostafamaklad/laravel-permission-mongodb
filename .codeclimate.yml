@@ -1,18 +1,22 @@
 engines:
-  duplication:
-    enabled: true
-  config:
-    languages:
-    - php
-  fixme:
-    enabled: true
-  php:md:
-    enabled: true
-  issue_override:
-    severity: info
-ratings:
-  paths:
-  - "**.php"
-exclude_paths:
-- config/
-- tests/
+      fixme:
+        enabled: true
+        issue_override:
+          severity: info
+
+# engines:
+#   duplication:
+#     enabled: true
+#     config:
+#       languages:
+#       - php
+#   fixme:
+#     enabled: true
+#   phpmd:
+#     enabled: true
+# ratings:
+#   paths:
+#   - "**.php"
+# exclude_paths:
+# - config/
+# - tests/
