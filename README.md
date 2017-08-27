@@ -5,6 +5,7 @@
 [![Build Status][ico-travis]][link-travis]
 [![Code Climate][ico-code-climate]][link-code-climate]
 [![StyleCI][ico-styleci]][link-styleci]
+[![Dependency Status][ico-dependency]][link-dependency]
 [![Total Downloads][ico-downloads]][link-downloads]
 
 This package allows you to manage user permissions and roles in a database.
@@ -672,6 +673,7 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [ico-code-climate]:https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb/badges/gpa.svg
 [ico-test-coverage]:https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb/badges/coverage.svg
 [ico-issue-count]:https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb/badges/issue_count.svg
+[ico-dependency]: https://gemnasium.com/badges/github.com/mostafamaklad/laravel-permission-mongodb.svg
 
 
 [link-packagist]: https://packagist.org/packages/mostafamaklad/laravel-permission-mongodb
@@ -683,6 +685,7 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [link-downloads]: https://packagist.org/packages/mostafamaklad/laravel-permission-mongodb
 [link-code-climate]: https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb
 [link-test-coverage]: https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb/coverage
+[link-dependency]: https://gemnasium.com/github.com/mostafamaklad/laravel-permission-mongodb
 [link-issue-count]: https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb
 
 
