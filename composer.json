@@ -40,12 +40,9 @@
     },
     "require-dev": {
         "codeclimate/php-test-reporter": "dev-master",
-        "squizlabs/php_codesniffer": "~2.0",
         "monolog/monolog": "^1.22",
         "orchestra/testbench": "~3.4.2",
-        "phpunit/phpunit": "^6.0",
-        "phpunit/php-invoker": "~1.1",
-        "phpmd/phpmd": "~2.0"
+        "phpunit/phpunit": "^6.0"
     },
     "autoload": {
         "psr-4": {

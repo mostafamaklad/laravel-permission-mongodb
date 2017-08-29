@@ -44,7 +44,6 @@ before_script:
 script:
   - mkdir -p build/logs
   - vendor/bin/phpunit
-  - vendor/bin/phpcs --standard=PSR2 ./src/ ./test
 
 after_success:
   - sh -c 'php vendor/bin/coveralls -v'
