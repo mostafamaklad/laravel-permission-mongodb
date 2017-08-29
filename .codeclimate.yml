@@ -1,0 +1,22 @@
+---
+engines:
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - php
+  phpcodesniffer:
+    enabled: true
+  phpmd:
+    enabled: true
+    checks:
+      CleanCode/ElseExpression:
+        enabled: false
+      Controversial/Superglobals:
+        enabled: false
+ratings:
+  paths:
+  - "**.blade.php"
+  - "**.php"
+exclude_paths:
+- tests/

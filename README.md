@@ -5,7 +5,7 @@
 [![Build Status][ico-travis]][link-travis]
 [![Code Climate][ico-codeclimate]][link-codeclimate]
 [![StyleCI][ico-styleci]][link-styleci]
-[![Coverage Status][ico-code-coverage]][link-code-coverage]
+[![Coverage Status][ico-coveralls]][link-coveralls]
 [![Dependency Status][ico-gemnasium]][link-gemnasium]
 [![Total Downloads][ico-downloads]][link-packagist]
 
@@ -681,8 +681,8 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [ico-scrutinizer-build]: https://scrutinizer-ci.com/g/mostafamaklad/laravel-permission-mongodb/badges/build.png?style=flat-square
 [ico-scrutinizer-coverage]: https://img.shields.io/scrutinizer/coverage/g/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
 
-[link-code-coverage]: https://coveralls.io/github/mostafamaklad/laravel-permission-mongodb
-[ico-code-coverage]: https://coveralls.io/repos/github/mostafamaklad/laravel-permission-mongodb/badge.svg?style=flat-square
+[link-coveralls]: https://coveralls.io/github/mostafamaklad/laravel-permission-mongodb
+[ico-coveralls]: https://coveralls.io/repos/github/mostafamaklad/laravel-permission-mongodb/badge.svg?style=flat-square
 
 [link-styleci]: https://styleci.io/repos/100894062
 [ico-styleci]: https://styleci.io/repos/100894062/shield?style=flat-square
