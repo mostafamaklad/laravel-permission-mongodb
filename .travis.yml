@@ -49,5 +49,3 @@ after_success:
   - sh -c 'php vendor/bin/coveralls -v'
   - vendor/bin/test-reporter
   - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml
