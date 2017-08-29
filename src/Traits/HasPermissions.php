@@ -67,7 +67,7 @@ trait HasPermissions
     }
 
     /**
-     * @param string|array|Permission|\Illuminate\Support\Collection $permissions
+     * @param string|Permission $permissions
      *
      * @return Permission
      */
@@ -75,13 +75,6 @@ trait HasPermissions
     {
         if (is_string($permissions)) {
             return app(Permission::class)->findByName($permissions, $this->getDefaultGuardName());
-        }
-
-        if (is_array($permissions)) {
-            return app(Permission::class)
-                ->whereIn('name', $permissions)
-                ->whereId('guard_name', $this->getGuardNames())
-                ->get();
         }
 
         return $permissions;
