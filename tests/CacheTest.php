@@ -39,7 +39,7 @@ class CacheTest extends TestCase
     }
 
     /** @test */
-    public function permission_creation_and_updating_should_flush_the_cache()
+    public function permission_creation_and_updating_and_deleting_should_flush_the_cache()
     {
         $permission = app(Permission::class)->create(['name' => 'new']);
         $this->assertCount(1, DB::getQueryLog());
@@ -53,6 +53,12 @@ class CacheTest extends TestCase
 
         $this->registrar->registerPermissions();
         $this->assertCount(6, DB::getQueryLog());
+
+        $permission->delete();
+        $this->assertCount(7, DB::getQueryLog());
+
+        $this->registrar->registerPermissions();
+        $this->assertCount(9, DB::getQueryLog());
     }
 
     /** @test */
@@ -70,6 +76,12 @@ class CacheTest extends TestCase
 
         $this->registrar->registerPermissions();
         $this->assertCount(7, DB::getQueryLog());
+
+        $role->delete();
+        $this->assertCount(8, DB::getQueryLog());
+
+        $this->registrar->registerPermissions();
+        $this->assertCount(10, DB::getQueryLog());
     }
 
     /** @test */

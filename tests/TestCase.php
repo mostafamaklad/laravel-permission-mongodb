@@ -85,7 +85,7 @@ abstract class TestCase extends Orchestra
             'host'     => 'localhost',
             'port'     => '27017',
             'driver'   => 'mongodb',
-            'database' => 'cx_sa_test',
+            'database' => 'laravel_permission_mongodb_test',
             'prefix'   => '',
         ]);
 
