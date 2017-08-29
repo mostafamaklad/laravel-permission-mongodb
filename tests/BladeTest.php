@@ -24,26 +24,24 @@ class BladeTest extends TestCase
     public function all_blade_directives_will_evaluate_falsly_when_there_is_nobody_logged_in()
     {
         $permission = 'edit-articles';
-        $role       = 'writer';
-        $roles      = [$role];
+        $role = 'writer';
+        $roles = [$role];
 
         $this->assertEquals('does not have permission', $this->renderView('can', ['permission' => $permission]));
         $this->assertEquals('does not have role', $this->renderView('role', [$role]));
         $this->assertEquals('does not have role', $this->renderView('hasRole', [$role]));
         $this->assertEquals('does not have all of the given roles', $this->renderView('hasAllRoles', $roles));
-        $this->assertEquals('does not have all of the given roles',
-            $this->renderView('hasAllRoles', ['roles' => implode('|', $roles)]));
+        $this->assertEquals('does not have all of the given roles', $this->renderView('hasAllRoles', ['roles' => implode('|', $roles)]));
         $this->assertEquals('does not have any of the given roles', $this->renderView('hasAnyRole', $roles));
-        $this->assertEquals('does not have any of the given roles',
-            $this->renderView('hasAnyRole', ['roles' => implode('|', $roles)]));
+        $this->assertEquals('does not have any of the given roles', $this->renderView('hasAnyRole', ['roles' => implode('|', $roles)]));
     }
 
     /** @test */
     public function all_blade_directives_will_evaluate_falsy_when_somebody_without_roles_or_permissions_is_logged_in()
     {
         $permission = 'edit-articles';
-        $role       = 'writer';
-        $roles      = 'writer';
+        $role = 'writer';
+        $roles = 'writer';
 
         auth()->setUser($this->testUser);
 
@@ -58,8 +56,8 @@ class BladeTest extends TestCase
     public function all_blade_directives_will_evaluate_falsy_when_somebody_with_another_guard_is_logged_in()
     {
         $permission = 'edit-articles';
-        $role       = 'writer';
-        $roles      = 'writer';
+        $role = 'writer';
+        $roles = 'writer';
 
         auth('admin')->setUser($this->testAdmin);
 
@@ -96,8 +94,7 @@ class BladeTest extends TestCase
     {
         auth('admin')->setUser($this->getSuperAdmin());
 
-        $this->assertEquals('has role for guard',
-            $this->renderView('guardRole', ['role' => 'super-admin', 'guard' => 'admin']));
+        $this->assertEquals('has role for guard', $this->renderView('guardRole', ['role' => 'super-admin', 'guard' => 'admin']));
     }
 
     /** @test */
@@ -113,48 +110,45 @@ class BladeTest extends TestCase
     {
         auth('admin')->setUser($this->getSuperAdmin());
 
-        $this->assertEquals('has role',
-            $this->renderView('guardHasRole', ['role' => 'super-admin', 'guard' => 'admin']));
+        $this->assertEquals('has role', $this->renderView('guardHasRole', ['role' => 'super-admin', 'guard' => 'admin']));
     }
 
     /** @test */
-    public function the_hasanyrole_directive_will_evaluate_false_when_the_logged_in_user_does_not_have_any_of_the_required_roles(
-    ) {
+    public function the_hasanyrole_directive_will_evaluate_false_when_the_logged_in_user_does_not_have_any_of_the_required_roles()
+    {
         $roles = ['writer', 'intern'];
 
         auth()->setUser($this->getMember());
 
         $this->assertEquals('does not have any of the given roles', $this->renderView('hasAnyRole', compact('roles')));
-        $this->assertEquals('does not have any of the given roles', $this->renderView('hasAnyRole', ['roles' => '"writer"|"intern"']));
+        $this->assertEquals('does not have any of the given roles', $this->renderView('hasAnyRole', ['roles' => implode('|', $roles)]));
     }
 
     /** @test */
-    public function the_hasanyrole_directive_will_evaluate_true_when_the_logged_in_user_does_have_some_of_the_required_roles(
-    ) {
+    public function the_hasanyrole_directive_will_evaluate_true_when_the_logged_in_user_does_have_some_of_the_required_roles()
+    {
         $roles = ['member', 'writer', 'intern'];
 
         auth()->setUser($this->getMember());
 
         $this->assertEquals('does have some of the roles', $this->renderView('hasAnyRole', compact('roles')));
-        $this->assertEquals('does have some of the roles',
-            $this->renderView('hasAnyRole', ['roles' => implode('|', $roles)]));
+        $this->assertEquals('does have some of the roles', $this->renderView('hasAnyRole', ['roles' => implode('|', $roles)]));
     }
 
     /** @test */
-    public function the_hasanyrole_directive_will_evaluate_true_when_the_logged_in_user_does_have_some_of_the_required_roles_for_the_given_guard(
-    ) {
+    public function the_hasanyrole_directive_will_evaluate_true_when_the_logged_in_user_does_have_some_of_the_required_roles_for_the_given_guard()
+    {
         $roles = ['super-admin', 'moderator'];
         $guard = 'admin';
 
         auth('admin')->setUser($this->getSuperAdmin());
 
-        $this->assertEquals('does have some of the roles',
-            $this->renderView('guardHasAnyRole', compact('roles', 'guard')));
+        $this->assertEquals('does have some of the roles', $this->renderView('guardHasAnyRole', compact('roles', 'guard')));
     }
 
     /** @test */
-    public function the_hasanyrole_directive_will_evaluate_true_when_the_logged_in_user_does_have_some_of_the_required_roles_in_pipe(
-    ) {
+    public function the_hasanyrole_directive_will_evaluate_true_when_the_logged_in_user_does_have_some_of_the_required_roles_in_pipe()
+    {
         $guard = 'admin';
 
         auth('admin')->setUser($this->getSuperAdmin());
@@ -163,26 +157,24 @@ class BladeTest extends TestCase
     }
 
     /** @test */
-    public function the_hasanyrole_directive_will_evaluate_false_when_the_logged_in_user_doesnt_have_some_of_the_required_roles_in_pipe(
-    ) {
+    public function the_hasanyrole_directive_will_evaluate_false_when_the_logged_in_user_doesnt_have_some_of_the_required_roles_in_pipe()
+    {
         $guard = '';
 
         auth('admin')->setUser($this->getMember());
 
-        $this->assertEquals('does not have any of the given roles',
-            $this->renderView('guardHasAnyRolePipe', compact('guard')));
+        $this->assertEquals('does not have any of the given roles', $this->renderView('guardHasAnyRolePipe', compact('guard')));
     }
 
     /** @test */
-    public function the_hasallroles_directive_will_evaluate_false_when_the_logged_in_user_does_not_have_all_required_roles(
-    ) {
+    public function the_hasallroles_directive_will_evaluate_false_when_the_logged_in_user_does_not_have_all_required_roles()
+    {
         $roles = ['member', 'writer'];
 
         auth()->setUser($this->getMember());
 
         $this->assertEquals('does not have all of the given roles', $this->renderView('hasAllRoles', compact('roles')));
-        $this->assertEquals('does not have all of the given roles',
-            $this->renderView('hasAllRoles', ['roles' => implode('|', $roles)]));
+        $this->assertEquals('does not have all of the given roles', $this->renderView('hasAllRoles', ['roles' => implode('|', $roles)]));
     }
 
     /** @test */
@@ -199,13 +191,12 @@ class BladeTest extends TestCase
         auth()->setUser($user);
 
         $this->assertEquals('does have all of the given roles', $this->renderView('hasAllRoles', compact('roles')));
-        $this->assertEquals('does have all of the given roles',
-            $this->renderView('hasAllRoles', ['roles' => implode('|', $roles)]));
+        $this->assertEquals('does have all of the given roles', $this->renderView('hasAllRoles', ['roles' => implode('|', $roles)]));
     }
 
     /** @test */
-    public function the_hasallroles_directive_will_evaluate_true_when_the_logged_in_user_does_have_all_required_roles_for_the_given_guard(
-    ) {
+    public function the_hasallroles_directive_will_evaluate_true_when_the_logged_in_user_does_have_all_required_roles_for_the_given_guard()
+    {
         $roles = ['super-admin', 'moderator'];
         $guard = 'admin';
 
@@ -217,13 +208,12 @@ class BladeTest extends TestCase
 
         auth('admin')->setUser($admin);
 
-        $this->assertEquals('does have all of the given roles',
-            $this->renderView('guardHasAllRoles', compact('roles', 'guard')));
+        $this->assertEquals('does have all of the given roles', $this->renderView('guardHasAllRoles', compact('roles', 'guard')));
     }
 
     /** @test */
-    public function the_hasallroles_directive_will_evaluate_true_when_the_logged_in_user_does_have_all_required_roles_in_pipe(
-    ) {
+    public function the_hasallroles_directive_will_evaluate_true_when_the_logged_in_user_does_have_all_required_roles_in_pipe()
+    {
         $guard = 'admin';
 
         $admin = $this->getSuperAdmin();
@@ -234,15 +224,14 @@ class BladeTest extends TestCase
 
         auth('admin')->setUser($admin);
 
-        $this->assertEquals('does have all of the given roles',
-            $this->renderView('guardHasAllRolesPipe', compact('guard')));
+        $this->assertEquals('does have all of the given roles', $this->renderView('guardHasAllRolesPipe', compact('guard')));
     }
 
     /** @test */
-    public function the_hasallroles_directive_will_evaluate_false_when_the_logged_in_user_doesnt_have_all_required_roles_in_pipe(
-    ) {
+    public function the_hasallroles_directive_will_evaluate_false_when_the_logged_in_user_doesnt_have_all_required_roles_in_pipe()
+    {
         $guard = '';
-        $user  = $this->getMember();
+        $user = $this->getMember();
 
         $user->assignRole('writer');
 
@@ -250,8 +239,7 @@ class BladeTest extends TestCase
 
         auth()->setUser($user);
 
-        $this->assertEquals('does not have all of the given roles',
-            $this->renderView('guardHasAllRolesPipe', compact('guard')));
+        $this->assertEquals('does not have all of the given roles', $this->renderView('guardHasAllRolesPipe', compact('guard')));
     }
 
     protected function getWriter()
@@ -289,6 +277,6 @@ class BladeTest extends TestCase
             $view = view($view)->with($parameters);
         }
 
-        return trim((string)($view));
+        return trim((string) ($view));
     }
 }
