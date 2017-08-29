@@ -3,10 +3,11 @@
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
 [![Build Status][ico-travis]][link-travis]
-[![Code Climate][ico-code-climate]][link-code-climate]
+[![Code Climate][ico-codeclimate]][link-codeclimate]
 [![StyleCI][ico-styleci]][link-styleci]
-[![Dependency Status][ico-dependency]][link-dependency]
-[![Total Downloads][ico-downloads]][link-downloads]
+[![Coverage Status][ico-code-coverage]][link-code-coverage]
+[![Dependency Status][ico-gemnasium]][link-gemnasium]
+[![Total Downloads][ico-downloads]][link-packagist]
 
 This package allows you to manage user permissions and roles in a database.
 It is inspired from [laravel-permission][link-laravel-permission]. Same code same every thing but it is compatible with [laravel-mongodb][link-laravel-mongodb]
@@ -662,32 +663,38 @@ If you discover any security related issues, please email dev.mostafa.maklad@gma
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
-[ico-version]: https://img.shields.io/packagist/v/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
-[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/mostafamaklad/laravel-permission-mongodb/master.svg?style=flat-square
-[ico-scrutinizer-build]: https://scrutinizer-ci.com/g/mostafamaklad/laravel-permission-mongodb/badges/build.png?b=master
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
-[ico-styleci]: https://styleci.io/repos/100894062/shield
-[ico-downloads]: https://img.shields.io/packagist/dt/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
-[ico-code-climate]:https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb/badges/gpa.svg
-[ico-test-coverage]:https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb/badges/coverage.svg
-[ico-issue-count]:https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb/badges/issue_count.svg
-[ico-dependency]: https://gemnasium.com/badges/github.com/mostafamaklad/laravel-permission-mongodb.svg
-
 
 [link-packagist]: https://packagist.org/packages/mostafamaklad/laravel-permission-mongodb
-[link-travis]: https://travis-ci.org/mostafamaklad/laravel-permission-mongodb
-[link-scrutinizer-build]: https://scrutinizer-ci.com/g/mostafamaklad/laravel-permission-mongodb/build-status/master
-[link-scrutinizer]: https://scrutinizer-ci.com/g/mostafamaklad/laravel-permission-mongodb/code-structure
-[link-code-quality]: https://scrutinizer-ci.com/g/mostafamaklad/laravel-permission-mongodb
-[link-styleci]: https://styleci.io/repos/100894062
-[link-downloads]: https://packagist.org/packages/mostafamaklad/laravel-permission-mongodb
-[link-code-climate]: https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb
-[link-test-coverage]: https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb/coverage
-[link-dependency]: https://gemnasium.com/github.com/mostafamaklad/laravel-permission-mongodb
-[link-issue-count]: https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb
+[ico-version]: https://img.shields.io/packagist/v/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
+[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
 
+
+
+[link-travis]: https://travis-ci.org/mostafamaklad/laravel-permission-mongodb
+[ico-travis]: https://img.shields.io/travis/mostafamaklad/laravel-permission-mongodb/master.svg?style=flat-square
+
+[link-scrutinizer]: https://scrutinizer-ci.com/g/mostafamaklad/laravel-permission-mongodb
+[link-scrutinizer-build]: https://scrutinizer-ci.com/g/mostafamaklad/laravel-permission-mongodb/build-status/master
+[link-scrutinizer-coverage]: https://scrutinizer-ci.com/g/mostafamaklad/laravel-permission-mongodb/code-structure
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/g/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
+[ico-scrutinizer-build]: https://scrutinizer-ci.com/g/mostafamaklad/laravel-permission-mongodb/badges/build.png?style=flat-square
+[ico-scrutinizer-coverage]: https://img.shields.io/scrutinizer/coverage/g/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
+
+[link-code-coverage]: https://coveralls.io/github/mostafamaklad/laravel-permission-mongodb
+[ico-code-coverage]: https://coveralls.io/repos/github/mostafamaklad/laravel-permission-mongodb/badge.svg?style=flat-square
+
+[link-styleci]: https://styleci.io/repos/100894062
+[ico-styleci]: https://styleci.io/repos/100894062/shield?style=flat-square
+
+[link-codeclimate]: https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb
+[link-codeclimate-coverage]: https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb/coverage
+[ico-codeclimate]:https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb/badges/gpa.svg?style=flat-square
+[ico-codeclimate-coverage]:https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb/badges/coverage.svg?style=flat-square
+[ico-codeclimate-issue-count]:https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb/badges/issue_count.svg?style=flat-square
+
+[link-gemnasium]: https://gemnasium.com/github.com/mostafamaklad/laravel-permission-mongodb
+[ico-gemnasium]: https://gemnasium.com/badges/github.com/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
 
 [link-author]: https://github.com/mostafamaklad
 [link-contributors]: ../../contributors
