@@ -39,9 +39,10 @@
         "jenssegers/mongodb": "^3.2"
     },
     "require-dev": {
+        "codeclimate/php-test-reporter": "dev-master",
         "monolog/monolog": "^1.22",
         "orchestra/testbench": "~3.4.2",
-        "phpunit/phpunit" : "^6.0"
+        "phpunit/phpunit": "^6.0"
     },
     "autoload": {
         "psr-4": {
