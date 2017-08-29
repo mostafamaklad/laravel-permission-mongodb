@@ -43,9 +43,12 @@ before_script:
 
 script:
   - mkdir -p build/logs
-  - vendor/bin/phpunit --coverage-text --coverage-clover build/logs/clover.xml
+  - vendor/bin/phpunit
+  - vendor/bin/phpcs --standard=PSR2 ./src/ ./test
 
 after_success:
   - sh -c 'php vendor/bin/coveralls -v'
   - vendor/bin/test-reporter
   - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml
