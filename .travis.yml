@@ -24,6 +24,8 @@ addons:
     - mongodb-3.0-precise
     packages:
     - mongodb-org-server
+    code_climate:
+      repo_token: d1e37bee7168ee1746010705b5a942b491d6d984dfa22eb873d7914335eb3065
 
 before_script:
   - pecl install mongodb
