@@ -40,5 +40,8 @@ class PermissionTest extends TestCase
         $this->assertCount(1, $this->testUserPermission->users);
         $this->assertTrue($this->testUserPermission->users->first()->is($this->testUser));
         $this->assertInstanceOf(User::class, $this->testUserPermission->users->first());
+
+        $this->testUser->delete();
+        $this->assertEquals(0, $this->testUserPermission->users()->count());
     }
 }
