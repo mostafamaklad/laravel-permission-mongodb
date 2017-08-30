@@ -30,9 +30,8 @@ class RoleTest extends TestCase
         $this->assertTrue($this->testUserRole->users->first()->is($this->testUser));
         $this->assertInstanceOf(User::class, $this->testUserRole->users->first());
 
-        // FIXME mongodb detach
-        // $this->testUser->delete();
-        // $this->assertCount(0, $this->testUserRole->users);
+        $this->testUser->delete();
+        $this->assertEquals(0, $this->testUserRole->users()->count());
     }
 
     /** @test */
