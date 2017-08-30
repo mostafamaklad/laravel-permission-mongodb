@@ -7,7 +7,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Contracts\Logging\Log;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Cache\Repository;
-use Maklad\Permission\Contracts\Permission;
+use Jenssegers\Mongodb\Eloquent\Model;
+use Maklad\Permission\Contracts\PermissionInterface as Permission;
 
 class PermissionRegistrar
 {
@@ -34,7 +35,7 @@ class PermissionRegistrar
     {
         try {
             $this->getPermissions()->map(function (Permission $permission) {
-                $this->gate->define($permission->name, function ($user) use ($permission) {
+                $this->gate->define($permission->name, function (Model $user) use ($permission) {
                     return $user->hasPermissionTo($permission);
                 });
             });

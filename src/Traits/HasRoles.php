@@ -4,9 +4,10 @@ namespace Maklad\Permission\Traits;
 
 use Illuminate\Support\Collection;
 use Jenssegers\Mongodb\Eloquent\Builder;
+use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Relations\BelongsToMany;
-use Maklad\Permission\Contracts\Role;
-use Maklad\Permission\Contracts\Permission;
+use Maklad\Permission\Contracts\PermissionInterface as Permission;
+use Maklad\Permission\Contracts\RoleInterface as Role;
 
 trait HasRoles
 {
@@ -14,7 +15,7 @@ trait HasRoles
 
     public static function bootHasRoles()
     {
-        static::deleting(function ($model) {
+        static::deleting(function (Model $model) {
             foreach ($model->roles as $role) {
                 $role->users()->detach($model);
             }

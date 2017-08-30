@@ -4,8 +4,9 @@ namespace Maklad\Permission\Contracts;
 
 use Jenssegers\Mongodb\Relations\BelongsToMany;
 use Maklad\Permission\Exceptions\RoleDoesNotExist;
+use Maklad\Permission\Models\Permission;
 
-interface Role
+interface RoleInterface
 {
     /**
      * A role may be given various permissions.
@@ -19,16 +20,16 @@ interface Role
      * @param string $name
      * @param string|null $guardName
      *
-     * @return Role
+     * @return RoleInterface
      *
      * @throws RoleDoesNotExist
      */
-    public static function findByName(string $name, $guardName): Role;
+    public static function findByName(string $name, $guardName): RoleInterface;
 
     /**
      * Determine if the user may perform the given permission.
      *
-     * @param string|Permission $permission
+     * @param string|PermissionInterface $permission
      *
      * @return bool
      */

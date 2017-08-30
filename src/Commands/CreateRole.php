@@ -3,7 +3,7 @@
 namespace Maklad\Permission\Commands;
 
 use Illuminate\Console\Command;
-use Maklad\Permission\Contracts\Role as RoleContract;
+use Maklad\Permission\Contracts\RoleInterface as Role;
 
 class CreateRole extends Command
 {
@@ -15,7 +15,7 @@ class CreateRole extends Command
 
     public function handle()
     {
-        $roleClass = app(RoleContract::class);
+        $roleClass = app(Role::class);
 
         $role = $roleClass::create([
             'name'       => $this->argument('name'),
