@@ -2,7 +2,7 @@
 
 namespace Maklad\Permission\Test;
 
-use Maklad\Permission\Contracts\Role;
+use Maklad\Permission\Models\Role;
 use Maklad\Permission\Exceptions\RoleDoesNotExist;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\Exceptions\PermissionDoesNotExist;

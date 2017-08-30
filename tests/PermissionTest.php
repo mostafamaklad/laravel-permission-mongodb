@@ -2,7 +2,7 @@
 
 namespace Maklad\Permission\Test;
 
-use Maklad\Permission\Contracts\Permission;
+use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Exceptions\PermissionAlreadyExists;
 
 class PermissionTest extends TestCase
