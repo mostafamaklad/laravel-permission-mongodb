@@ -2,7 +2,6 @@
 
 namespace Maklad\Permission;
 
-
 class Helpers
 {
     /**
