@@ -3,9 +3,10 @@
 namespace Maklad\Permission\Traits;
 
 use Illuminate\Support\Collection;
-use Maklad\Permission\Contracts\Role;
+use Jenssegers\Mongodb\Eloquent\Model;
+use Maklad\Permission\Contracts\PermissionInterface as Permission;
+use Maklad\Permission\Contracts\RoleInterface as Role;
 use Maklad\Permission\PermissionRegistrar;
-use Maklad\Permission\Contracts\Permission;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 
 trait HasPermissions
@@ -81,11 +82,10 @@ trait HasPermissions
     }
 
     /**
-     * @param Permission|Role $roleOrPermission
+     * @param Model|Permission|Role $roleOrPermission
      *
-     * @throws GuardDoesNotMatch
      */
-    protected function ensureModelSharesGuard($roleOrPermission)
+    protected function ensureModelSharesGuard(Model $roleOrPermission)
     {
         if (! $this->getGuardNames()->contains($roleOrPermission->guard_name)) {
             throw GuardDoesNotMatch::create($roleOrPermission->guard_name, $this->getGuardNames());

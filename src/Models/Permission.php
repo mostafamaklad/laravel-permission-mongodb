@@ -5,13 +5,14 @@ namespace Maklad\Permission\Models;
 use Illuminate\Support\Collection;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Relations\BelongsToMany;
+use Maklad\Permission\Helpers;
 use Maklad\Permission\PermissionRegistrar;
 use Maklad\Permission\Traits\RefreshesPermissionCache;
 use Maklad\Permission\Exceptions\PermissionDoesNotExist;
 use Maklad\Permission\Exceptions\PermissionAlreadyExists;
-use Maklad\Permission\Contracts\Permission as PermissionContract;
+use Maklad\Permission\Contracts\PermissionInterface;
 
-class Permission extends Model implements PermissionContract
+class Permission extends Model implements PermissionInterface
 {
     use RefreshesPermissionCache;
 
@@ -55,7 +56,7 @@ class Permission extends Model implements PermissionContract
      */
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(getModelForGuard($this->attributes['guard_name']));
+        return $this->belongsToMany(Helpers::getModelForGuard($this->attributes['guard_name']));
     }
 
     /**
@@ -64,9 +65,9 @@ class Permission extends Model implements PermissionContract
      * @param string $name
      * @param string|null $guardName
      *
-     * @return PermissionContract
+     * @return PermissionInterface
      */
-    public static function findByName(string $name, $guardName = null): PermissionContract
+    public static function findByName(string $name, $guardName = null): PermissionInterface
     {
         $guardName = $guardName ?? config('auth.defaults.guard');
 

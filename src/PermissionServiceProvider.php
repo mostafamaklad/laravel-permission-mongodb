@@ -4,8 +4,8 @@ namespace Maklad\Permission;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\Compilers\BladeCompiler;
-use Maklad\Permission\Contracts\Role as RoleContract;
-use Maklad\Permission\Contracts\Permission as PermissionContract;
+use Maklad\Permission\Contracts\RoleInterface as Role;
+use Maklad\Permission\Contracts\PermissionInterface as Permission;
 
 class PermissionServiceProvider extends ServiceProvider
 {
@@ -49,8 +49,8 @@ class PermissionServiceProvider extends ServiceProvider
     {
         $config = $this->app->config['permission.models'];
 
-        $this->app->bind(PermissionContract::class, $config['permission']);
-        $this->app->bind(RoleContract::class, $config['role']);
+        $this->app->bind(Permission::class, $config['permission']);
+        $this->app->bind(Role::class, $config['role']);
     }
 
     protected function registerBladeExtensions()

@@ -3,15 +3,16 @@
 namespace Maklad\Permission\Models;
 
 use Jenssegers\Mongodb\Eloquent\Model;
+use Maklad\Permission\Helpers;
 use Maklad\Permission\Traits\HasPermissions;
 use Maklad\Permission\Exceptions\RoleDoesNotExist;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\Exceptions\RoleAlreadyExists;
-use Maklad\Permission\Contracts\Role as RoleContract;
+use Maklad\Permission\Contracts\RoleInterface;
 use Maklad\Permission\Traits\RefreshesPermissionCache;
 use Jenssegers\Mongodb\Relations\BelongsToMany;
 
-class Role extends Model implements RoleContract
+class Role extends Model implements RoleInterface
 {
     use HasPermissions;
     use RefreshesPermissionCache;
@@ -55,7 +56,7 @@ class Role extends Model implements RoleContract
      */
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(getModelForGuard($this->attributes['guard_name']));
+        return $this->belongsToMany(Helpers::getModelForGuard($this->attributes['guard_name']));
     }
 
     /**
@@ -64,9 +65,9 @@ class Role extends Model implements RoleContract
      * @param string $name
      * @param string|null $guardName
      *
-     * @return RoleContract
+     * @return RoleInterface
      */
-    public static function findByName(string $name, $guardName = null): RoleContract
+    public static function findByName(string $name, $guardName = null): RoleInterface
     {
         $guardName = $guardName ?? config('auth.defaults.guard');
 

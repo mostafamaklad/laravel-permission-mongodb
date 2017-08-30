@@ -3,7 +3,7 @@
 namespace Maklad\Permission\Test;
 
 use Artisan;
-use Maklad\Permission\Contracts\Role;
+use Maklad\Permission\Models\Role;
 
 class BladeTest extends TestCase
 {
