@@ -15,8 +15,12 @@ trait HasRoles
     public static function bootHasRoles()
     {
         static::deleting(function ($model) {
-            $model->roles()->detach();
-            $model->permissions()->detach();
+            foreach ($model->roles as $role) {
+                $role->users()->detach($model);
+            }
+            foreach ($model->permissions as $permissions) {
+                $permissions->users()->detach($model);
+            }
         });
     }
 
