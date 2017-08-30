@@ -4,9 +4,9 @@ namespace Maklad\Permission\Test;
 
 use Jenssegers\Mongodb\MongodbServiceProvider;
 use Monolog\Handler\TestHandler;
-use Maklad\Permission\Contracts\Role;
 use Maklad\Permission\PermissionRegistrar;
-use Maklad\Permission\Contracts\Permission;
+use Maklad\Permission\Models\Role;
+use Maklad\Permission\Models\Permission;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Maklad\Permission\PermissionServiceProvider;
 

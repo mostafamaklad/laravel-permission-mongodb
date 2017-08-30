@@ -3,7 +3,7 @@
 namespace Maklad\Permission\Commands;
 
 use Illuminate\Console\Command;
-use Maklad\Permission\Contracts\Permission as PermissionContract;
+use Maklad\Permission\Contracts\PermissionInterface as Permission;
 
 class CreatePermission extends Command
 {
@@ -15,7 +15,7 @@ class CreatePermission extends Command
 
     public function handle()
     {
-        $permissionClass = app(PermissionContract::class);
+        $permissionClass = app(Permission::class);
 
         $permission = $permissionClass::create([
             'name'       => $this->argument('name'),
