@@ -1,3 +1,7 @@
+build:
+    environment:
+            mongodb: true
+
 filter:
     excluded_paths: [tests/*]
 
