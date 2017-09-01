@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2ba9ad9f58c9a127c2087f0cd4d704e2",
+    "content-hash": "a7e197b019be1d7bbe68282c431d2f36",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -1700,16 +1700,16 @@
     "packages-dev": [
         {
             "name": "codeclimate/php-test-reporter",
-            "version": "dev-master",
+            "version": "v0.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeclimate/php-test-reporter.git",
-                "reference": "8093f0e532f1ba36d9cbebd30d58c85869b13a0a"
+                "reference": "eab9ac233f23a4c12a12755793750f22fc46dd3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeclimate/php-test-reporter/zipball/8093f0e532f1ba36d9cbebd30d58c85869b13a0a",
-                "reference": "8093f0e532f1ba36d9cbebd30d58c85869b13a0a",
+                "url": "https://api.github.com/repos/codeclimate/php-test-reporter/zipball/eab9ac233f23a4c12a12755793750f22fc46dd3e",
+                "reference": "eab9ac233f23a4c12a12755793750f22fc46dd3e",
                 "shasum": ""
             },
             "require": {
@@ -1722,7 +1722,7 @@
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^2.0.0",
-                "phpunit/phpunit": "^4.8.35 || ^5.7.0 || ^6.0.0"
+                "phpunit/phpunit": "^4.8.31"
             },
             "bin": [
                 "composer/bin/test-reporter"
@@ -1755,7 +1755,7 @@
                 "codeclimate",
                 "coverage"
             ],
-            "time": "2017-06-01 13:19:55"
+            "time": "2017-02-15T22:25:47+00:00"
         },
         {
             "name": "doctrine/instantiator",
@@ -3859,9 +3859,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "codeclimate/php-test-reporter": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
