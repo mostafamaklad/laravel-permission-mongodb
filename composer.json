@@ -37,7 +37,6 @@
         "jenssegers/mongodb": "^3.2"
     },
     "require-dev": {
-        "codeclimate/php-test-reporter": "^0.4",
         "monolog/monolog": "^1.22",
         "orchestra/testbench": "~3.4.2|~5.5.0",
         "phpunit/phpunit": "^6.0"
