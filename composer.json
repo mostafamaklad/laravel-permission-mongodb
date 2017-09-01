@@ -31,17 +31,15 @@
     ],
     "require": {
         "php" : ">=7.0",
-        "illuminate/auth": "~5.4.0",
-        "illuminate/container": "~5.4.0",
-        "illuminate/contracts": "~5.4.0",
-        "illuminate/support": "~5.1",
-        "illuminate/view": "~5.1",
+        "illuminate/auth": "~5.4.0|~5.5.0",
+        "illuminate/container": "~5.4.0|~5.5.0",
+        "illuminate/contracts": "~5.4.0|~5.5.0",
         "jenssegers/mongodb": "^3.2"
     },
     "require-dev": {
         "codeclimate/php-test-reporter": "dev-master",
         "monolog/monolog": "^1.22",
-        "orchestra/testbench": "~3.4.2",
+        "orchestra/testbench": "~3.4.2|~5.5.0",
         "phpunit/phpunit": "^6.0"
     },
     "autoload": {
