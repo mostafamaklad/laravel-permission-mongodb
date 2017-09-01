@@ -1,6 +1,7 @@
 build:
     environment:
         mongodb: true
+        selenium: true
     tests:
         override:
             -
