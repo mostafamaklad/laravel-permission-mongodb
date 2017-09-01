@@ -3,6 +3,7 @@
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
 [![Build Status][ico-travis]][link-travis]
+[![Scrutinizer][ico-scrutinizer]][link-scrutinizer]
 [![Code Climate][ico-codeclimate]][link-codeclimate]
 [![StyleCI][ico-styleci]][link-styleci]
 [![Coverage Status][ico-coveralls]][link-coveralls]
@@ -66,7 +67,7 @@ You can install the package via composer:
 composer require mostafamaklad/laravel-permission-mongodb
 ```
 
-Now add the service provider in `config/app.php` file:
+In Laravel 5.5 the service provider will automatically get registered. In older versions of the framework just add the service provider in `config/app.php` file:
 
 ```php
 'providers' => [
