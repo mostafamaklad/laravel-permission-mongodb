@@ -36,10 +36,6 @@ before_script:
   - travis_retry composer install --no-interaction
   - travis_retry composer self-update
   - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
-
 
 script:
   - mkdir -p build/logs
@@ -48,4 +44,3 @@ script:
 after_success:
   - sh -c 'php vendor/bin/coveralls -v'
   - vendor/bin/test-reporter
-  - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
