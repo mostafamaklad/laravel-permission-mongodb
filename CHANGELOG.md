@@ -2,6 +2,12 @@
 
 All Notable changes to `laravel-permission-mongodb` will be documented in this file.
 
+## 1.2.0 - 2017-09-03
+
+### Added
+- Add getRoleNames() method to return a collection of assigned roles
+- Add getPermissionNames() method to return a collection of all assigned permissions
+
 ## 1.1.0 - 2017-09-01
 
 ### Added

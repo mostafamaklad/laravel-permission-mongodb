@@ -407,4 +407,26 @@ class HasRolesTest extends TestCase
             $this->testUser->getAllPermissions()->pluck('name')
         );
     }
+
+    /** @test */
+    public function it_can_retrieve_role_names()
+    {
+        $this->testUser->assignRole('testRole', 'testRole2');
+
+        $this->assertEquals(
+            collect(['testRole', 'testRole2']),
+            $this->testUser->getRoleNames()
+        );
+    }
+
+    /** @test */
+    public function it_can_retrieve_permission_names()
+    {
+        $this->testUser->givePermissionTo('edit-articles', 'edit-news');
+
+        $this->assertEquals(
+            collect(['edit-articles', 'edit-news']),
+            $this->testUser->getPermissionNames()
+        );
+    }
 }
