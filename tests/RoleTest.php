@@ -65,10 +65,6 @@ class RoleTest extends TestCase
         $this->expectException(PermissionDoesNotExist::class);
 
         $this->testUserRole->givePermissionTo('admin-permission');
-
-        $this->expectException(GuardDoesNotMatch::class);
-
-        $this->testUserRole->givePermissionTo($this->testAdminPermission);
     }
 
     /** @test */
@@ -119,10 +115,6 @@ class RoleTest extends TestCase
         $this->expectException(PermissionDoesNotExist::class);
 
         $this->testUserRole->syncPermissions('admin-permission');
-
-        $this->expectException(GuardDoesNotMatch::class);
-
-        $this->testUserRole->syncPermissions($this->testAdminPermission);
     }
 
     /** @test */
