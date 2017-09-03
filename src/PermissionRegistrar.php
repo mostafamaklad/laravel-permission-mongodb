@@ -33,24 +33,13 @@ class PermissionRegistrar
 
     public function registerPermissions(): bool
     {
-        try {
-            $this->getPermissions()->map(function (Permission $permission) {
-                $this->gate->define($permission->name, function (Model $user) use ($permission) {
-                    return $user->hasPermissionTo($permission);
-                });
+        $this->getPermissions()->map(function (Permission $permission) {
+            $this->gate->define($permission->name, function (Model $user) use ($permission) {
+                return $user->hasPermissionTo($permission);
             });
+        });
 
-            return true;
-        } catch (Exception $exception) {
-            if ($this->shouldLogException()) {
-                $this->logger->alert(
-                    "Could not register permissions because {$exception->getMessage()}" . PHP_EOL .
-                    $exception->getTraceAsString()
-                );
-            }
-
-            return false;
-        }
+        return true;
     }
 
     public function forgetCachedPermissions()
@@ -63,10 +52,5 @@ class PermissionRegistrar
         return $this->cache->remember($this->cacheKey, config('permission.cache_expiration_time'), function () {
             return app(Permission::class)->with('roles')->get();
         });
-    }
-
-    protected function shouldLogException(): bool
-    {
-        return config('permission.log_registration_exception');
     }
 }
