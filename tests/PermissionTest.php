@@ -4,16 +4,28 @@ namespace Maklad\Permission\Test;
 
 use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Exceptions\PermissionAlreadyExists;
+use Monolog\Logger;
 
 class PermissionTest extends TestCase
 {
     /** @test */
     public function it_throws_an_exception_when_the_permission_already_exists()
     {
-        $this->expectException(PermissionAlreadyExists::class);
+        $can_logs  = [true, false];
 
-        app(Permission::class)->create(['name' => 'test-permission']);
-        app(Permission::class)->create(['name' => 'test-permission']);
+        foreach ($can_logs as $can_log) {
+            $this->app['config']->set('permission.log_registration_exception', $can_log);
+
+            try {
+                $this->expectException(PermissionAlreadyExists::class);
+
+                app(Permission::class)->create(['name' => 'test-permission']);
+                app(Permission::class)->create(['name' => 'test-permission']);
+            } finally {
+                $message = 'A permission `test-permission` already exists for guard `web`.';
+                $this->logMessage($message, Logger::ALERT);
+            }
+        }
     }
 
     /** @test */

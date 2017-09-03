@@ -9,6 +9,13 @@ class GuardDoesNotMatch extends InvalidArgumentException
 {
     public static function create(string $givenGuard, Collection $expectedGuards)
     {
-        return new static("The given role or permission should use guard `{$expectedGuards->implode(', ')}` instead of `{$givenGuard}`.");
+        $message = new static("The given role or permission should use guard `{$expectedGuards->implode(', ')}` instead of `{$givenGuard}`.");
+
+        if (config('permission.log_registration_exception')) {
+            $logger = app('log');
+            $logger->alert($message);
+        }
+        
+        return $message;
     }
 }
