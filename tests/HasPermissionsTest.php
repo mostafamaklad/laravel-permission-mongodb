@@ -54,7 +54,6 @@ class HasPermissionsTest extends TestCase
                 $this->logMessage($message, Logger::ALERT);
             }
         }
-
     }
 
     /** @test */
