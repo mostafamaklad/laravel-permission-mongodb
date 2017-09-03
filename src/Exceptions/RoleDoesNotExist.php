@@ -8,6 +8,13 @@ class RoleDoesNotExist extends InvalidArgumentException
 {
     public static function create(string $roleName)
     {
-        return new static("There is no role named `{$roleName}`.");
+        $message = new static("There is no role named `{$roleName}`.");
+
+        if (config('permission.log_registration_exception')) {
+            $logger = app('log');
+            $logger->alert($message);
+        }
+
+        return $message;
     }
 }
