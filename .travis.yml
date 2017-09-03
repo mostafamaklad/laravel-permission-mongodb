@@ -10,9 +10,6 @@ env:
   matrix:
     - COMPOSER_FLAGS="--prefer-lowest"
     - COMPOSER_FLAGS=""
-  global:
-    - CC_TEST_REPORTER_ID=d1e37bee7168ee1746010705b5a942b491d6d984dfa22eb873d7914335eb3065
-    - GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
 
 sudo: false
 
@@ -26,8 +23,6 @@ addons:
     - mongodb-3.0-precise
     packages:
     - mongodb-org-server
-    code_climate:
-      repo_token: d1e37bee7168ee1746010705b5a942b491d6d984dfa22eb873d7914335eb3065
 
 before_script:
   - pecl install mongodb
@@ -43,4 +38,5 @@ script:
 
 after_success:
   - sh -c 'php vendor/bin/coveralls -v'
-  - vendor/bin/test-reporter
+  - CODECLIMATE_REPO_TOKEN="d1e37bee7168ee1746010705b5a942b491d6d984dfa22eb873d7914335eb3065" vendor/bin/test-reporter --stdout > codeclimate.json
+  - "curl -X POST -d @codeclimate.json -H 'Content-Type: application/json' -H 'User-Agent: Code Climate (PHP Test Reporter v0.1.1)' https://codeclimate.com/test_reports"
