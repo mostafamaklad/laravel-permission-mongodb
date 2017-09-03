@@ -294,6 +294,13 @@ trait HasRoles
             ->values();
     }
 
+    /**
+     * Return Role object
+     *
+     * @param $role role name
+     *
+     * @return Role
+     */
     protected function getStoredRole($role): Role
     {
         if (is_string($role)) {
@@ -301,5 +308,26 @@ trait HasRoles
         }
 
         return $role;
+    }
+
+    /**
+     * Return a collection of role names associated with this user.
+     *
+     * @return Collection
+     */
+    public function getRoleNames(): Collection
+    {
+        return $this->roles->pluck('name');
+    }
+
+
+    /**
+     * Return a collection of permission names associated with this user.
+     *
+     * @return Collection
+     */
+    public function getPermissionNames(): Collection
+    {
+        return $this->getAllPermissions()->pluck('name');
     }
 }

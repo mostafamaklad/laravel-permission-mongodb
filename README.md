@@ -47,8 +47,9 @@ $user->can('edit articles');
 * [Using artisan commands](#using-artisan-commands)
 * [Database Seeding](#database-seeding)
 * [Extending](#extending)
-* [Troubleshooting](#troubleshooting)
-    * [Cache](#cache)
+* [Cache](#cache)
+    * [Manual cache reset](#manual-cache-reset)
+    * [Cache Identifier](#cache-identifier)
 * [Need a UI?](#need-a-ui)
 * [Change log](#change-log)
 * [Testing](#testing)
@@ -227,13 +228,19 @@ The `HasRoles` trait adds Moloquent relationships to your models, which can be a
 
 ```php
 // get a list of all permissions directly assigned to the user
-$permissions = $user->permissions;
+$permissions = $user->permissions; // Returns a collection
 
 // get all permissions inherited by the user via roles
-$permissions = $user->getAllPermissions();
+$permissions = $user->getAllPermissions(); // Returns a collection
+
+// get all permissions names
+$permissions = $user->getPermissionNames(); // Returns a collection
 
 // get a collection of all defined roles
 $roles = $user->roles->pluck('name'); // Returns a collection
+
+// get all role names
+$roles = $user->getRoleNames() // Returns a collection;
 ```
 
 The `HasRoles` trait also adds a scope to your models to scope the query to certain roles:
@@ -611,26 +618,32 @@ keep the following things in mind:
   ```
   And update the `models.role` and `models.permission` values
 
-## Troubleshooting
+## Cache
 
-### Cache
+Role and Permission data are cached to speed up performance.
 
-If you manipulate permission/role data directly in the database instead of calling the supplied methods, then you will not see the changes reflected in the application, because role and permission data is cached to speed up performance.
-
-To manually reset the cache for this package, run:
-```bash
-php artisan cache:forget maklad.permission.cache
-```
-
-When you use the supplied methods, such as the following, the cache is automatically reset for you:
+When you use the supplied methods for manipulating roles and permissions, the cache is automatically reset for you:
 
 ```php
-// see earlier in the README for how these methods work:
 $user->assignRole('writer');
 $user->removeRole('writer');
+$user->syncRoles(params);
 $role->givePermissionTo('edit articles');
 $role->revokePermissionTo('edit articles');
+$role->syncPermissions(params);
 ```
+
+HOWEVER, if you manipulate permission/role data directly in the database instead of calling the supplied methods, then you will not see the changes reflected in the application unless you manually reset the cache.
+
+### Manual cache reset
+To manually reset the cache for this package, run:
+```bash
+php artisan cache:forget spatie.permission.cache
+```
+
+### Cache Identifier
+
+TIP: If you are leveraging a caching service such as redis or memcached and there are other sites running on your server, you could run into cache clashes. It is prudent to set your own cache `prefix` in `/config/cache.php` for each application uniquely. This will prevent other applications from accidentally using/changing your cached data.
 
 ## Need a UI?
 
