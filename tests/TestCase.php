@@ -7,6 +7,7 @@ use Monolog\Handler\TestHandler;
 use Maklad\Permission\PermissionRegistrar;
 use Maklad\Permission\Models\Role;
 use Maklad\Permission\Models\Permission;
+use Monolog\Logger;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Maklad\Permission\PermissionServiceProvider;
 
@@ -158,12 +159,12 @@ abstract class TestCase extends Orchestra
 
     protected function assertNotLogged($message, $level)
     {
-        $this->assertFalse($this->hasLog($message, $level), "Found `{$message}` in the logs.");
+        $this->assertFalse($this->hasLog($message, $level));
     }
 
     protected function assertLogged($message, $level)
     {
-        $this->assertTrue($this->hasLog($message, $level), "Couldn't find `{$message}` in the logs.");
+        $this->assertTrue($this->hasLog($message, $level));
     }
 
     /**
@@ -180,5 +181,17 @@ abstract class TestCase extends Orchestra
             ) {
             return $handler instanceof TestHandler && $handler->hasRecordThatContains($message, $level);
         })->count() > 0;
+    }
+
+    /**
+     * @param $message
+     */
+    protected function logMessage($message, $level)
+    {
+        if (config('permission.log_registration_exception')) {
+            $this->assertLogged($message, $level);
+        } else {
+            $this->assertNotLogged($message, $level);
+        }
     }
 }

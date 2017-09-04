@@ -7,6 +7,7 @@ use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\Exceptions\RoleAlreadyExists;
 use Maklad\Permission\Exceptions\PermissionDoesNotExist;
+use Monolog\Logger;
 
 class RoleTest extends TestCase
 {
@@ -37,10 +38,21 @@ class RoleTest extends TestCase
     /** @test */
     public function it_throws_an_exception_when_the_role_already_exists()
     {
-        $this->expectException(RoleAlreadyExists::class);
+        $can_logs = [true, false];
 
-        app(Role::class)->create(['name' => 'test-role']);
-        app(Role::class)->create(['name' => 'test-role']);
+        foreach ($can_logs as $can_log) {
+            $this->app['config']->set('permission.log_registration_exception', $can_log);
+
+            try {
+                $this->expectException(RoleAlreadyExists::class);
+
+                app(Role::class)->create(['name' => 'test-role']);
+                app(Role::class)->create(['name' => 'test-role']);
+            } finally {
+                $message = 'A role `test-role` already exists for guard `web`.';
+                $this->logMessage($message, Logger::ALERT);
+            }
+        }
     }
 
     /** @test */
@@ -54,21 +66,39 @@ class RoleTest extends TestCase
     /** @test */
     public function it_throws_an_exception_when_given_a_permission_that_does_not_exist()
     {
-        $this->expectException(PermissionDoesNotExist::class);
+        $can_logs = [true, false];
 
-        $this->testUserRole->givePermissionTo('create-evil-empire');
+        foreach ($can_logs as $can_log) {
+            $this->app['config']->set('permission.log_registration_exception', $can_log);
+
+            try {
+                $this->expectException(PermissionDoesNotExist::class);
+
+                $this->testUserRole->givePermissionTo('create-evil-empire');
+            } finally {
+                $message = 'There is no permission named `create-evil-empire` for guard `web`.';
+                $this->logMessage($message, Logger::ALERT);
+            }
+        }
     }
 
     /** @test */
     public function it_throws_an_exception_when_given_a_permission_that_belongs_to_another_guard()
     {
-        $this->expectException(PermissionDoesNotExist::class);
+        $can_logs = [true, false];
 
-        $this->testUserRole->givePermissionTo('admin-permission');
+        foreach ($can_logs as $can_log) {
+            $this->app['config']->set('permission.log_registration_exception', $can_log);
 
-        $this->expectException(GuardDoesNotMatch::class);
+            try {
+                $this->expectException(GuardDoesNotMatch::class);
 
-        $this->testUserRole->givePermissionTo($this->testAdminPermission);
+                $this->testUserRole->givePermissionTo($this->testAdminPermission);
+            } finally {
+                $message = 'The given role or permission should use guard `web` instead of `admin`.';
+                $this->logMessage($message, Logger::ALERT);
+            }
+        }
     }
 
     /** @test */
@@ -104,25 +134,41 @@ class RoleTest extends TestCase
     /** @test */
     public function it_throws_an_exception_when_syncing_permissions_that_do_not_exist()
     {
-        $this->testUserRole->givePermissionTo('edit-articles');
+        $can_logs = [true, false];
 
-        $this->expectException(PermissionDoesNotExist::class);
+        foreach ($can_logs as $can_log) {
+            $this->app['config']->set('permission.log_registration_exception', $can_log);
 
-        $this->testUserRole->syncPermissions('permission-does-not-exist');
+            try {
+                $this->testUserRole->givePermissionTo('edit-articles');
+
+                $this->expectException(PermissionDoesNotExist::class);
+
+                $this->testUserRole->syncPermissions('permission-does-not-exist');
+            } finally {
+                $message = 'There is no permission named `permission-does-not-exist` for guard `web`.';
+                $this->logMessage($message, Logger::ALERT);
+            }
+        }
     }
 
     /** @test */
     public function it_throws_an_exception_when_syncing_permissions_that_belong_to_a_different_guard()
     {
-        $this->testUserRole->givePermissionTo('edit-articles');
+        $can_logs = [true, false];
 
-        $this->expectException(PermissionDoesNotExist::class);
+        foreach ($can_logs as $can_log) {
+            $this->app['config']->set('permission.log_registration_exception', $can_log);
 
-        $this->testUserRole->syncPermissions('admin-permission');
+            try {
+                $this->expectException(GuardDoesNotMatch::class);
 
-        $this->expectException(GuardDoesNotMatch::class);
-
-        $this->testUserRole->syncPermissions($this->testAdminPermission);
+                $this->testUserRole->syncPermissions($this->testAdminPermission);
+            } finally {
+                $message = 'The given role or permission should use guard `web` instead of `admin`.';
+                $this->logMessage($message, Logger::ALERT);
+            }
+        }
     }
 
     /** @test */
@@ -170,9 +216,20 @@ class RoleTest extends TestCase
     /** @test */
     public function it_throws_an_exception_if_the_permission_does_not_exist()
     {
-        $this->expectException(PermissionDoesNotExist::class);
+        $can_logs = [true, false];
 
-        $this->testUserRole->hasPermissionTo('doesnt-exist');
+        foreach ($can_logs as $can_log) {
+            $this->app['config']->set('permission.log_registration_exception', $can_log);
+
+            try {
+                $this->expectException(PermissionDoesNotExist::class);
+
+                $this->testUserRole->hasPermissionTo('doesnt-exist');
+            } finally {
+                $message = 'There is no permission named `doesnt-exist` for guard `web`.';
+                $this->logMessage($message, Logger::ALERT);
+            }
+        }
     }
 
     /** @test */
@@ -186,11 +243,22 @@ class RoleTest extends TestCase
     /** @test */
     public function it_throws_an_exception_when_a_permission_of_the_wrong_guard_is_passed_in()
     {
-        $this->expectException(GuardDoesNotMatch::class);
+        $can_logs = [true, false];
 
-        $permission = app(Permission::class)->findByName('wrong-guard-permission', 'admin');
+        foreach ($can_logs as $can_log) {
+            $this->app['config']->set('permission.log_registration_exception', $can_log);
 
-        $this->testUserRole->hasPermissionTo($permission);
+            try {
+                $this->expectException(GuardDoesNotMatch::class);
+
+                $permission = app(Permission::class)->findByName('wrong-guard-permission', 'admin');
+
+                $this->testUserRole->hasPermissionTo($permission);
+            } finally {
+                $message = 'The given role or permission should use guard `web` instead of `admin`.';
+                $this->logMessage($message, Logger::ALERT);
+            }
+        }
     }
 
     /** @test */
