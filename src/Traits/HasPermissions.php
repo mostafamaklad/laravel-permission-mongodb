@@ -5,7 +5,6 @@ namespace Maklad\Permission\Traits;
 use Illuminate\Support\Collection;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Maklad\Permission\Contracts\PermissionInterface as Permission;
-use Maklad\Permission\Contracts\RoleInterface as Role;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\PermissionRegistrar;
 
