@@ -6,6 +6,7 @@ use Maklad\Permission\Models\Role;
 use Maklad\Permission\Exceptions\RoleDoesNotExist;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\Exceptions\PermissionDoesNotExist;
+use Monolog\Logger;
 
 class HasRolesTest extends TestCase
 {
@@ -60,25 +61,58 @@ class HasRolesTest extends TestCase
     /** @test */
     public function it_throws_an_exception_when_assigning_a_role_that_does_not_exist()
     {
-        $this->expectException(RoleDoesNotExist::class);
+        $can_logs = [true, false];
 
-        $this->testUser->assignRole('evil-emperor');
+        foreach ($can_logs as $can_log) {
+            $this->app['config']->set('permission.log_registration_exception', $can_log);
+
+            try {
+                $this->expectException(RoleDoesNotExist::class);
+
+                $this->testUser->assignRole('evil-emperor');
+            } finally {
+                $message = 'There is no role named `evil-emperor`.';
+                $this->logMessage($message, Logger::ALERT);
+            }
+        }
     }
 
     /** @test */
     public function it_can_only_assign_roles_from_the_correct_guard()
     {
-        $this->expectException(RoleDoesNotExist::class);
+        $can_logs = [true, false];
 
-        $this->testUser->assignRole('testAdminRole');
+        foreach ($can_logs as $can_log) {
+            $this->app['config']->set('permission.log_registration_exception', $can_log);
+
+            try {
+                $this->expectException(RoleDoesNotExist::class);
+
+                $this->testUser->assignRole('testAdminRole');
+            } finally {
+                $message = 'There is no role named `testAdminRole`.';
+                $this->logMessage($message, Logger::ALERT);
+            }
+        }
     }
 
     /** @test */
     public function it_throws_an_exception_when_assigning_a_role_from_a_different_guard()
     {
-        $this->expectException(GuardDoesNotMatch::class);
+        $can_logs = [true, false];
 
-        $this->testUser->assignRole($this->testAdminRole);
+        foreach ($can_logs as $can_log) {
+            $this->app['config']->set('permission.log_registration_exception', $can_log);
+
+            try {
+                $this->expectException(GuardDoesNotMatch::class);
+
+                $this->testUser->assignRole($this->testAdminRole);
+            } finally {
+                $message = 'The given role or permission should use guard `web, api` instead of `admin`.';
+                $this->logMessage($message, Logger::ALERT);
+            }
+        }
     }
 
     /** @test */
@@ -130,13 +164,20 @@ class HasRolesTest extends TestCase
     /** @test */
     public function it_throws_an_exception_when_syncing_a_role_from_another_guard()
     {
-        $this->expectException(RoleDoesNotExist::class);
+        $can_logs = [true, false];
 
-        $this->testUser->syncRoles('testRole', 'testAdminRole');
+        foreach ($can_logs as $can_log) {
+            $this->app['config']->set('permission.log_registration_exception', $can_log);
 
-        $this->expectException(GuardDoesNotMatch::class);
+            try {
+                $this->expectException(GuardDoesNotMatch::class);
 
-        $this->testUser->syncRoles('testRole', $this->testAdminRole);
+                $this->testUser->syncRoles('testRole', $this->testAdminRole);
+            } finally {
+                $message = 'The given role or permission should use guard `web, api` instead of `admin`.';
+                $this->logMessage($message, Logger::ALERT);
+            }
+        }
     }
 
     /** @test */
@@ -193,18 +234,6 @@ class HasRolesTest extends TestCase
         $scopedUsers = User::role($this->testUserRole)->get();
 
         $this->assertEquals($scopedUsers->count(), 1);
-    }
-
-    /** @test */
-    public function it_throws_an_exception_when_trying_to_scope_a_role_from_another_guard()
-    {
-        $this->expectException(RoleDoesNotExist::class);
-
-        User::role('testAdminRole')->get();
-
-        $this->expectException(GuardDoesNotMatch::class);
-
-        User::role($this->testAdminRole)->get();
     }
 
     /** @test */
@@ -286,23 +315,45 @@ class HasRolesTest extends TestCase
     /** @test */
     public function it_throws_an_exception_when_the_permission_does_not_exist()
     {
-        $this->expectException(PermissionDoesNotExist::class);
+        $can_logs = [true, false];
 
-        $this->testUser->hasPermissionTo('does-not-exist');
+        foreach ($can_logs as $can_log) {
+            $this->app['config']->set('permission.log_registration_exception', $can_log);
+
+            try {
+                $this->expectException(PermissionDoesNotExist::class);
+
+                $this->testUser->hasPermissionTo('does-not-exist');
+            } finally {
+                $message = 'There is no permission named `does-not-exist` for guard `web`.';
+                $this->logMessage($message, Logger::ALERT);
+            }
+        }
     }
 
     /** @test */
     public function it_throws_an_exception_when_the_permission_does_not_exist_for_this_guard()
     {
-        $this->expectException(PermissionDoesNotExist::class);
+        $can_logs = [true, false];
 
-        $this->testUser->hasPermissionTo('admin-permission');
+        foreach ($can_logs as $can_log) {
+            $this->app['config']->set('permission.log_registration_exception', $can_log);
+
+            try {
+                $this->expectException(PermissionDoesNotExist::class);
+
+                $this->testUser->hasPermissionTo('admin-permission');
+            } finally {
+                $message = 'There is no permission named `admin-permission` for guard `web`.';
+                $this->logMessage($message, Logger::ALERT);
+            }
+        }
     }
 
     /** @test */
     public function it_can_work_with_a_user_that_does_not_have_any_permissions_at_all()
     {
-        // FIXME try to use object without saving it to database
+        // TODO try to use object without saving it to database
         $user = User::create(['email' => 'new@user.com']);
 
         $this->assertFalse($user->hasPermissionTo('edit-articles'));
