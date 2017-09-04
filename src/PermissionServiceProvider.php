@@ -4,8 +4,8 @@ namespace Maklad\Permission;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\Compilers\BladeCompiler;
-use Maklad\Permission\Contracts\RoleInterface as Role;
 use Maklad\Permission\Contracts\PermissionInterface as Permission;
+use Maklad\Permission\Contracts\RoleInterface as Role;
 
 class PermissionServiceProvider extends ServiceProvider
 {
