@@ -2,10 +2,9 @@
 
 namespace Maklad\Permission;
 
-use Illuminate\Support\Collection;
-use Illuminate\Contracts\Logging\Log;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Cache\Repository;
+use Illuminate\Support\Collection;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Maklad\Permission\Contracts\PermissionInterface as Permission;
 

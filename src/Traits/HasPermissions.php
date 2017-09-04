@@ -6,8 +6,8 @@ use Illuminate\Support\Collection;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Maklad\Permission\Contracts\PermissionInterface as Permission;
 use Maklad\Permission\Contracts\RoleInterface as Role;
-use Maklad\Permission\PermissionRegistrar;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
+use Maklad\Permission\PermissionRegistrar;
 
 trait HasPermissions
 {
@@ -82,7 +82,7 @@ trait HasPermissions
     }
 
     /**
-     * @param Model|Permission|Role $roleOrPermission
+     * @param Model $roleOrPermission
      *
      */
     protected function ensureModelSharesGuard(Model $roleOrPermission)

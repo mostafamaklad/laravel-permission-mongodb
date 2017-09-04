@@ -3,14 +3,14 @@
 namespace Maklad\Permission\Models;
 
 use Jenssegers\Mongodb\Eloquent\Model;
-use Maklad\Permission\Helpers;
-use Maklad\Permission\Traits\HasPermissions;
-use Maklad\Permission\Exceptions\RoleDoesNotExist;
+use Jenssegers\Mongodb\Relations\BelongsToMany;
+use Maklad\Permission\Contracts\RoleInterface;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\Exceptions\RoleAlreadyExists;
-use Maklad\Permission\Contracts\RoleInterface;
+use Maklad\Permission\Exceptions\RoleDoesNotExist;
+use Maklad\Permission\Helpers;
+use Maklad\Permission\Traits\HasPermissions;
 use Maklad\Permission\Traits\RefreshesPermissionCache;
-use Jenssegers\Mongodb\Relations\BelongsToMany;
 
 class Role extends Model implements RoleInterface
 {
