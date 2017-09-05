@@ -13,16 +13,13 @@ class PermissionMiddleware
             abort(403);
         }
 
-        $permissions = is_array($permission)
-            ? $permission
-            : explode('|', $permission);
+        $permission = is_array($permission) ? $permission : explode('|', $permission);
 
-        foreach ($permissions as $permission) {
-            if (Auth::user()->can($permission)) {
-                return $next($request);
-            }
+
+        if (! Auth::user()->hasAnyPermission($permission)) {
+            abort(403);
         }
 
-        abort(403);
+        return $next($request);
     }
 }
