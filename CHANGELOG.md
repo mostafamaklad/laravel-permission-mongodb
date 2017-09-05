@@ -2,6 +2,12 @@
 
 All Notable changes to `laravel-permission-mongodb` will be documented in this file.
 
+## 1.2.1 - 2017-09-05
+
+### Added
+- Let middleware use caching
+- Allow logging while exceptions
+
 ## 1.2.0 - 2017-09-03
 
 ### Added
