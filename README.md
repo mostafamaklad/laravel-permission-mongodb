@@ -8,6 +8,7 @@
 [![StyleCI][ico-styleci]][link-styleci]
 [![Coverage Status][ico-coveralls]][link-coveralls]
 [![Dependency Status][ico-gemnasium]][link-gemnasium]
+[![SensioLabsInsight][ico-sensiolabs]][link-sensiolabs]
 [![Total Downloads][ico-downloads]][link-packagist]
 
 This package allows you to manage user permissions and roles in a database.
@@ -709,6 +710,9 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 
 [link-gemnasium]: https://gemnasium.com/github.com/mostafamaklad/laravel-permission-mongodb
 [ico-gemnasium]: https://gemnasium.com/badges/github.com/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
+
+[link-sensiolabs]: https://insight.sensiolabs.com/projects/9a0d8b6f-1b6d-4f9f-ba87-ed9ab66b7707
+[ico-sensiolabs]: https://insight.sensiolabs.com/projects/9a0d8b6f-1b6d-4f9f-ba87-ed9ab66b7707/mini.png
 
 [link-author]: https://github.com/mostafamaklad
 [link-contributors]: ../../contributors
