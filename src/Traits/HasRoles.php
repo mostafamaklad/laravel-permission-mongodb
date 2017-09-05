@@ -60,11 +60,7 @@ trait HasRoles
         }
 
         $roles = $roles->map(function ($role) {
-            if ($role instanceof Role) {
-                return $role;
-            }
-
-            return app(Role::class)->findByName($role, $this->getDefaultGuardName());
+            return $this->getStoredRole($role);
         });
 
         return $query->whereIn('role_ids', $roles->pluck('_id'));
