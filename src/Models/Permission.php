@@ -31,8 +31,10 @@ class Permission extends Model implements PermissionInterface
     {
         $attributes['guard_name'] = $attributes['guard_name'] ?? config('auth.defaults.guard');
 
-        if (static::getPermissions()->where('name', $attributes['name'])->where('guard_name',
-            $attributes['guard_name'])->first()) {
+        if (static::getPermissions()->where('name', $attributes['name'])->where(
+            'guard_name',
+            $attributes['guard_name']
+        )->first()) {
             throw PermissionAlreadyExists::create($attributes['name'], $attributes['guard_name']);
         }
 
