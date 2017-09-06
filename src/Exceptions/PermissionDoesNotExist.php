@@ -11,6 +11,6 @@ class PermissionDoesNotExist extends InvalidArgumentException
     {
         $message = "There is no permission named `{$permissionName}` for guard `{$guardName}`.";
 
-        return new static(Helpers::logAlertMessage($message));
+        return new self(Helpers::logAlertMessage($message));
     }
 }

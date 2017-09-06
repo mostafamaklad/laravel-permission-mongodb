@@ -9,6 +9,6 @@ class RoleAlreadyExists extends InvalidArgumentException
 {
     public static function create(string $roleName, string $guardName)
     {
-        return new static(Helpers::logAlertMessage("A role `{$roleName}` already exists for guard `{$guardName}`."));
+        return new self(Helpers::logAlertMessage("A role `{$roleName}` already exists for guard `{$guardName}`."));
     }
 }
