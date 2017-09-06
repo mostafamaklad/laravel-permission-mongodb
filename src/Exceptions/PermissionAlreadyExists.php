@@ -3,14 +3,18 @@
 namespace Maklad\Permission\Exceptions;
 
 use InvalidArgumentException;
-use Maklad\Permission\Helpers;
 
 class PermissionAlreadyExists extends InvalidArgumentException
 {
     public static function create(string $permissionName, string $guardName)
     {
-        $message = "A permission `{$permissionName}` already exists for guard `{$guardName}`.";
+        $message = new static("A permission `{$permissionName}` already exists for guard `{$guardName}`.");
 
-        return new self(Helpers::logAlertMessage($message));
+        if (config('permission.log_registration_exception')) {
+            $logger = app('log');
+            $logger->alert($message);
+        }
+
+        return $message;
     }
 }
