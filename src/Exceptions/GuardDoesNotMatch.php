@@ -12,6 +12,6 @@ class GuardDoesNotMatch extends InvalidArgumentException
     {
         $expected = $expectedGuards->implode(', ');
         $message = "The given role or permission should use guard `{$expected}` instead of `{$givenGuard}`.";
-        return new static(Helpers::logAlertMessage($message));
+        return new self(Helpers::logAlertMessage($message));
     }
 }

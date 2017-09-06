@@ -11,6 +11,6 @@ class PermissionAlreadyExists extends InvalidArgumentException
     {
         $message = "A permission `{$permissionName}` already exists for guard `{$guardName}`.";
 
-        return new static(Helpers::logAlertMessage($message));
+        return new self(Helpers::logAlertMessage($message));
     }
 }
