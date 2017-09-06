@@ -2,9 +2,11 @@
 
 namespace Maklad\Permission\Test;
 
+use Maklad\Permission\Helpers;
 use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Exceptions\PermissionAlreadyExists;
 use Monolog\Logger;
+use Symfony\Component\Console\Helper\Helper;
 
 class PermissionTest extends TestCase
 {
@@ -22,8 +24,8 @@ class PermissionTest extends TestCase
                 app(Permission::class)->create(['name' => 'test-permission']);
                 app(Permission::class)->create(['name' => 'test-permission']);
             } finally {
-                $message = 'A permission `test-permission` already exists for guard `web`.';
-                $this->logMessage($message, Logger::ALERT);
+                $message = Helpers::getPermissionAlreadyExistsMessage('test-permission', 'web');
+                $this->assertLogMessage($message, Logger::ALERT);
             }
         }
     }

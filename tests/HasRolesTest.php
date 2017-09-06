@@ -2,11 +2,13 @@
 
 namespace Maklad\Permission\Test;
 
+use Maklad\Permission\Helpers;
 use Maklad\Permission\Models\Role;
 use Maklad\Permission\Exceptions\RoleDoesNotExist;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\Exceptions\PermissionDoesNotExist;
 use Monolog\Logger;
+use Symfony\Component\Console\Helper\Helper;
 
 class HasRolesTest extends TestCase
 {
@@ -71,8 +73,8 @@ class HasRolesTest extends TestCase
 
                 $this->testUser->assignRole('evil-emperor');
             } finally {
-                $message = 'There is no role named `evil-emperor`.';
-                $this->logMessage($message, Logger::ALERT);
+                $message = Helpers::getRoleDoesNotExistMessage('evil-emperor', 'web');
+                $this->assertLogMessage($message, Logger::ALERT);
             }
         }
     }
@@ -90,8 +92,8 @@ class HasRolesTest extends TestCase
 
                 $this->testUser->assignRole('testAdminRole');
             } finally {
-                $message = 'There is no role named `testAdminRole`.';
-                $this->logMessage($message, Logger::ALERT);
+                $message = Helpers::getRoleDoesNotExistMessage('testAdminRole', 'web');
+                $this->assertLogMessage($message, Logger::ALERT);
             }
         }
     }
@@ -109,8 +111,8 @@ class HasRolesTest extends TestCase
 
                 $this->testUser->assignRole($this->testAdminRole);
             } finally {
-                $message = 'The given role or permission should use guard `web, api` instead of `admin`.';
-                $this->logMessage($message, Logger::ALERT);
+                $message = Helpers::getGuardDoesNotMatchMessage(collect(['web', 'api']), 'admin');
+                $this->assertLogMessage($message, Logger::ALERT);
             }
         }
     }
@@ -174,8 +176,8 @@ class HasRolesTest extends TestCase
 
                 $this->testUser->syncRoles('testRole', $this->testAdminRole);
             } finally {
-                $message = 'The given role or permission should use guard `web, api` instead of `admin`.';
-                $this->logMessage($message, Logger::ALERT);
+                $message = Helpers::getGuardDoesNotMatchMessage(collect(['web', 'api']), 'admin');
+                $this->assertLogMessage($message, Logger::ALERT);
             }
         }
     }
@@ -325,8 +327,8 @@ class HasRolesTest extends TestCase
 
                 $this->testUser->hasPermissionTo('does-not-exist');
             } finally {
-                $message = 'There is no permission named `does-not-exist` for guard `web`.';
-                $this->logMessage($message, Logger::ALERT);
+                $message = Helpers::getPermissionDoesNotExistMessage('does-not-exist', 'web');
+                $this->assertLogMessage($message, Logger::ALERT);
             }
         }
     }
@@ -344,8 +346,8 @@ class HasRolesTest extends TestCase
 
                 $this->testUser->hasPermissionTo('admin-permission');
             } finally {
-                $message = 'There is no permission named `admin-permission` for guard `web`.';
-                $this->logMessage($message, Logger::ALERT);
+                $message = Helpers::getPermissionDoesNotExistMessage('admin-permission', 'web');
+                $this->assertLogMessage($message, Logger::ALERT);
             }
         }
     }

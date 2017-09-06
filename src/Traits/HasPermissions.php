@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Maklad\Permission\Contracts\PermissionInterface as Permission;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
+use Maklad\Permission\Helpers;
 use Maklad\Permission\PermissionRegistrar;
 
 trait HasPermissions
@@ -83,11 +84,15 @@ trait HasPermissions
     /**
      * @param Model $roleOrPermission
      *
+     * @throws GuardDoesNotMatch
      */
     protected function ensureModelSharesGuard(Model $roleOrPermission)
     {
         if (! $this->getGuardNames()->contains($roleOrPermission->guard_name)) {
-            throw GuardDoesNotMatch::create($roleOrPermission->guard_name, $this->getGuardNames());
+            $expected = $this->getGuardNames();
+            $given = $roleOrPermission->guard_name;
+
+            throw new GuardDoesNotMatch(Helpers::getGuardDoesNotMatchMessage($expected, $given));
         }
     }
 

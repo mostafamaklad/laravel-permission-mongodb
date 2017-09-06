@@ -28,12 +28,22 @@ class Role extends Model implements RoleInterface
         $this->setTable(config('permission.table_names.roles'));
     }
 
+    /**
+     * @param array $attributes
+     *
+     * @return $this|Model
+     * @throws RoleAlreadyExists
+     * @internal param array $attributes§
+     *
+     */
     public static function create(array $attributes = [])
     {
         $attributes['guard_name'] = $attributes['guard_name'] ?? config('auth.defaults.guard');
 
         if (static::where('name', $attributes['name'])->where('guard_name', $attributes['guard_name'])->first()) {
-            throw RoleAlreadyExists::create($attributes['name'], $attributes['guard_name']);
+            $name = $attributes['name'];
+            $guard_name = $attributes['guard_name'];
+            throw new RoleAlreadyExists(Helpers::getRoleAlreadyExistsMessage($name, $guard_name));
         }
 
         return static::query()->create($attributes);
@@ -66,6 +76,7 @@ class Role extends Model implements RoleInterface
      * @param string|null $guardName
      *
      * @return RoleInterface
+     * @throws RoleDoesNotExist
      */
     public static function findByName(string $name, $guardName = null): RoleInterface
     {
@@ -74,7 +85,7 @@ class Role extends Model implements RoleInterface
         $role = static::where('name', $name)->where('guard_name', $guardName)->first();
 
         if (! $role) {
-            throw RoleDoesNotExist::create($name);
+            throw new RoleDoesNotExist(Helpers::getRoleDoesNotExistMessage($name, $guardName));
         }
 
         return $role;
@@ -96,7 +107,10 @@ class Role extends Model implements RoleInterface
         }
 
         if (! $this->getGuardNames()->contains($permission->guard_name)) {
-            throw GuardDoesNotMatch::create($permission->guard_name, $this->getGuardNames());
+            $expected = $this->getGuardNames();
+            $given = $permission->guard_name;
+
+            throw new GuardDoesNotMatch(Helpers::getGuardDoesNotMatchMessage($expected, $given));
         }
 
         return $this->permissions->contains('id', $permission->id);
