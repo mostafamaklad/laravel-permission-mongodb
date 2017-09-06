@@ -293,7 +293,7 @@ trait HasRoles
     /**
      * Return Role object
      *
-     * @param $role role name
+     * @param String|Role $role role name
      *
      * @return Role
      */
