@@ -4,6 +4,7 @@ namespace Maklad\Permission\Test;
 
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\Exceptions\PermissionDoesNotExist;
+use Maklad\Permission\Helpers;
 use Monolog\Logger;
 
 class HasPermissionsTest extends TestCase
@@ -21,7 +22,7 @@ class HasPermissionsTest extends TestCase
     /** @test */
     public function it_throws_an_exception_when_assigning_a_permission_that_does_not_exist()
     {
-        $can_logs  = [true, false];
+        $can_logs = [true, false];
 
         foreach ($can_logs as $can_log) {
             $this->app['config']->set('permission.log_registration_exception', $can_log);
@@ -31,8 +32,8 @@ class HasPermissionsTest extends TestCase
 
                 $this->testUser->givePermissionTo('permission-does-not-exist');
             } finally {
-                $message = 'There is no permission named `permission-does-not-exist` for guard `web`.';
-                $this->logMessage($message, Logger::ALERT);
+                $message = Helpers::getPermissionDoesNotExistMessage('permission-does-not-exist', 'web');
+                $this->assertLogMessage($message, Logger::ALERT);
             }
         }
     }
@@ -40,7 +41,7 @@ class HasPermissionsTest extends TestCase
     /** @test */
     public function it_throws_an_exception_when_assigning_a_permission_to_a_user_from_a_different_guard()
     {
-        $can_logs  = [true, false];
+        $can_logs = [true, false];
 
         foreach ($can_logs as $can_log) {
             $this->app['config']->set('permission.log_registration_exception', $can_log);
@@ -50,8 +51,8 @@ class HasPermissionsTest extends TestCase
 
                 $this->testUser->givePermissionTo($this->testAdminPermission);
             } finally {
-                $message = 'The given role or permission should use guard `web, api` instead of `admin`.';
-                $this->logMessage($message, Logger::ALERT);
+                $message = Helpers::getGuardDoesNotMatchMessage(collect(['web', 'api']), 'admin');
+                $this->assertLogMessage($message, Logger::ALERT);
             }
         }
     }

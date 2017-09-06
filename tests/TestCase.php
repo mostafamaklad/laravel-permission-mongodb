@@ -186,7 +186,7 @@ abstract class TestCase extends Orchestra
     /**
      * @param $message
      */
-    protected function logMessage($message, $level)
+    protected function assertLogMessage($message, $level)
     {
         if (config('permission.log_registration_exception')) {
             $this->assertLogged($message, $level);
