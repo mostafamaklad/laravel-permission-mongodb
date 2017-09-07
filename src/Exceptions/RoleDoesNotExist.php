@@ -2,19 +2,19 @@
 
 namespace Maklad\Permission\Exceptions;
 
-use InvalidArgumentException;
+use Throwable;
 
-class RoleDoesNotExist extends InvalidArgumentException
+class RoleDoesNotExist extends MakladException
 {
-    public static function create(string $roleName)
+    /**
+     * RoleDoesNotExist constructor.
+     *
+     * @param string $message
+     * @param int $code
+     * @param Throwable|null $previous
+     */
+    public function __construct($message = "", $code = 0, Throwable $previous = null)
     {
-        $message = new static("There is no role named `{$roleName}`.");
-
-        if (config('permission.log_registration_exception')) {
-            $logger = app('log');
-            $logger->alert($message);
-        }
-
-        return $message;
+        parent::__construct($message, $code, $previous);
     }
 }

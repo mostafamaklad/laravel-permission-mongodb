@@ -46,11 +46,11 @@ class RoleTest extends TestCase
             try {
                 $this->expectException(RoleAlreadyExists::class);
 
-                app(Role::class)->create(['name' => 'test-role']);
-                app(Role::class)->create(['name' => 'test-role']);
+                \app(Role::class)->create(['name' => 'test-role']);
+                \app(Role::class)->create(['name' => 'test-role']);
             } finally {
-                $message = 'A role `test-role` already exists for guard `web`.';
-                $this->logMessage($message, Logger::ALERT);
+                $message = $this->helpers->getRoleAlreadyExistsMessage('test-role', 'web');
+                $this->assertLogMessage($message, Logger::ALERT);
             }
         }
     }
@@ -76,8 +76,8 @@ class RoleTest extends TestCase
 
                 $this->testUserRole->givePermissionTo('create-evil-empire');
             } finally {
-                $message = 'There is no permission named `create-evil-empire` for guard `web`.';
-                $this->logMessage($message, Logger::ALERT);
+                $message = $this->helpers->getPermissionDoesNotExistMessage('create-evil-empire', 'web');
+                $this->assertLogMessage($message, Logger::ALERT);
             }
         }
     }
@@ -95,8 +95,8 @@ class RoleTest extends TestCase
 
                 $this->testUserRole->givePermissionTo($this->testAdminPermission);
             } finally {
-                $message = 'The given role or permission should use guard `web` instead of `admin`.';
-                $this->logMessage($message, Logger::ALERT);
+                $message = $this->helpers->getGuardDoesNotMatchMessage(collect(['web']), 'admin');
+                $this->assertLogMessage($message, Logger::ALERT);
             }
         }
     }
@@ -146,8 +146,8 @@ class RoleTest extends TestCase
 
                 $this->testUserRole->syncPermissions('permission-does-not-exist');
             } finally {
-                $message = 'There is no permission named `permission-does-not-exist` for guard `web`.';
-                $this->logMessage($message, Logger::ALERT);
+                $message = $this->helpers->getPermissionDoesNotExistMessage('permission-does-not-exist', 'web');
+                $this->assertLogMessage($message, Logger::ALERT);
             }
         }
     }
@@ -165,8 +165,8 @@ class RoleTest extends TestCase
 
                 $this->testUserRole->syncPermissions($this->testAdminPermission);
             } finally {
-                $message = 'The given role or permission should use guard `web` instead of `admin`.';
-                $this->logMessage($message, Logger::ALERT);
+                $message = $this->helpers->getGuardDoesNotMatchMessage(collect(['web']), 'admin');
+                $this->assertLogMessage($message, Logger::ALERT);
             }
         }
     }
@@ -226,8 +226,8 @@ class RoleTest extends TestCase
 
                 $this->testUserRole->hasPermissionTo('doesnt-exist');
             } finally {
-                $message = 'There is no permission named `doesnt-exist` for guard `web`.';
-                $this->logMessage($message, Logger::ALERT);
+                $message = $this->helpers->getPermissionDoesNotExistMessage('doesnt-exist', 'web');
+                $this->assertLogMessage($message, Logger::ALERT);
             }
         }
     }
@@ -255,8 +255,8 @@ class RoleTest extends TestCase
 
                 $this->testUserRole->hasPermissionTo($permission);
             } finally {
-                $message = 'The given role or permission should use guard `web` instead of `admin`.';
-                $this->logMessage($message, Logger::ALERT);
+                $message = $this->helpers->getGuardDoesNotMatchMessage(collect(['web']), 'admin');
+                $this->assertLogMessage($message, Logger::ALERT);
             }
         }
     }
@@ -264,7 +264,7 @@ class RoleTest extends TestCase
     /** @test */
     public function it_belongs_to_a_guard()
     {
-        $role = app(Role::class)->create(['name' => 'admin', 'guard_name' => 'admin']);
+        $role = \app(Role::class)->create(['name' => 'admin', 'guard_name' => 'admin']);
 
         $this->assertEquals('admin', $role->guard_name);
     }

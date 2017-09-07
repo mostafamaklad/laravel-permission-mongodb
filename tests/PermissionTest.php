@@ -2,9 +2,11 @@
 
 namespace Maklad\Permission\Test;
 
+use Maklad\Permission\Helpers;
 use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Exceptions\PermissionAlreadyExists;
 use Monolog\Logger;
+use Symfony\Component\Console\Helper\Helper;
 
 class PermissionTest extends TestCase
 {
@@ -19,11 +21,11 @@ class PermissionTest extends TestCase
             try {
                 $this->expectException(PermissionAlreadyExists::class);
 
-                app(Permission::class)->create(['name' => 'test-permission']);
-                app(Permission::class)->create(['name' => 'test-permission']);
+                \app(Permission::class)->create(['name' => 'test-permission']);
+                \app(Permission::class)->create(['name' => 'test-permission']);
             } finally {
-                $message = 'A permission `test-permission` already exists for guard `web`.';
-                $this->logMessage($message, Logger::ALERT);
+                $message = $this->helpers->getPermissionAlreadyExistsMessage('test-permission', 'web');
+                $this->assertLogMessage($message, Logger::ALERT);
             }
         }
     }
@@ -31,7 +33,7 @@ class PermissionTest extends TestCase
     /** @test */
     public function it_belongs_to_a_guard()
     {
-        $permission = app(Permission::class)->create(['name' => 'can-edit', 'guard_name' => 'admin']);
+        $permission = \app(Permission::class)->create(['name' => 'can-edit', 'guard_name' => 'admin']);
 
         $this->assertEquals('admin', $permission->guard_name);
     }

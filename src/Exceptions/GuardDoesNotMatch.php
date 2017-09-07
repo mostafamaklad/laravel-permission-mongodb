@@ -2,21 +2,19 @@
 
 namespace Maklad\Permission\Exceptions;
 
-use InvalidArgumentException;
-use Illuminate\Support\Collection;
+use Throwable;
 
-class GuardDoesNotMatch extends InvalidArgumentException
+class GuardDoesNotMatch extends MakladException
 {
-    public static function create(string $givenGuard, Collection $expectedGuards)
+    /**
+     * GuardDoesNotMatch constructor.
+     *
+     * @param string $message
+     * @param int $code
+     * @param Throwable|null $previous
+     */
+    public function __construct($message = "", $code = 0, Throwable $previous = null)
     {
-        $expect = $expectedGuards->implode(', ');
-        $message = new static("The given role or permission should use guard `{$expect}` instead of `{$givenGuard}`.");
-
-        if (config('permission.log_registration_exception')) {
-            $logger = app('log');
-            $logger->alert($message);
-        }
-
-        return $message;
+        parent::__construct($message, $code, $previous);
     }
 }
