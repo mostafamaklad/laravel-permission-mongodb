@@ -3,16 +3,18 @@
 namespace Maklad\Permission\Test;
 
 use Jenssegers\Mongodb\MongodbServiceProvider;
+use Maklad\Permission\Helpers;
 use Monolog\Handler\TestHandler;
 use Maklad\Permission\PermissionRegistrar;
 use Maklad\Permission\Models\Role;
 use Maklad\Permission\Models\Permission;
-use Monolog\Logger;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Maklad\Permission\PermissionServiceProvider;
 
 abstract class TestCase extends Orchestra
 {
+    protected $helpers;
+
     /**
      * Flush the database after each test function
      */
@@ -51,14 +53,16 @@ abstract class TestCase extends Orchestra
         $this->reloadPermissions();
 
         $this->testUser           = User::first();
-        $this->testUserRole       = app(Role::class)->where('name', 'testRole')->first();
-        $this->testUserPermission = app(Permission::class)->where('name', 'edit-articles')->first();
+        $this->testUserRole       = \app(Role::class)->where('name', 'testRole')->first();
+        $this->testUserPermission = \app(Permission::class)->where('name', 'edit-articles')->first();
 
         $this->testAdmin           = Admin::first();
-        $this->testAdminRole       = app(Role::class)->where('name', 'testAdminRole')->first();
-        $this->testAdminPermission = app(Permission::class)->where('name', 'admin-permission')->first();
+        $this->testAdminRole       = \app(Role::class)->where('name', 'testAdminRole')->first();
+        $this->testAdminPermission = \app(Permission::class)->where('name', 'admin-permission')->first();
 
         $this->clearLogTestHandler();
+
+        $this->helpers = new Helpers();
     }
 
     /**
@@ -70,7 +74,7 @@ abstract class TestCase extends Orchestra
     {
         return [
             PermissionServiceProvider::class,
-            MongodbServiceProvider::class,
+            MongodbServiceProvider::class
         ];
     }
 
@@ -87,7 +91,7 @@ abstract class TestCase extends Orchestra
             'port'     => '27017',
             'driver'   => 'mongodb',
             'database' => 'laravel_permission_mongodb_test',
-            'prefix'   => '',
+            'prefix'   => ''
         ]);
 
         $app['config']->set('view.paths', [__DIR__ . '/resources/views']);
@@ -127,9 +131,9 @@ abstract class TestCase extends Orchestra
      */
     protected function reloadPermissions()
     {
-        app(PermissionRegistrar::class)->forgetCachedPermissions();
+        \app(PermissionRegistrar::class)->forgetCachedPermissions();
 
-        return app(PermissionRegistrar::class)->registerPermissions();
+        return \app(PermissionRegistrar::class)->registerPermissions();
     }
 
     /**
@@ -150,7 +154,7 @@ abstract class TestCase extends Orchestra
 
     protected function clearLogTestHandler()
     {
-        collect($this->app['log']->getMonolog()->getHandlers())->filter(function ($handler) {
+        \collect($this->app['log']->getMonolog()->getHandlers())->filter(function ($handler) {
             return $handler instanceof TestHandler;
         })->first(function (TestHandler $handler) {
             $handler->clear();
@@ -175,10 +179,10 @@ abstract class TestCase extends Orchestra
      */
     protected function hasLog($message, $level)
     {
-        return collect($this->app['log']->getMonolog()->getHandlers())->filter(function ($handler) use (
-                $message,
-                $level
-            ) {
+        return \collect($this->app['log']->getMonolog()->getHandlers())->filter(function ($handler) use (
+            $message,
+            $level
+        ) {
             return $handler instanceof TestHandler && $handler->hasRecordThatContains($message, $level);
         })->count() > 0;
     }
@@ -188,7 +192,7 @@ abstract class TestCase extends Orchestra
      */
     protected function assertLogMessage($message, $level)
     {
-        if (config('permission.log_registration_exception')) {
+        if (\config('permission.log_registration_exception')) {
             $this->assertLogged($message, $level);
         } else {
             $this->assertNotLogged($message, $level);

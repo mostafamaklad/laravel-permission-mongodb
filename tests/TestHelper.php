@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
+/**
+ * Class TestHelper
+ * @package Maklad\Permission\Test
+ */
 class TestHelper
 {
     /**
@@ -20,8 +24,8 @@ class TestHelper
             return $middleware->handle(new Request(), function () {
                 return (new Response())->setContent('<html></html>');
             }, $parameter)->status();
-        } catch (HttpException $e) {
-            return $e->getStatusCode();
+        } catch (HttpException $exception) {
+            return $exception->getStatusCode();
         }
     }
 }

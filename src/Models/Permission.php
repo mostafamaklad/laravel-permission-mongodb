@@ -17,6 +17,7 @@ class Permission extends Model implements PermissionInterface
     use RefreshesPermissionCache;
 
     public $guarded = ['id'];
+    protected $helpers;
 
     /**
      * Permission constructor.
@@ -25,11 +26,13 @@ class Permission extends Model implements PermissionInterface
      */
     public function __construct(array $attributes = [])
     {
-        $attributes['guard_name'] = $attributes['guard_name'] ?? config('auth.defaults.guard');
+        $attributes['guard_name'] = $attributes['guard_name'] ?? \config('auth.defaults.guard');
 
         parent::__construct($attributes);
 
-        $this->setTable(config('permission.table_names.permissions'));
+        $this->helpers = new Helpers();
+
+        $this->setTable(\config('permission.table_names.permissions'));
     }
 
     /**
@@ -41,7 +44,7 @@ class Permission extends Model implements PermissionInterface
      */
     public static function create(array $attributes = [])
     {
-        $attributes['guard_name'] = $attributes['guard_name'] ?? config('auth.defaults.guard');
+        $attributes['guard_name'] = $attributes['guard_name'] ?? \config('auth.defaults.guard');
 
         if (static::getPermissions()->where('name', $attributes['name'])->where(
             'guard_name',
@@ -49,7 +52,8 @@ class Permission extends Model implements PermissionInterface
         )->first()) {
             $name = $attributes['name'];
             $guard_name = $attributes['guard_name'];
-            throw new PermissionAlreadyExists(Helpers::getPermissionAlreadyExistsMessage($name, $guard_name));
+            $helpers = new Helpers();
+            throw new PermissionAlreadyExists($helpers->getPermissionAlreadyExistsMessage($name, $guard_name));
         }
 
         return static::query()->create($attributes);
@@ -62,8 +66,8 @@ class Permission extends Model implements PermissionInterface
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(
-            config('permission.models.role'),
-            config('permission.table_names.role_has_permissions')
+            \config('permission.models.role'),
+            \config('permission.table_names.role_has_permissions')
         );
     }
 
@@ -73,7 +77,7 @@ class Permission extends Model implements PermissionInterface
      */
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(Helpers::getModelForGuard($this->attributes['guard_name']));
+        return $this->belongsToMany($this->helpers->getModelForGuard($this->attributes['guard_name']));
     }
 
     /**
@@ -92,7 +96,8 @@ class Permission extends Model implements PermissionInterface
         $permission = static::getPermissions()->where('name', $name)->where('guard_name', $guardName)->first();
 
         if (! $permission) {
-            throw new PermissionDoesNotExist(Helpers::getPermissionDoesNotExistMessage($name, $guardName));
+            $helpers = new Helpers();
+            throw new PermissionDoesNotExist($helpers->getPermissionDoesNotExistMessage($name, $guardName));
         }
 
         return $permission;

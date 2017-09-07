@@ -2,13 +2,11 @@
 
 namespace Maklad\Permission\Test;
 
-use Maklad\Permission\Helpers;
 use Maklad\Permission\Models\Role;
 use Maklad\Permission\Exceptions\RoleDoesNotExist;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\Exceptions\PermissionDoesNotExist;
 use Monolog\Logger;
-use Symfony\Component\Console\Helper\Helper;
 
 class HasRolesTest extends TestCase
 {
@@ -73,7 +71,7 @@ class HasRolesTest extends TestCase
 
                 $this->testUser->assignRole('evil-emperor');
             } finally {
-                $message = Helpers::getRoleDoesNotExistMessage('evil-emperor', 'web');
+                $message = $this->helpers->getRoleDoesNotExistMessage('evil-emperor', 'web');
                 $this->assertLogMessage($message, Logger::ALERT);
             }
         }
@@ -92,7 +90,7 @@ class HasRolesTest extends TestCase
 
                 $this->testUser->assignRole('testAdminRole');
             } finally {
-                $message = Helpers::getRoleDoesNotExistMessage('testAdminRole', 'web');
+                $message = $this->helpers->getRoleDoesNotExistMessage('testAdminRole', 'web');
                 $this->assertLogMessage($message, Logger::ALERT);
             }
         }
@@ -111,7 +109,7 @@ class HasRolesTest extends TestCase
 
                 $this->testUser->assignRole($this->testAdminRole);
             } finally {
-                $message = Helpers::getGuardDoesNotMatchMessage(collect(['web', 'api']), 'admin');
+                $message = $this->helpers->getGuardDoesNotMatchMessage(collect(['web', 'api']), 'admin');
                 $this->assertLogMessage($message, Logger::ALERT);
             }
         }
@@ -176,7 +174,7 @@ class HasRolesTest extends TestCase
 
                 $this->testUser->syncRoles('testRole', $this->testAdminRole);
             } finally {
-                $message = Helpers::getGuardDoesNotMatchMessage(collect(['web', 'api']), 'admin');
+                $message = $this->helpers->getGuardDoesNotMatchMessage(collect(['web', 'api']), 'admin');
                 $this->assertLogMessage($message, Logger::ALERT);
             }
         }
@@ -327,7 +325,7 @@ class HasRolesTest extends TestCase
 
                 $this->testUser->hasPermissionTo('does-not-exist');
             } finally {
-                $message = Helpers::getPermissionDoesNotExistMessage('does-not-exist', 'web');
+                $message = $this->helpers->getPermissionDoesNotExistMessage('does-not-exist', 'web');
                 $this->assertLogMessage($message, Logger::ALERT);
             }
         }
@@ -346,7 +344,7 @@ class HasRolesTest extends TestCase
 
                 $this->testUser->hasPermissionTo('admin-permission');
             } finally {
-                $message = Helpers::getPermissionDoesNotExistMessage('admin-permission', 'web');
+                $message = $this->helpers->getPermissionDoesNotExistMessage('admin-permission', 'web');
                 $this->assertLogMessage($message, Logger::ALERT);
             }
         }
