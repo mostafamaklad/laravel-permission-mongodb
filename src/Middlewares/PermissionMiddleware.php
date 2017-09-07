@@ -1,23 +1,35 @@
 <?php
+declare(strict_types=1);
 
 namespace Maklad\Permission\Middlewares;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Class PermissionMiddleware
+ * @package Maklad\Permission\Middlewares
+ */
 class PermissionMiddleware
 {
+    /**
+     * @param $request
+     * @param Closure $next
+     * @param $permission
+     *
+     * @return mixed
+     */
     public function handle($request, Closure $next, $permission)
     {
         if (Auth::guest()) {
-            abort(403);
+            \abort(403);
         }
 
-        $permission = is_array($permission) ? $permission : explode('|', $permission);
+        $permissions = \is_array($permission) ? $permission : \explode('|', $permission);
 
 
-        if (! Auth::user()->hasAnyPermission($permission)) {
-            abort(403);
+        if (! Auth::user()->hasAnyPermission($permissions)) {
+            \abort(403);
         }
 
         return $next($request);

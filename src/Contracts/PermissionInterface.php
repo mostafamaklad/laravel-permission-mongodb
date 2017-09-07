@@ -1,10 +1,15 @@
 <?php
+declare(strict_types=1);
 
 namespace Maklad\Permission\Contracts;
 
 use Jenssegers\Mongodb\Relations\BelongsToMany;
 use Maklad\Permission\Exceptions\PermissionDoesNotExist;
 
+/**
+ * Interface PermissionInterface
+ * @package Maklad\Permission\Contracts
+ */
 interface PermissionInterface
 {
     /**

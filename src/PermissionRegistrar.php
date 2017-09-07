@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Maklad\Permission;
 
@@ -8,6 +9,10 @@ use Illuminate\Support\Collection;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Maklad\Permission\Contracts\PermissionInterface as Permission;
 
+/**
+ * Class PermissionRegistrar
+ * @package Maklad\Permission
+ */
 class PermissionRegistrar
 {
     /** @var \Illuminate\Contracts\Auth\Access\Gate */
