@@ -9,6 +9,10 @@ use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\Helpers;
 use Maklad\Permission\PermissionRegistrar;
 
+/**
+ * Trait HasPermissions
+ * @package Maklad\Permission\Traits
+ */
 trait HasPermissions
 {
     /**
@@ -17,10 +21,11 @@ trait HasPermissions
      * @param string|array|Permission|\Illuminate\Support\Collection $permissions
      *
      * @return $this
+     * @throws GuardDoesNotMatch
      */
     public function givePermissionTo(...$permissions)
     {
-        $permissions = collect($permissions)
+        $permissions = \collect($permissions)
             ->flatten()
             ->map(function ($permission) {
                 return $this->getStoredPermission($permission);
@@ -43,6 +48,7 @@ trait HasPermissions
      * @param string|array|Permission|\Illuminate\Support\Collection $permissions
      *
      * @return $this
+     * @throws GuardDoesNotMatch
      */
     public function syncPermissions(...$permissions)
     {
@@ -74,8 +80,8 @@ trait HasPermissions
      */
     protected function getStoredPermission($permissions): Permission
     {
-        if (is_string($permissions)) {
-            return app(Permission::class)->findByName($permissions, $this->getDefaultGuardName());
+        if (\is_string($permissions)) {
+            return \app(Permission::class)->findByName($permissions, $this->getDefaultGuardName());
         }
 
         return $permissions;
@@ -91,30 +97,31 @@ trait HasPermissions
         if (! $this->getGuardNames()->contains($roleOrPermission->guard_name)) {
             $expected = $this->getGuardNames();
             $given = $roleOrPermission->guard_name;
+            $helpers = new Helpers();
 
-            throw new GuardDoesNotMatch(Helpers::getGuardDoesNotMatchMessage($expected, $given));
+            throw new GuardDoesNotMatch($helpers->getGuardDoesNotMatchMessage($expected, $given));
         }
     }
 
     protected function getGuardNames(): Collection
     {
         if ($this->guard_name) {
-            return collect($this->guard_name);
+            return \collect($this->guard_name);
         }
 
-        return collect(config('auth.guards'))
+        return \collect(\config('auth.guards'))
             ->map(function ($guard) {
-                return config("auth.providers.{$guard['provider']}.model");
+                return \config("auth.providers.{$guard['provider']}.model");
             })
             ->filter(function ($model) {
-                return get_class($this) === $model;
+                return \get_class($this) === $model;
             })
             ->keys();
     }
 
     protected function getDefaultGuardName(): string
     {
-        $default = config('auth.defaults.guard');
+        $default = \config('auth.defaults.guard');
 
         return $this->getGuardNames()->first() ?: $default;
     }
@@ -124,6 +131,6 @@ trait HasPermissions
      */
     public function forgetCachedPermissions()
     {
-        app(PermissionRegistrar::class)->forgetCachedPermissions();
+        \app(PermissionRegistrar::class)->forgetCachedPermissions();
     }
 }

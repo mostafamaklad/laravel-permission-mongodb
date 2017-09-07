@@ -28,8 +28,11 @@ class MiddlewareTest extends TestCase
     {
         $this->assertEquals(
             $this->runMiddleware(
-                $this->roleMiddleware, 'testRole'
-            ), 403);
+                $this->roleMiddleware,
+                'testRole'
+            ),
+            403
+        );
     }
 
     /** @test */
@@ -41,8 +44,11 @@ class MiddlewareTest extends TestCase
 
         $this->assertEquals(
             $this->runMiddleware(
-                $this->roleMiddleware, 'testRole'
-            ), 200);
+                $this->roleMiddleware,
+                'testRole'
+            ),
+            200
+        );
     }
 
     /** @test */
@@ -54,13 +60,19 @@ class MiddlewareTest extends TestCase
 
         $this->assertEquals(
             $this->runMiddleware(
-                $this->roleMiddleware, 'testRole|testRole2'
-            ), 200);
+                $this->roleMiddleware,
+                'testRole|testRole2'
+            ),
+            200
+        );
 
         $this->assertEquals(
             $this->runMiddleware(
-                $this->roleMiddleware, ['testRole2', 'testRole']
-            ), 200);
+                $this->roleMiddleware,
+                ['testRole2', 'testRole']
+            ),
+            200
+        );
     }
 
     /** @test */
@@ -72,8 +84,11 @@ class MiddlewareTest extends TestCase
 
         $this->assertEquals(
             $this->runMiddleware(
-                $this->roleMiddleware, 'testRole2'
-            ), 403);
+                $this->roleMiddleware,
+                'testRole2'
+            ),
+            403
+        );
     }
 
     /** @test */
@@ -83,8 +98,11 @@ class MiddlewareTest extends TestCase
 
         $this->assertEquals(
             $this->runMiddleware(
-                $this->roleMiddleware, 'testRole|testRole2'
-            ), 403);
+                $this->roleMiddleware,
+                'testRole|testRole2'
+            ),
+            403
+        );
     }
 
     /** @test */
@@ -94,8 +112,11 @@ class MiddlewareTest extends TestCase
 
         $this->assertEquals(
             $this->runMiddleware(
-                $this->roleMiddleware, ''
-            ), 403);
+                $this->roleMiddleware,
+                ''
+            ),
+            403
+        );
     }
 
     /** @test */
@@ -103,8 +124,11 @@ class MiddlewareTest extends TestCase
     {
         $this->assertEquals(
             $this->runMiddleware(
-                $this->permissionMiddleware, 'edit-articles'
-            ), 403);
+                $this->permissionMiddleware,
+                'edit-articles'
+            ),
+            403
+        );
     }
 
     /** @test */
@@ -116,8 +140,11 @@ class MiddlewareTest extends TestCase
 
         $this->assertEquals(
             $this->runMiddleware(
-                $this->permissionMiddleware, 'edit-articles'
-            ), 200);
+                $this->permissionMiddleware,
+                'edit-articles'
+            ),
+            200
+        );
     }
 
     /** @test */
@@ -129,13 +156,19 @@ class MiddlewareTest extends TestCase
 
         $this->assertEquals(
             $this->runMiddleware(
-                $this->permissionMiddleware, 'edit-news|edit-articles'
-            ), 200);
+                $this->permissionMiddleware,
+                'edit-news|edit-articles'
+            ),
+            200
+        );
 
         $this->assertEquals(
             $this->runMiddleware(
-                $this->permissionMiddleware, ['edit-news', 'edit-articles']
-            ), 200);
+                $this->permissionMiddleware,
+                ['edit-news', 'edit-articles']
+            ),
+            200
+        );
     }
 
     /** @test */
@@ -147,8 +180,11 @@ class MiddlewareTest extends TestCase
 
         $this->assertEquals(
             $this->runMiddleware(
-                $this->permissionMiddleware, 'edit-news'
-            ), 403);
+                $this->permissionMiddleware,
+                'edit-news'
+            ),
+            403
+        );
     }
 
     /** @test */
@@ -158,8 +194,11 @@ class MiddlewareTest extends TestCase
 
         $this->assertEquals(
             $this->runMiddleware(
-                $this->permissionMiddleware, 'edit-articles|edit-news'
-            ), 403);
+                $this->permissionMiddleware,
+                'edit-articles|edit-news'
+            ),
+            403
+        );
     }
 
     protected function runMiddleware($middleware, $parameter)

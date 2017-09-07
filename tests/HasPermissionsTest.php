@@ -4,7 +4,6 @@ namespace Maklad\Permission\Test;
 
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\Exceptions\PermissionDoesNotExist;
-use Maklad\Permission\Helpers;
 use Monolog\Logger;
 
 class HasPermissionsTest extends TestCase
@@ -32,7 +31,7 @@ class HasPermissionsTest extends TestCase
 
                 $this->testUser->givePermissionTo('permission-does-not-exist');
             } finally {
-                $message = Helpers::getPermissionDoesNotExistMessage('permission-does-not-exist', 'web');
+                $message = $this->helpers->getPermissionDoesNotExistMessage('permission-does-not-exist', 'web');
                 $this->assertLogMessage($message, Logger::ALERT);
             }
         }
@@ -51,7 +50,7 @@ class HasPermissionsTest extends TestCase
 
                 $this->testUser->givePermissionTo($this->testAdminPermission);
             } finally {
-                $message = Helpers::getGuardDoesNotMatchMessage(collect(['web', 'api']), 'admin');
+                $message = $this->helpers->getGuardDoesNotMatchMessage(collect(['web', 'api']), 'admin');
                 $this->assertLogMessage($message, Logger::ALERT);
             }
         }
