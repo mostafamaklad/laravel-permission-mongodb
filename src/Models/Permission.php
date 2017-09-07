@@ -51,9 +51,9 @@ class Permission extends Model implements PermissionInterface
             $attributes['guard_name']
         )->first()) {
             $name = $attributes['name'];
-            $guard_name = $attributes['guard_name'];
+            $guardName = $attributes['guard_name'];
             $helpers = new Helpers();
-            throw new PermissionAlreadyExists($helpers->getPermissionAlreadyExistsMessage($name, $guard_name));
+            throw new PermissionAlreadyExists($helpers->getPermissionAlreadyExistsMessage($name, $guardName));
         }
 
         return static::query()->create($attributes);
