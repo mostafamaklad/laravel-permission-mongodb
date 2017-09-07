@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Maklad\Permission\Models;
 
@@ -12,6 +13,10 @@ use Maklad\Permission\Helpers;
 use Maklad\Permission\Traits\HasPermissions;
 use Maklad\Permission\Traits\RefreshesPermissionCache;
 
+/**
+ * Class Role
+ * @package Maklad\Permission\Models
+ */
 class Role extends Model implements RoleInterface
 {
     use HasPermissions;
@@ -20,6 +25,11 @@ class Role extends Model implements RoleInterface
     public $guarded = ['id'];
     protected $helpers;
 
+    /**
+     * Role constructor.
+     *
+     * @param array $attributes
+     */
     public function __construct(array $attributes = [])
     {
         $attributes['guard_name'] = $attributes['guard_name'] ?? \config('auth.defaults.guard');

@@ -1,10 +1,15 @@
 <?php
+declare(strict_types=1);
 
 namespace Maklad\Permission\Commands;
 
 use Illuminate\Console\Command;
 use Maklad\Permission\Contracts\PermissionInterface as Permission;
 
+/**
+ * Class CreatePermission
+ * @package Maklad\Permission\Commands
+ */
 class CreatePermission extends Command
 {
     protected $signature = 'permission:create-permission 
@@ -15,11 +20,11 @@ class CreatePermission extends Command
 
     public function handle()
     {
-        $permissionClass = app(Permission::class);
+        $permissionClass = \app(Permission::class);
 
         $permission = $permissionClass::create([
             'name'       => $this->argument('name'),
-            'guard_name' => $this->argument('guard'),
+            'guard_name' => $this->argument('guard')
         ]);
 
         $this->info("Permission `{$permission->name}` created");

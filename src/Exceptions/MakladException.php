@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Created by PhpStorm.
  * User: mostafamaklad
@@ -11,6 +12,10 @@ namespace Maklad\Permission\Exceptions;
 use InvalidArgumentException;
 use Throwable;
 
+/**
+ * Class MakladException
+ * @package Maklad\Permission\Exceptions
+ */
 class MakladException extends InvalidArgumentException
 {
     /**
@@ -20,12 +25,12 @@ class MakladException extends InvalidArgumentException
      * @param int $code
      * @param Throwable|null $previous
      */
-    public function __construct($message = "", $code = 0, Throwable $previous = null)
+    public function __construct($message = '', $code = 0, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
 
-        if (config('permission.log_registration_exception')) {
-            $logger = app('log');
+        if (\config('permission.log_registration_exception')) {
+            $logger = \app('log');
             $logger->alert($message);
         }
     }
