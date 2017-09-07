@@ -18,22 +18,36 @@ class Role extends Model implements RoleInterface
     use RefreshesPermissionCache;
 
     public $guarded = ['id'];
+    protected $helpers;
 
     public function __construct(array $attributes = [])
     {
-        $attributes['guard_name'] = $attributes['guard_name'] ?? config('auth.defaults.guard');
+        $attributes['guard_name'] = $attributes['guard_name'] ?? \config('auth.defaults.guard');
 
         parent::__construct($attributes);
 
-        $this->setTable(config('permission.table_names.roles'));
+        $this->helpers = new Helpers();
+
+        $this->setTable(\config('permission.table_names.roles'));
     }
 
+    /**
+     * @param array $attributes
+     *
+     * @return $this|Model
+     * @throws RoleAlreadyExists
+     * @internal param array $attributes§
+     *
+     */
     public static function create(array $attributes = [])
     {
-        $attributes['guard_name'] = $attributes['guard_name'] ?? config('auth.defaults.guard');
+        $attributes['guard_name'] = $attributes['guard_name'] ?? \config('auth.defaults.guard');
 
         if (static::where('name', $attributes['name'])->where('guard_name', $attributes['guard_name'])->first()) {
-            throw RoleAlreadyExists::create($attributes['name'], $attributes['guard_name']);
+            $name = $attributes['name'];
+            $guardName = $attributes['guard_name'];
+            $helpers = new Helpers();
+            throw new RoleAlreadyExists($helpers->getRoleAlreadyExistsMessage($name, $guardName));
         }
 
         return static::query()->create($attributes);
@@ -46,8 +60,8 @@ class Role extends Model implements RoleInterface
     public function permissions(): BelongsToMany
     {
         return $this->belongsToMany(
-            config('permission.models.permission'),
-            config('permission.table_names.role_has_permissions')
+            \config('permission.models.permission'),
+            \config('permission.table_names.role_has_permissions')
         );
     }
 
@@ -56,7 +70,7 @@ class Role extends Model implements RoleInterface
      */
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(Helpers::getModelForGuard($this->attributes['guard_name']));
+        return $this->belongsToMany($this->helpers->getModelForGuard($this->attributes['guard_name']));
     }
 
     /**
@@ -66,15 +80,17 @@ class Role extends Model implements RoleInterface
      * @param string|null $guardName
      *
      * @return RoleInterface
+     * @throws RoleDoesNotExist
      */
     public static function findByName(string $name, $guardName = null): RoleInterface
     {
-        $guardName = $guardName ?? config('auth.defaults.guard');
+        $guardName = $guardName ?? \config('auth.defaults.guard');
 
         $role = static::where('name', $name)->where('guard_name', $guardName)->first();
 
         if (! $role) {
-            throw RoleDoesNotExist::create($name);
+            $helpers = new Helpers();
+            throw new RoleDoesNotExist($helpers->getRoleDoesNotExistMessage($name, $guardName));
         }
 
         return $role;
@@ -91,12 +107,15 @@ class Role extends Model implements RoleInterface
      */
     public function hasPermissionTo($permission): bool
     {
-        if (is_string($permission)) {
-            $permission = app(Permission::class)->findByName($permission, $this->getDefaultGuardName());
+        if (\is_string($permission)) {
+            $permission = \app(Permission::class)->findByName($permission, $this->getDefaultGuardName());
         }
 
         if (! $this->getGuardNames()->contains($permission->guard_name)) {
-            throw GuardDoesNotMatch::create($permission->guard_name, $this->getGuardNames());
+            $expected = $this->getGuardNames();
+            $given = $permission->guard_name;
+
+            throw new GuardDoesNotMatch($this->helpers->getGuardDoesNotMatchMessage($expected, $given));
         }
 
         return $this->permissions->contains('id', $permission->id);
