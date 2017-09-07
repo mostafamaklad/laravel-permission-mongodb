@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Maklad\Permission\Models;
 
@@ -12,6 +13,10 @@ use Maklad\Permission\Helpers;
 use Maklad\Permission\PermissionRegistrar;
 use Maklad\Permission\Traits\RefreshesPermissionCache;
 
+/**
+ * Class Permission
+ * @package Maklad\Permission\Models
+ */
 class Permission extends Model implements PermissionInterface
 {
     use RefreshesPermissionCache;

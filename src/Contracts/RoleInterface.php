@@ -1,11 +1,15 @@
 <?php
+declare(strict_types=1);
 
 namespace Maklad\Permission\Contracts;
 
 use Jenssegers\Mongodb\Relations\BelongsToMany;
 use Maklad\Permission\Exceptions\RoleDoesNotExist;
-use Maklad\Permission\Models\Permission;
 
+/**
+ * Interface RoleInterface
+ * @package Maklad\Permission\Contracts
+ */
 interface RoleInterface
 {
     /**
