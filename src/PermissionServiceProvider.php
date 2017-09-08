@@ -30,6 +30,8 @@ class PermissionServiceProvider extends ServiceProvider
         $this->registerModelBindings();
 
         $permissionLoader->registerPermissions();
+
+        $this->registerBladeExtensions();
     }
 
     public function register()
@@ -38,8 +40,6 @@ class PermissionServiceProvider extends ServiceProvider
             __DIR__ . '/../config/permission.php',
             'permission'
         );
-
-        $this->registerBladeExtensions();
     }
 
     protected function registerModelBindings()
