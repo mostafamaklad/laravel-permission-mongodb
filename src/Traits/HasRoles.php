@@ -21,11 +21,12 @@ trait HasRoles
     public static function bootHasRoles()
     {
         static::deleting(function (Model $model) {
+
             foreach ($model->roles as $role) {
                 $role->users()->detach($model);
             }
-            foreach ($model->permissions as $permissions) {
-                $permissions->users()->detach($model);
+            foreach ($model->permissions as $permission) {
+                $permission->users()->detach($model);
             }
         });
     }
@@ -60,7 +61,7 @@ trait HasRoles
             $roles = \collect($roles);
         }
 
-        if (! $roles instanceof Collection) {
+        if ( ! $roles instanceof Collection) {
             $roles = \collect([$roles]);
         }
 
