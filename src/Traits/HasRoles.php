@@ -61,7 +61,7 @@ trait HasRoles
             $roles = \collect($roles);
         }
 
-        if ( ! $roles instanceof Collection) {
+        if (! $roles instanceof Collection) {
             $roles = \collect([$roles]);
         }
 
