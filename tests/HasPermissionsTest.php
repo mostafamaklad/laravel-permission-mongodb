@@ -70,5 +70,7 @@ class HasPermissionsTest extends TestCase
         $this->refreshTestUser();
 
         $this->assertFalse($this->testUser->hasPermissionTo($this->testUserPermission));
+
+        $this->assertCount(0, $this->testUserPermission->users);
     }
 }
