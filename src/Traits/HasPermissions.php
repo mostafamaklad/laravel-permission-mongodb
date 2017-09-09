@@ -26,15 +26,15 @@ trait HasPermissions
      */
     public function givePermissionTo(...$permissions)
     {
-        $permissions = \collect($permissions)
-            ->flatten()
-            ->map(function ($permission) {
-                return $this->getStoredPermission($permission);
-            })
-            ->each(function ($permission) {
-                $this->ensureModelSharesGuard($permission);
-            })
-            ->all();
+        $permissions = new Collection($permissions);
+        $permissions = $permissions->flatten()
+                                   ->map(function ($permission) {
+                                       return $this->getStoredPermission($permission);
+                                   })
+                                   ->each(function ($permission) {
+                                       $this->ensureModelSharesGuard($permission);
+                                   })
+                                   ->all();
 
         $this->permissions()->saveMany($permissions);
 
@@ -81,8 +81,9 @@ trait HasPermissions
      */
     protected function getStoredPermission($permissions): Permission
     {
+        $helpers = new Helpers();
         if (\is_string($permissions)) {
-            return \app(Permission::class)->findByName($permissions, $this->getDefaultGuardName());
+            return $helpers->app(Permission::class)->findByName($permissions, $this->getDefaultGuardName());
         }
 
         return $permissions;
@@ -97,8 +98,8 @@ trait HasPermissions
     {
         if (! $this->getGuardNames()->contains($roleOrPermission->guard_name)) {
             $expected = $this->getGuardNames();
-            $given = $roleOrPermission->guard_name;
-            $helpers = new Helpers();
+            $given    = $roleOrPermission->guard_name;
+            $helpers  = new Helpers();
 
             throw new GuardDoesNotMatch($helpers->getGuardDoesNotMatchMessage($expected, $given));
         }
@@ -106,23 +107,28 @@ trait HasPermissions
 
     protected function getGuardNames(): Collection
     {
+        $helpers = new Helpers();
         if ($this->guard_name) {
-            return \collect($this->guard_name);
+            return new Collection($this->guard_name);
         }
 
-        return \collect(\config('auth.guards'))
-            ->map(function ($guard) {
-                return \config("auth.providers.{$guard['provider']}.model");
-            })
-            ->filter(function ($model) {
-                return \get_class($this) === $model;
-            })
-            ->keys();
+        $guards = new Collection($helpers->config('auth.guards'));
+
+        return $guards->map(function ($guard) {
+            $helpers = new Helpers();
+
+            return $helpers->config("auth.providers.{$guard['provider']}.model");
+        })
+                      ->filter(function ($model) {
+                          return \get_class($this) === $model;
+                      })
+                      ->keys();
     }
 
     protected function getDefaultGuardName(): string
     {
-        $default = \config('auth.defaults.guard');
+        $helpers = new Helpers();
+        $default = $helpers->config('auth.defaults.guard');
 
         return $this->getGuardNames()->first() ?: $default;
     }
@@ -132,6 +138,7 @@ trait HasPermissions
      */
     public function forgetCachedPermissions()
     {
-        \app(PermissionRegistrar::class)->forgetCachedPermissions();
+        $helpers = new Helpers();
+        $helpers->app(PermissionRegistrar::class)->forgetCachedPermissions();
     }
 }

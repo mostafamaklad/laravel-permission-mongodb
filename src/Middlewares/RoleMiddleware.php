@@ -5,6 +5,7 @@ namespace Maklad\Permission\Middlewares;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use Maklad\Permission\Helpers;
 
 /**
  * Class RoleMiddleware
@@ -21,14 +22,15 @@ class RoleMiddleware
      */
     public function handle($request, Closure $next, $role)
     {
+        $helpers = new Helpers();
         if (Auth::guest()) {
-            \abort(403);
+            $helpers->abort(403);
         }
 
         $roles = \is_array($role) ? $role : \explode('|', $role);
 
         if (! Auth::user()->hasAnyRole($roles)) {
-            \abort(403);
+            $helpers->abort(403);
         }
 
         return $next($request);

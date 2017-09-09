@@ -5,6 +5,7 @@ namespace Maklad\Permission\Commands;
 
 use Illuminate\Console\Command;
 use Maklad\Permission\Contracts\RoleInterface as Role;
+use Maklad\Permission\Helpers;
 
 /**
  * Class CreateRole
@@ -20,7 +21,8 @@ class CreateRole extends Command
 
     public function handle()
     {
-        $roleClass = \app(Role::class);
+        $helpers = new Helpers();
+        $roleClass = $helpers->app(Role::class);
 
         $role = $roleClass::create([
             'name'       => $this->argument('name'),
