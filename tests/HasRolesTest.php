@@ -188,11 +188,14 @@ class HasRolesTest extends TestCase
         $user1 = User::create(['email' => 'user1@test.com']);
         $user2 = User::create(['email' => 'user2@test.com']);
         $user1->assignRole('testRole');
+        $user1->assignRole('testRole2');
         $user2->assignRole('testRole2');
 
-        $scopedUsers = User::role('testRole')->get();
+        $scopedUsers1 = User::role('testRole')->get();
+        $scopedUsers2 = User::role('testRole2')->get();
 
-        $this->assertEquals($scopedUsers->count(), 1);
+        $this->assertEquals($scopedUsers1->count(), 1);
+        $this->assertEquals($scopedUsers2->count(), 2);
     }
 
     /** @test */

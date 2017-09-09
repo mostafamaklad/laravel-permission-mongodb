@@ -51,7 +51,7 @@ trait HasRoles
      * Scope the model query to certain roles only.
      *
      * @param Builder $query
-     * @param string|array|Role|\Illuminate\Support\Collection $roles
+     * @param string|array|Role|Collection $roles
      *
      * @return Builder
      */
@@ -70,6 +70,36 @@ trait HasRoles
         });
 
         return $query->whereIn('role_ids', $roles->pluck('_id'));
+    }
+
+    /**
+     * Scope the model query to certain permissions only.
+     *
+     * @param Builder $query
+     * @param string|array|Permission|Collection $permissions
+     *
+     * @return Builder
+     */
+    public function scopePermission(Builder $query, $permissions): Builder
+    {
+        if (\is_array($permissions)) {
+            $permissions = \collect($permissions);
+        }
+
+        if (! $permissions instanceof Collection) {
+            $permissions = \collect([$permissions]);
+        }
+
+        $roles = \collect([]);
+        $permissions = $permissions->map(function ($permission) use (&$roles) {
+            $permission = $this->getStoredPermission($permission);
+            $roles = $roles->merge($permission->roles);
+            return $permission;
+        });
+        $roles = $roles->unique();
+
+        return $query->orWhereIn('permission_ids', $permissions->pluck('_id'))
+            ->orWhereIn('role_ids', $roles->pluck('_id'));
     }
 
     /**
