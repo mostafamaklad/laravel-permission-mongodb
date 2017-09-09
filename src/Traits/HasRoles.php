@@ -56,17 +56,7 @@ trait HasRoles
      */
     public function scopeRole(Builder $query, $roles): Builder
     {
-        if (\is_array($roles)) {
-            $roles = \collect($roles);
-        }
-
-        if (! $roles instanceof Collection) {
-            $roles = \collect([$roles]);
-        }
-
-        $roles = $roles->map(function ($role) {
-            return $this->getStoredRole($role);
-        });
+        $roles = $this->convertToRoleModels($roles);
 
         return $query->whereIn('role_ids', $roles->pluck('_id'));
     }
@@ -81,24 +71,17 @@ trait HasRoles
      */
     public function scopePermission(Builder $query, $permissions): Builder
     {
-        if (\is_array($permissions)) {
-            $permissions = \collect($permissions);
-        }
-
-        if (! $permissions instanceof Collection) {
-            $permissions = \collect([$permissions]);
-        }
+        $permissions = $this->convertToPermissionModels($permissions);
 
         $roles = \collect([]);
-        $permissions = $permissions->map(function ($permission) use (&$roles) {
-            $permission = $this->getStoredPermission($permission);
+
+        foreach ($permissions as $permission) {
             $roles = $roles->merge($permission->roles);
-            return $permission;
-        });
+        }
         $roles = $roles->unique();
 
         return $query->orWhereIn('permission_ids', $permissions->pluck('_id'))
-            ->orWhereIn('role_ids', $roles->pluck('_id'));
+                     ->orWhereIn('role_ids', $roles->pluck('_id'));
     }
 
     /**
@@ -360,5 +343,29 @@ trait HasRoles
     public function getPermissionNames(): Collection
     {
         return $this->getAllPermissions()->pluck('name');
+    }
+
+    /**
+     * Convert to Role Models
+     *
+     * @param $roles
+     *
+     * @return Collection
+     */
+    private function convertToRoleModels($roles): Collection
+    {
+        if (\is_array($roles)) {
+            $roles = \collect($roles);
+        }
+
+        if (! $roles instanceof Collection) {
+            $roles = \collect([$roles]);
+        }
+
+        $roles = $roles->map(function ($role) {
+            return $this->getStoredRole($role);
+        });
+
+        return $roles;
     }
 }

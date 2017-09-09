@@ -134,4 +134,28 @@ trait HasPermissions
     {
         \app(PermissionRegistrar::class)->forgetCachedPermissions();
     }
+
+    /**
+     * Convert to Permission Models
+     *
+     * @param string|array|Collection $permissions
+     *
+     * @return Collection
+     */
+    private function convertToPermissionModels($permissions): Collection
+    {
+        if (\is_array($permissions)) {
+            $permissions = \collect($permissions);
+        }
+
+        if (! $permissions instanceof Collection) {
+            $permissions = \collect([$permissions]);
+        }
+
+        $permissions = $permissions->map(function ($permission) {
+            return $this->getStoredPermission($permission);
+        });
+
+        return $permissions;
+    }
 }
