@@ -2,6 +2,15 @@
 
 All Notable changes to `laravel-permission-mongodb` will be documented in this file.
 
+## 1.3.0 - 2017-09-09
+
+### Added
+- Added permission scope to HasRoles trait
+- Update dependencies
+
+### Changed
+- Register Blade extensions in boot instead of register
+
 ## 1.2.2 - 2017-09-07
 
 ### Fixed
