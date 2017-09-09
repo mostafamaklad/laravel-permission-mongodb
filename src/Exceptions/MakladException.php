@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace Maklad\Permission\Exceptions;
 
 use InvalidArgumentException;
-use Maklad\Permission\Helpers;
 use Throwable;
 
 /**
@@ -19,7 +18,6 @@ use Throwable;
  */
 class MakladException extends InvalidArgumentException
 {
-    protected $helpers;
     /**
      * MakladException constructor.
      *
@@ -29,11 +27,10 @@ class MakladException extends InvalidArgumentException
      */
     public function __construct($message = '', $code = 0, Throwable $previous = null)
     {
-        $this->helpers = new Helpers();
         parent::__construct($message, $code, $previous);
 
-        if ($this->helpers->config('permission.log_registration_exception')) {
-            $logger = $this->helpers->app('log');
+        if (\config('permission.log_registration_exception')) {
+            $logger = \app('log');
             $logger->alert($message);
         }
     }

@@ -9,7 +9,6 @@ use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Relations\BelongsToMany;
 use Maklad\Permission\Contracts\PermissionInterface as Permission;
 use Maklad\Permission\Contracts\RoleInterface as Role;
-use Maklad\Permission\Helpers;
 
 /**
  * Trait HasRoles
@@ -36,9 +35,7 @@ trait HasRoles
      */
     public function roles(): BelongsToMany
     {
-        $helpers = new Helpers();
-
-        return $this->belongsToMany($helpers->config('permission.models.role'))->withTimestamps();
+        return $this->belongsToMany(\config('permission.models.role'))->withTimestamps();
     }
 
     /**
@@ -46,9 +43,7 @@ trait HasRoles
      */
     public function permissions(): BelongsToMany
     {
-        $helpers = new Helpers();
-
-        return $this->belongsToMany($helpers->config('permission.models.permission'))->withTimestamps();
+        return $this->belongsToMany(\config('permission.models.permission'))->withTimestamps();
     }
 
     /**
@@ -62,11 +57,11 @@ trait HasRoles
     public function scopeRole(Builder $query, $roles): Builder
     {
         if (\is_array($roles)) {
-            $roles = new Collection($roles);
+            $roles = \collect($roles);
         }
 
         if (! $roles instanceof Collection) {
-            $roles = new Collection([$roles]);
+            $roles = \collect([$roles]);
         }
 
         $roles = $roles->map(function ($role) {
@@ -87,24 +82,23 @@ trait HasRoles
     public function scopePermission(Builder $query, $permissions): Builder
     {
         if (\is_array($permissions)) {
-            $permissions = new Collection($permissions);
+            $permissions = \collect($permissions);
         }
 
         if (! $permissions instanceof Collection) {
-            $permissions = new Collection([$permissions]);
+            $permissions = \collect([$permissions]);
         }
 
-        $roles       = new Collection([]);
+        $roles = \collect([]);
         $permissions = $permissions->map(function ($permission) use (&$roles) {
             $permission = $this->getStoredPermission($permission);
-            $roles      = $roles->merge($permission->roles);
-
+            $roles = $roles->merge($permission->roles);
             return $permission;
         });
-        $roles       = $roles->unique();
+        $roles = $roles->unique();
 
         return $query->orWhereIn('permission_ids', $permissions->pluck('_id'))
-                     ->orWhereIn('role_ids', $roles->pluck('_id'));
+            ->orWhereIn('role_ids', $roles->pluck('_id'));
     }
 
     /**
@@ -116,15 +110,15 @@ trait HasRoles
      */
     public function assignRole(...$roles)
     {
-        $roles = new Collection($roles);
-        $roles = $roles->flatten()
-                       ->map(function ($role) {
-                           return $this->getStoredRole($role);
-                       })
-                       ->each(function ($role) {
-                           $this->ensureModelSharesGuard($role);
-                       })
-                       ->all();
+        $roles = \collect($roles)
+            ->flatten()
+            ->map(function ($role) {
+                return $this->getStoredRole($role);
+            })
+            ->each(function ($role) {
+                $this->ensureModelSharesGuard($role);
+            })
+            ->all();
 
         $this->roles()->saveMany($roles);
 
@@ -224,9 +218,7 @@ trait HasRoles
             return $this->roles->contains('id', $roles->id);
         }
 
-        $roles = new Collection($roles);
-
-        $roles = $roles->map(function ($role) {
+        $roles = \collect()->make($roles)->map(function ($role) {
             return $role instanceof Role ? $role->name : $role;
         });
 
@@ -243,9 +235,8 @@ trait HasRoles
      */
     public function hasPermissionTo($permission, $guardName = null): bool
     {
-        $helpers = new Helpers();
         if (\is_string($permission)) {
-            $permission = $helpers->app(Permission::class)->findByName(
+            $permission = \app(Permission::class)->findByName(
                 $permission,
                 $guardName ?? $this->getDefaultGuardName()
             );
@@ -297,9 +288,8 @@ trait HasRoles
      */
     public function hasDirectPermission($permission): bool
     {
-        $helpers = new Helpers();
         if (\is_string($permission)) {
-            $permission = $helpers->app(Permission::class)->findByName($permission, $this->getDefaultGuardName());
+            $permission = \app(Permission::class)->findByName($permission, $this->getDefaultGuardName());
         }
 
         return $this->permissions->contains('id', $permission->id);
@@ -344,9 +334,8 @@ trait HasRoles
      */
     protected function getStoredRole($role): Role
     {
-        $helpers = new Helpers();
         if (\is_string($role)) {
-            return $helpers->app(Role::class)->findByName($role, $this->getDefaultGuardName());
+            return \app(Role::class)->findByName($role, $this->getDefaultGuardName());
         }
 
         return $role;

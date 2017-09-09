@@ -5,7 +5,6 @@ namespace Maklad\Permission\Commands;
 
 use Illuminate\Console\Command;
 use Maklad\Permission\Contracts\PermissionInterface as Permission;
-use Maklad\Permission\Helpers;
 
 /**
  * Class CreatePermission
@@ -21,8 +20,7 @@ class CreatePermission extends Command
 
     public function handle()
     {
-        $helpers = new Helpers();
-        $permissionClass = $helpers->app(Permission::class);
+        $permissionClass = \app(Permission::class);
 
         $permission = $permissionClass::create([
             'name'       => $this->argument('name'),
