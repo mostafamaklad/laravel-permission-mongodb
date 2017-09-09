@@ -19,15 +19,17 @@ class HasRolesTest extends TestCase
     /** @test */
     public function it_can_assign_and_remove_a_role()
     {
-        $this->testUser->assignRole('testRole');
+        $this->testUser->assignRole($this->testUserRole);
 
-        $this->assertTrue($this->testUser->hasRole('testRole'));
+        $this->assertTrue($this->testUser->hasRole($this->testUserRole));
 
-        $this->testUser->removeRole('testRole');
+        $this->testUser->removeRole($this->testUserRole);
 
         $this->refreshTestUser();
 
-        $this->assertFalse($this->testUser->hasRole('testRole'));
+        $this->assertFalse($this->testUser->hasRole($this->testUserRole));
+
+        $this->assertCount(0, $this->testUserRole->users);
     }
 
     /** @test */
@@ -186,11 +188,14 @@ class HasRolesTest extends TestCase
         $user1 = User::create(['email' => 'user1@test.com']);
         $user2 = User::create(['email' => 'user2@test.com']);
         $user1->assignRole('testRole');
+        $user1->assignRole('testRole2');
         $user2->assignRole('testRole2');
 
-        $scopedUsers = User::role('testRole')->get();
+        $scopedUsers1 = User::role('testRole')->get();
+        $scopedUsers2 = User::role('testRole2')->get();
 
-        $this->assertEquals($scopedUsers->count(), 1);
+        $this->assertEquals($scopedUsers1->count(), 1);
+        $this->assertEquals($scopedUsers2->count(), 2);
     }
 
     /** @test */

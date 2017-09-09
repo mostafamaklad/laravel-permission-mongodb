@@ -28,7 +28,7 @@ $role->givePermissionTo('edit articles');
 
 If you're using multiple guards we've got you covered as well. Every guard will have its own set of permissions and roles that can be assigned to the guard's users. Read about it in the [using multiple guards](#using-multiple-guards) section of the readme.
 
-Because all permissions will be registered on [Laravel's gate](https://laravel.com/docs/5.4/authorization), you can test if a user has a permission with Laravel's default `can` function:
+Because all permissions will be registered on [Laravel's gate](https://laravel.com/docs/5.5/authorization), you can test if a user has a permission with Laravel's default `can` function:
 
 ```php
 $user->can('edit articles');
@@ -251,6 +251,15 @@ $users = User::role('writer')->get(); // Returns only users with the role 'write
 ```
 
 The scope can accept a string, a `\Maklad\Permission\Models\Role` object or an `\Illuminate\Support\Collection` object.
+
+The `HasRoles` trait also adds a scope to your models to scope the query to certain permissions:
+
+```php
+$users = User::permission('edit articles')->get(); // Returns only users with the permission 'edit articles'
+```
+
+The scope can accept a string, a `\Maklad\Permission\Models\Permission` object or an `\Illuminate\Support\Collection` object.
+
 
 ### Using "direct" permissions
 
