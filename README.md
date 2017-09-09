@@ -252,6 +252,15 @@ $users = User::role('writer')->get(); // Returns only users with the role 'write
 
 The scope can accept a string, a `\Maklad\Permission\Models\Role` object or an `\Illuminate\Support\Collection` object.
 
+The `HasRoles` trait also adds a scope to your models to scope the query to certain permissions:
+
+```php
+$users = User::permission('edit articles')->get(); // Returns only users with the permission 'edit articles'
+```
+
+The scope can accept a string, a `\Maklad\Permission\Models\Permission` object or an `\Illuminate\Support\Collection` object.
+
+
 ### Using "direct" permissions
 
 A permission can be given to any user with the `HasRoles` trait:
