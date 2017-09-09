@@ -24,10 +24,13 @@ class PermissionRegistrar
     /** @var string */
     protected $cacheKey = 'maklad.permission.cache';
 
+    protected $helpers;
+
     public function __construct(Gate $gate, Repository $cache)
     {
         $this->gate   = $gate;
         $this->cache  = $cache;
+        $this->helpers = new Helpers();
     }
 
     public function registerPermissions(): bool
@@ -46,10 +49,16 @@ class PermissionRegistrar
         $this->cache->forget($this->cacheKey);
     }
 
+    /**
+     * Get permissions
+     *
+     * @return Collection
+     */
     public function getPermissions(): Collection
     {
-        return $this->cache->remember($this->cacheKey, \config('permission.cache_expiration_time'), function () {
-            return \app(Permission::class)->with('roles')->get();
+        $expirationTime = $this->helpers->config('permission.cache_expiration_time');
+        return $this->cache->remember($this->cacheKey, $expirationTime, function () {
+            return $this->helpers->app(Permission::class)->with('roles')->get();
         });
     }
 }
