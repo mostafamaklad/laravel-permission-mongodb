@@ -244,21 +244,14 @@ $roles = $user->roles->pluck('name'); // Returns a collection
 $roles = $user->getRoleNames() // Returns a collection;
 ```
 
-The `HasRoles` trait also adds a scope to your models to scope the query to certain roles:
+The `HasRoles` trait also adds scopes to your models to scope the query to certain roles or permissions:
 
 ```php
 $users = User::role('writer')->get(); // Returns only users with the role 'writer'
-```
-
-The scope can accept a string, a `\Maklad\Permission\Models\Role` object or an `\Illuminate\Support\Collection` object.
-
-The `HasRoles` trait also adds a scope to your models to scope the query to certain permissions:
-
-```php
 $users = User::permission('edit articles')->get(); // Returns only users with the permission 'edit articles'
 ```
 
-The scope can accept a string, a `\Maklad\Permission\Models\Permission` object or an `\Illuminate\Support\Collection` object.
+The scope can accept a string, a `\Maklad\Permission\Models\Role` object, a `\Maklad\Permission\Models\Permission` object or an `\Illuminate\Support\Collection` object.
 
 
 ### Using "direct" permissions
