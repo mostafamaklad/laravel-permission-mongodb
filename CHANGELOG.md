@@ -2,6 +2,14 @@
 
 All Notable changes to `laravel-permission-mongodb` will be documented in this file.
 
+## 1.3.1 - 2017-09-11
+
+### Added
+- Add convertToRoleModels and convertToPermissionModels
+
+### Fixed
+- Register Blade extensions
+
 ## 1.3.0 - 2017-09-09
 
 ### Added
