@@ -17,21 +17,19 @@ class PermissionServiceProvider extends ServiceProvider
     public function boot(PermissionRegistrar $permissionLoader)
     {
         $this->publishes([
-            __DIR__ . '/../config/permission.php' => $this->app->configPath() . '/permission.php',
+            __DIR__ . '/../config/permission.php' => $this->app->configPath() . '/permission.php'
         ], 'config');
 
         if ($this->app->runningInConsole()) {
             $this->commands([
                 Commands\CreateRole::class,
-                Commands\CreatePermission::class,
+                Commands\CreatePermission::class
             ]);
         }
 
         $this->registerModelBindings();
 
         $permissionLoader->registerPermissions();
-
-        $this->registerBladeExtensions();
     }
 
     public function register()
@@ -40,6 +38,8 @@ class PermissionServiceProvider extends ServiceProvider
             __DIR__ . '/../config/permission.php',
             'permission'
         );
+
+        $this->registerBladeExtensions();
     }
 
     protected function registerModelBindings()
