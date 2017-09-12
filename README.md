@@ -1,7 +1,6 @@
 # laravel-permission-mongodb
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
-[![Laravel 5.4][ico-laravel-5.4]][link-laravel-5.4]
 [![Software License][ico-license]](LICENSE.md)
 [![Build Status][ico-travis]][link-travis]
 [![Scrutinizer][ico-scrutinizer]][link-scrutinizer]
@@ -11,6 +10,9 @@
 [![Dependency Status][ico-gemnasium]][link-gemnasium]
 [![SensioLabsInsight][ico-sensiolabs]][link-sensiolabs]
 [![Total Downloads][ico-downloads]][link-packagist]
+[![Laravel 5.3.x][ico-laravel-5.3]][link-laravel-5.3]
+[![Laravel 5.4.x][ico-laravel-5.4]][link-laravel-5.4]
+[![Laravel 5.5.x][ico-laravel-5.5]][link-laravel-5.5]
 
 This package allows you to manage user permissions and roles in a database.
 It is inspired from [laravel-permission][link-laravel-permission]. Same code same every thing but it is compatible with [laravel-mongodb][link-laravel-mongodb]
@@ -689,7 +691,10 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 
 [link-laravel-5.4]: https://laravel.com/docs/5.4
 [ico-laravel-5.4]: https://img.shields.io/badge/Laravel-5.4.x-brightgreen.svg?style=flat-square
-
+[link-laravel-5.5]: https://laravel.com/docs/5.5
+[ico-laravel-5.5]: https://img.shields.io/badge/Laravel-5.5.x-red.svg?style=flat-square
+[link-laravel-5.3]: https://laravel.com/docs/5.3
+[ico-laravel-5.3]: https://img.shields.io/badge/Laravel-5.3.x-red.svg?style=flat-square
 
 [link-travis]: https://travis-ci.org/mostafamaklad/laravel-permission-mongodb
 [ico-travis]: https://img.shields.io/travis/mostafamaklad/laravel-permission-mongodb/master.svg?style=flat-square
