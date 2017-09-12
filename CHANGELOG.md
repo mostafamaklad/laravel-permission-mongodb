@@ -2,6 +2,11 @@
 
 All Notable changes to `laravel-permission-mongodb` will be documented in this file.
 
+## 1.3.1 - 2017-09-12
+
+### Removed
+- Remove the support of `laravel 5.5` till `jenssegers/laravel-mongodb` supports it
+
 ## 1.3.1 - 2017-09-11
 
 ### Added
