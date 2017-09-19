@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "27b5588b27f1c7ac4ce278e49617c450",
+    "content-hash": "237ae907852bbcf80c17a214f4153d96",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -74,6 +74,117 @@
             "time": "2017-07-22T12:18:28+00:00"
         },
         {
+            "name": "doctrine/lexer",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/lexer.git",
+                "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/lexer/zipball/83893c552fd2045dd78aef794c31e694c37c0b8c",
+                "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\Common\\Lexer\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Roman Borschel",
+                    "email": "roman@code-factory.org"
+                },
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com"
+                },
+                {
+                    "name": "Johannes Schmitt",
+                    "email": "schmittjoh@gmail.com"
+                }
+            ],
+            "description": "Base library for a lexer that can be used in Top-Down, Recursive Descent Parsers.",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "lexer",
+                "parser"
+            ],
+            "time": "2014-09-09T13:34:57+00:00"
+        },
+        {
+            "name": "egulias/email-validator",
+            "version": "2.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/egulias/EmailValidator.git",
+                "reference": "bc31baa11ea2883e017f0a10d9722ef9d50eac1c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/bc31baa11ea2883e017f0a10d9722ef9d50eac1c",
+                "reference": "bc31baa11ea2883e017f0a10d9722ef9d50eac1c",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/lexer": "^1.0.1",
+                "php": ">= 5.5"
+            },
+            "require-dev": {
+                "dominicsayers/isemail": "dev-master",
+                "phpunit/phpunit": "^4.8.0",
+                "satooshi/php-coveralls": "dev-master"
+            },
+            "suggest": {
+                "ext-intl": "PHP Internationalization Libraries are required to use the SpoofChecking validation"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Egulias\\EmailValidator\\": "EmailValidator"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Eduardo Gulias Davis"
+                }
+            ],
+            "description": "A library for validating emails against several RFCs",
+            "homepage": "https://github.com/egulias/EmailValidator",
+            "keywords": [
+                "email",
+                "emailvalidation",
+                "emailvalidator",
+                "validation",
+                "validator"
+            ],
+            "time": "2017-01-30T22:07:36+00:00"
+        },
+        {
             "name": "erusev/parsedown",
             "version": "1.6.3",
             "source": {
@@ -117,29 +228,30 @@
         },
         {
             "name": "jenssegers/mongodb",
-            "version": "v3.2.2",
+            "version": "v3.3.0-alpha",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jenssegers/laravel-mongodb.git",
-                "reference": "1358e50428bc0aeea6d3e13717104d6d9b313887"
+                "reference": "5ecbf0b2f92329b4678f968aae41f8d50d9e1834"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jenssegers/laravel-mongodb/zipball/1358e50428bc0aeea6d3e13717104d6d9b313887",
-                "reference": "1358e50428bc0aeea6d3e13717104d6d9b313887",
+                "url": "https://api.github.com/repos/jenssegers/laravel-mongodb/zipball/5ecbf0b2f92329b4678f968aae41f8d50d9e1834",
+                "reference": "5ecbf0b2f92329b4678f968aae41f8d50d9e1834",
                 "shasum": ""
             },
             "require": {
-                "illuminate/container": "^5.1",
-                "illuminate/database": "^5.1",
-                "illuminate/events": "^5.1",
-                "illuminate/support": "^5.1",
+                "illuminate/container": "^5.5",
+                "illuminate/database": "^5.5",
+                "illuminate/events": "^5.5",
+                "illuminate/support": "^5.5",
                 "mongodb/mongodb": "^1.0.0"
             },
             "require-dev": {
+                "doctrine/dbal": "^2.5",
                 "mockery/mockery": "^0.9",
                 "orchestra/testbench": "^3.1",
-                "phpunit/phpunit": "^5.0|^6.0",
+                "phpunit/phpunit": "^6.0",
                 "satooshi/php-coveralls": "^1.0"
             },
             "suggest": {
@@ -147,10 +259,17 @@
                 "jenssegers/mongodb-session": "Add MongoDB session support to Laravel-MongoDB"
             },
             "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Jenssegers\\Mongodb\\MongodbServiceProvider",
+                        "Jenssegers\\Mongodb\\MongodbQueueServiceProvider"
+                    ]
+                }
+            },
             "autoload": {
                 "psr-0": {
-                    "Jenssegers\\Mongodb": "src/",
-                    "Jenssegers\\Eloquent": "src/"
+                    "Jenssegers\\Mongodb": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -174,20 +293,20 @@
                 "mongo",
                 "mongodb"
             ],
-            "time": "2017-03-12T09:23:10+00:00"
+            "time": "2017-09-18T14:11:39+00:00"
         },
         {
             "name": "laravel/framework",
-            "version": "v5.4.36",
+            "version": "v5.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "1062a22232071c3e8636487c86ec1ae75681bbf9"
+                "reference": "d3e0493bead126cf7fb9a005c64e6b58a9190e51"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/1062a22232071c3e8636487c86ec1ae75681bbf9",
-                "reference": "1062a22232071c3e8636487c86ec1ae75681bbf9",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/d3e0493bead126cf7fb9a005c64e6b58a9190e51",
+                "reference": "d3e0493bead126cf7fb9a005c64e6b58a9190e51",
                 "shasum": ""
             },
             "require": {
@@ -196,21 +315,22 @@
                 "ext-mbstring": "*",
                 "ext-openssl": "*",
                 "league/flysystem": "~1.0",
-                "monolog/monolog": "~1.11",
+                "monolog/monolog": "~1.12",
                 "mtdowling/cron-expression": "~1.0",
                 "nesbot/carbon": "~1.20",
-                "paragonie/random_compat": "~1.4|~2.0",
-                "php": ">=5.6.4",
+                "php": ">=7.0",
+                "psr/container": "~1.0",
+                "psr/simple-cache": "^1.0",
                 "ramsey/uuid": "~3.0",
-                "swiftmailer/swiftmailer": "~5.4",
-                "symfony/console": "~3.2",
-                "symfony/debug": "~3.2",
-                "symfony/finder": "~3.2",
-                "symfony/http-foundation": "~3.2",
-                "symfony/http-kernel": "~3.2",
-                "symfony/process": "~3.2",
-                "symfony/routing": "~3.2",
-                "symfony/var-dumper": "~3.2",
+                "swiftmailer/swiftmailer": "~6.0",
+                "symfony/console": "~3.3",
+                "symfony/debug": "~3.3",
+                "symfony/finder": "~3.3",
+                "symfony/http-foundation": "~3.3",
+                "symfony/http-kernel": "~3.3",
+                "symfony/process": "~3.3",
+                "symfony/routing": "~3.3",
+                "symfony/var-dumper": "~3.3",
                 "tijsverkoyen/css-to-inline-styles": "~2.2",
                 "vlucas/phpdotenv": "~2.2"
             },
@@ -249,12 +369,14 @@
             "require-dev": {
                 "aws/aws-sdk-php": "~3.0",
                 "doctrine/dbal": "~2.5",
-                "mockery/mockery": "~0.9.4",
+                "filp/whoops": "^2.1.4",
+                "mockery/mockery": "~1.0",
+                "orchestra/testbench-core": "3.5.*",
                 "pda/pheanstalk": "~3.0",
-                "phpunit/phpunit": "~5.7",
-                "predis/predis": "~1.0",
-                "symfony/css-selector": "~3.2",
-                "symfony/dom-crawler": "~3.2"
+                "phpunit/phpunit": "~6.0",
+                "predis/predis": "^1.1.1",
+                "symfony/css-selector": "~3.3",
+                "symfony/dom-crawler": "~3.3"
             },
             "suggest": {
                 "aws/aws-sdk-php": "Required to use the SQS queue driver and SES mail driver (~3.0).",
@@ -268,14 +390,14 @@
                 "pda/pheanstalk": "Required to use the beanstalk queue driver (~3.0).",
                 "predis/predis": "Required to use the redis cache and queue drivers (~1.0).",
                 "pusher/pusher-php-server": "Required to use the Pusher broadcast driver (~2.0).",
-                "symfony/css-selector": "Required to use some of the crawler integration testing tools (~3.2).",
-                "symfony/dom-crawler": "Required to use most of the crawler integration testing tools (~3.2).",
-                "symfony/psr-http-message-bridge": "Required to psr7 bridging features (0.2.*)."
+                "symfony/css-selector": "Required to use some of the crawler integration testing tools (~3.3).",
+                "symfony/dom-crawler": "Required to use most of the crawler integration testing tools (~3.3).",
+                "symfony/psr-http-message-bridge": "Required to psr7 bridging features (~1.0)."
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.4-dev"
+                    "dev-master": "5.5-dev"
                 }
             },
             "autoload": {
@@ -303,7 +425,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2017-08-30T09:26:16+00:00"
+            "time": "2017-09-13T13:36:29+00:00"
         },
         {
             "name": "league/flysystem",
@@ -670,6 +792,55 @@
             "time": "2017-03-13T16:27:32+00:00"
         },
         {
+            "name": "psr/container",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/container.git",
+                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
+                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Container\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common Container Interface (PHP FIG PSR-11)",
+            "homepage": "https://github.com/php-fig/container",
+            "keywords": [
+                "PSR-11",
+                "container",
+                "container-interface",
+                "container-interop",
+                "psr"
+            ],
+            "time": "2017-02-14T16:28:37+00:00"
+        },
+        {
             "name": "psr/log",
             "version": "1.0.2",
             "source": {
@@ -715,6 +886,54 @@
                 "psr-3"
             ],
             "time": "2016-10-10T12:19:37+00:00"
+        },
+        {
+            "name": "psr/simple-cache",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/simple-cache.git",
+                "reference": "753fa598e8f3b9966c886fe13f370baa45ef0e24"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/simple-cache/zipball/753fa598e8f3b9966c886fe13f370baa45ef0e24",
+                "reference": "753fa598e8f3b9966c886fe13f370baa45ef0e24",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\SimpleCache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interfaces for simple caching",
+            "keywords": [
+                "cache",
+                "caching",
+                "psr",
+                "psr-16",
+                "simple-cache"
+            ],
+            "time": "2017-01-02T13:31:39+00:00"
         },
         {
             "name": "ramsey/uuid",
@@ -800,29 +1019,30 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.4.8",
+            "version": "v6.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "9a06dc570a0367850280eefd3f1dc2da45aef517"
+                "reference": "008f088d535ed3333af5ad804dd4c0eaf97c2805"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/9a06dc570a0367850280eefd3f1dc2da45aef517",
-                "reference": "9a06dc570a0367850280eefd3f1dc2da45aef517",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/008f088d535ed3333af5ad804dd4c0eaf97c2805",
+                "reference": "008f088d535ed3333af5ad804dd4c0eaf97c2805",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "egulias/email-validator": "~2.0",
+                "php": ">=7.0.0"
             },
             "require-dev": {
                 "mockery/mockery": "~0.9.1",
-                "symfony/phpunit-bridge": "~3.2"
+                "symfony/phpunit-bridge": "~3.3@dev"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.4-dev"
+                    "dev-master": "6.0-dev"
                 }
             },
             "autoload": {
@@ -850,7 +1070,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2017-05-01T15:54:03+00:00"
+            "time": "2017-05-20T06:20:27+00:00"
         },
         {
             "name": "symfony/console",
@@ -1031,27 +1251,30 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.8.27",
+            "version": "v3.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "1377400fd641d7d1935981546aaef780ecd5bf6d"
+                "reference": "54ca9520a00386f83bca145819ad3b619aaa2485"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/1377400fd641d7d1935981546aaef780ecd5bf6d",
-                "reference": "1377400fd641d7d1935981546aaef780ecd5bf6d",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/54ca9520a00386f83bca145819ad3b619aaa2485",
+                "reference": "54ca9520a00386f83bca145819ad3b619aaa2485",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.9"
+                "php": "^5.5.9|>=7.0.8"
+            },
+            "conflict": {
+                "symfony/dependency-injection": "<3.3"
             },
             "require-dev": {
                 "psr/log": "~1.0",
-                "symfony/config": "^2.0.5|~3.0.0",
-                "symfony/dependency-injection": "~2.6|~3.0.0",
-                "symfony/expression-language": "~2.6|~3.0.0",
-                "symfony/stopwatch": "~2.3|~3.0.0"
+                "symfony/config": "~2.8|~3.0",
+                "symfony/dependency-injection": "~3.3",
+                "symfony/expression-language": "~2.8|~3.0",
+                "symfony/stopwatch": "~2.8|~3.0"
             },
             "suggest": {
                 "symfony/dependency-injection": "",
@@ -1060,7 +1283,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.8-dev"
+                    "dev-master": "3.3-dev"
                 }
             },
             "autoload": {
@@ -1087,7 +1310,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2017-06-02T07:47:27+00:00"
+            "time": "2017-07-29T21:54:42+00:00"
         },
         {
             "name": "symfony/finder",
@@ -1860,22 +2083,22 @@
         },
         {
             "name": "guzzle/guzzle",
-            "version": "v3.9.3",
+            "version": "v3.8.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/guzzle/guzzle3.git",
-                "reference": "0645b70d953bc1c067bbc8d5bc53194706b628d9"
+                "url": "https://github.com/guzzle/guzzle.git",
+                "reference": "4de0618a01b34aa1c8c33a3f13f396dcd3882eba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle3/zipball/0645b70d953bc1c067bbc8d5bc53194706b628d9",
-                "reference": "0645b70d953bc1c067bbc8d5bc53194706b628d9",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/4de0618a01b34aa1c8c33a3f13f396dcd3882eba",
+                "reference": "4de0618a01b34aa1c8c33a3f13f396dcd3882eba",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
                 "php": ">=5.3.3",
-                "symfony/event-dispatcher": "~2.1"
+                "symfony/event-dispatcher": ">=2.1"
             },
             "replace": {
                 "guzzle/batch": "self.version",
@@ -1902,21 +2125,18 @@
                 "guzzle/stream": "self.version"
             },
             "require-dev": {
-                "doctrine/cache": "~1.3",
-                "monolog/monolog": "~1.0",
+                "doctrine/cache": "*",
+                "monolog/monolog": "1.*",
                 "phpunit/phpunit": "3.7.*",
-                "psr/log": "~1.0",
-                "symfony/class-loader": "~2.1",
-                "zendframework/zend-cache": "2.*,<2.3",
-                "zendframework/zend-log": "2.*,<2.3"
-            },
-            "suggest": {
-                "guzzlehttp/guzzle": "Guzzle 5 has moved to a new package name. The package you have installed, Guzzle 3, is deprecated."
+                "psr/log": "1.0.*",
+                "symfony/class-loader": "*",
+                "zendframework/zend-cache": "<2.3",
+                "zendframework/zend-log": "<2.3"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.9-dev"
+                    "dev-master": "3.8-dev"
                 }
             },
             "autoload": {
@@ -1940,7 +2160,7 @@
                     "homepage": "https://github.com/guzzle/guzzle/contributors"
                 }
             ],
-            "description": "PHP HTTP client. This library is deprecated in favor of https://packagist.org/packages/guzzlehttp/guzzle",
+            "description": "Guzzle is a PHP HTTP client library and framework for building RESTful web service clients",
             "homepage": "http://guzzlephp.org/",
             "keywords": [
                 "client",
@@ -1952,7 +2172,7 @@
                 "web service"
             ],
             "abandoned": "guzzlehttp/guzzle",
-            "time": "2015-03-18T18:23:50+00:00"
+            "time": "2014-01-28T22:29:15+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -1998,39 +2218,35 @@
         },
         {
             "name": "orchestra/testbench",
-            "version": "v3.4.8",
+            "version": "v3.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/orchestral/testbench.git",
-                "reference": "954b15e551e53f0c6d3ce02dfab6b890288e5164"
+                "reference": "6d3fa0d98eb5ae012081aecfa4a6fb55df82b813"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/orchestral/testbench/zipball/954b15e551e53f0c6d3ce02dfab6b890288e5164",
-                "reference": "954b15e551e53f0c6d3ce02dfab6b890288e5164",
+                "url": "https://api.github.com/repos/orchestral/testbench/zipball/6d3fa0d98eb5ae012081aecfa4a6fb55df82b813",
+                "reference": "6d3fa0d98eb5ae012081aecfa4a6fb55df82b813",
                 "shasum": ""
             },
             "require": {
-                "fzaninotto/faker": "~1.4",
-                "laravel/framework": "~5.4.17",
-                "orchestra/testbench-core": "~3.4.0",
-                "php": ">=5.6.0"
+                "laravel/framework": "~5.5.0",
+                "orchestra/testbench-core": "~3.5.0",
+                "php": ">=7.0",
+                "phpunit/phpunit": "~6.0"
             },
             "require-dev": {
                 "mockery/mockery": "^0.9.4",
-                "orchestra/database": "~3.4.0",
-                "phpunit/phpunit": "~5.7"
+                "orchestra/database": "~3.5.0"
             },
             "suggest": {
-                "mockery/mockery": "Allow to use Mockery for testing (^0.9.4).",
-                "orchestra/database": "Allow to use --realpath migration for testing (~3.4).",
-                "orchestra/testbench-browser-kit": "Allow to use legacy BrowserKit for testing (~3.4).",
-                "phpunit/phpunit": "Allow to use PHPUnit for testing (~5.7)."
+                "orchestra/testbench-browser-kit": "Allow to use legacy BrowserKit for testing (~3.5)."
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.4-dev"
+                    "dev-master": "3.5-dev"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -2054,37 +2270,37 @@
                 "orchestral",
                 "testing"
             ],
-            "time": "2017-07-03T15:48:06+00:00"
+            "time": "2017-08-25T10:17:08+00:00"
         },
         {
             "name": "orchestra/testbench-core",
-            "version": "v3.4.1",
+            "version": "v3.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/orchestral/testbench-core.git",
-                "reference": "2a5bafeaac992c4c89da371f5bdd76cb99abb837"
+                "reference": "58b168a1e3220540dfc6b58739c0f75758579026"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/orchestral/testbench-core/zipball/2a5bafeaac992c4c89da371f5bdd76cb99abb837",
-                "reference": "2a5bafeaac992c4c89da371f5bdd76cb99abb837",
+                "url": "https://api.github.com/repos/orchestral/testbench-core/zipball/58b168a1e3220540dfc6b58739c0f75758579026",
+                "reference": "58b168a1e3220540dfc6b58739c0f75758579026",
                 "shasum": ""
             },
             "require": {
                 "fzaninotto/faker": "~1.4",
-                "php": ">=5.6.0"
+                "php": ">=7.0"
             },
             "require-dev": {
-                "laravel/framework": "~5.4.17",
+                "laravel/framework": "~5.5.0",
                 "mockery/mockery": "^0.9.4",
-                "orchestra/database": "~3.4.0",
-                "phpunit/phpunit": "~5.7 || ~6.0"
+                "orchestra/database": "~3.5.0",
+                "phpunit/phpunit": "~6.0"
             },
             "suggest": {
-                "laravel/framework": "Required for testing (~5.4.0).",
+                "laravel/framework": "Required for testing (~5.5.0).",
                 "mockery/mockery": "Allow to use Mockery for testing (^0.9.4).",
-                "orchestra/database": "Allow to use --realpath migration for testing (~3.4).",
-                "orchestra/testbench-browser-kit": "Allow to use legacy BrowserKit for testing (~3.4).",
+                "orchestra/database": "Allow to use --realpath migration for testing (~3.5).",
+                "orchestra/testbench-browser-kit": "Allow to use legacy BrowserKit for testing (~3.5).",
                 "phpunit/phpunit": "Allow to use PHPUnit for testing (~6.0)."
             },
             "type": "library",
@@ -2119,7 +2335,7 @@
                 "orchestral",
                 "testing"
             ],
-            "time": "2017-08-19T03:07:38+00:00"
+            "time": "2017-09-05T08:25:02+00:00"
         },
         {
             "name": "padraic/humbug_get_contents",
@@ -2216,7 +2432,7 @@
             ],
             "authors": [
                 {
-                    "name": "Pádraic Brady",
+                    "name": "Padraic Brady",
                     "email": "padraic.brady@gmail.com",
                     "homepage": "http://blog.astrumfutura.com"
                 }
@@ -2331,64 +2547,6 @@
             ],
             "description": "Library for handling version information and constraints",
             "time": "2017-03-05T17:38:23+00:00"
-        },
-        {
-            "name": "php-coveralls/php-coveralls",
-            "version": "v1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-coveralls/php-coveralls.git",
-                "reference": "da51d304fe8622bf9a6da39a8446e7afd432115c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-coveralls/php-coveralls/zipball/da51d304fe8622bf9a6da39a8446e7afd432115c",
-                "reference": "da51d304fe8622bf9a6da39a8446e7afd432115c",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "ext-simplexml": "*",
-                "guzzle/guzzle": "^2.8|^3.0",
-                "php": ">=5.3.3",
-                "psr/log": "^1.0",
-                "symfony/config": "^2.1|^3.0",
-                "symfony/console": "^2.1|^3.0",
-                "symfony/stopwatch": "^2.0|^3.0",
-                "symfony/yaml": "^2.0|^3.0"
-            },
-            "suggest": {
-                "symfony/http-kernel": "Allows Symfony integration"
-            },
-            "bin": [
-                "bin/coveralls"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Satooshi\\": "src/Satooshi/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Kitamura Satoshi",
-                    "email": "with.no.parachute@gmail.com",
-                    "homepage": "https://www.facebook.com/satooshi.jp"
-                }
-            ],
-            "description": "PHP client library for Coveralls API",
-            "homepage": "https://github.com/satooshi/php-coveralls",
-            "keywords": [
-                "ci",
-                "coverage",
-                "github",
-                "test"
-            ],
-            "time": "2016-01-20T17:35:46+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -3917,7 +4075,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "jenssegers/mongodb": 15
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
