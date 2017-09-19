@@ -65,7 +65,7 @@ $user->can('edit articles');
 
 This package can be used in Laravel 5.4 and up.
 
-> Note: use 1.3.2-alpha version if you are using Laravel 5.5
+> Note: use 1.3.3-alpha version if you are using Laravel 5.5
 
 You can install the package via composer:
 
