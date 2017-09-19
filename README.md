@@ -10,7 +10,6 @@
 [![Dependency Status][ico-gemnasium]][link-gemnasium]
 [![SensioLabsInsight][ico-sensiolabs]][link-sensiolabs]
 [![Total Downloads][ico-downloads]][link-packagist]
-[![Laravel 5.3.x][ico-laravel-5.3]][link-laravel-5.3]
 [![Laravel 5.4.x][ico-laravel-5.4]][link-laravel-5.4]
 [![Laravel 5.5.x][ico-laravel-5.5]][link-laravel-5.5]
 
@@ -31,7 +30,7 @@ $role->givePermissionTo('edit articles');
 
 If you're using multiple guards we've got you covered as well. Every guard will have its own set of permissions and roles that can be assigned to the guard's users. Read about it in the [using multiple guards](#using-multiple-guards) section of the readme.
 
-Because all permissions will be registered on [Laravel's gate](https://laravel.com/docs/5.4/authorization), you can test if a user has a permission with Laravel's default `can` function:
+Because all permissions will be registered on [Laravel's gate](https://laravel.com/docs/5.5/authorization), you can test if a user has a permission with Laravel's default `can` function:
 
 ```php
 $user->can('edit articles');
@@ -64,7 +63,9 @@ $user->can('edit articles');
 
 ## Installation
 
-This package can be used in Laravel 5.4.
+This package can be used in Laravel 5.4 and up.
+
+> Note: use 1.3.2-alpha version if you are using Laravel 5.5
 
 You can install the package via composer:
 
@@ -72,7 +73,7 @@ You can install the package via composer:
 composer require mostafamaklad/laravel-permission-mongodb
 ```
 
-In Laravel 5.4 the service provider will automatically get registered. In older versions of the framework just add the service provider in `config/app.php` file:
+In Laravel 5.5 the service provider will automatically get registered. In older versions of the framework just add the service provider in `config/app.php` file:
 
 ```php
 'providers' => [
@@ -692,9 +693,7 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [link-laravel-5.4]: https://laravel.com/docs/5.4
 [ico-laravel-5.4]: https://img.shields.io/badge/Laravel-5.4.x-brightgreen.svg?style=flat-square
 [link-laravel-5.5]: https://laravel.com/docs/5.5
-[ico-laravel-5.5]: https://img.shields.io/badge/Laravel-5.5.x-red.svg?style=flat-square
-[link-laravel-5.3]: https://laravel.com/docs/5.3
-[ico-laravel-5.3]: https://img.shields.io/badge/Laravel-5.3.x-red.svg?style=flat-square
+[ico-laravel-5.5]: https://img.shields.io/badge/Laravel-5.5.x-brightgreen.svg?style=flat-square
 
 [link-travis]: https://travis-ci.org/mostafamaklad/laravel-permission-mongodb
 [ico-travis]: https://img.shields.io/travis/mostafamaklad/laravel-permission-mongodb/master.svg?style=flat-square
