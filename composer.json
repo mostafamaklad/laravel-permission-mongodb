@@ -38,7 +38,7 @@
     },
     "require-dev": {
         "codeclimate/php-test-reporter": "^0.4.4",
-        "monolog/monolog": "^1.22",
+        "monolog/monolog": "^1.23",
         "orchestra/testbench": "~3.4.2|~3.5.0",
         "phpunit/phpunit": "^5.7|^6.3"
     },
