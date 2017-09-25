@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Maklad\Permission\Middlewares;
 
 use Closure;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * Class RoleMiddleware
@@ -21,13 +20,13 @@ class RoleMiddleware
      */
     public function handle($request, Closure $next, $role)
     {
-        if (Auth::guest()) {
+        if (auth()->guest()) {
             \abort(403);
         }
 
         $roles = \is_array($role) ? $role : \explode('|', $role);
 
-        if (! Auth::user()->hasAnyRole($roles)) {
+        if (! auth()->user()->hasAnyRole($roles)) {
             \abort(403);
         }
 
