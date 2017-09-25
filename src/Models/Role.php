@@ -38,7 +38,7 @@ class Role extends Model implements RoleInterface
 
         $this->helpers = new Helpers();
 
-        $this->setTable(\config('permission.table_names.roles'));
+        $this->setTable(\config('permission.collection_names.roles'));
     }
 
     /**
@@ -71,7 +71,7 @@ class Role extends Model implements RoleInterface
     {
         return $this->belongsToMany(
             \config('permission.models.permission'),
-            \config('permission.table_names.role_has_permissions')
+            \config('permission.collection_names.role_has_permissions')
         );
     }
 
