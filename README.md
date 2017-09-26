@@ -682,19 +682,19 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [ico-scrutinizer-coverage]: https://img.shields.io/scrutinizer/coverage/g/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
 
 [link-coveralls]: https://coveralls.io/github/mostafamaklad/laravel-permission-mongodb
-[ico-coveralls]: https://coveralls.io/repos/github/mostafamaklad/laravel-permission-mongodb/badge.svg?style=flat-square
+[ico-coveralls]: https://img.shields.io/coveralls/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
 
 [link-styleci]: https://styleci.io/repos/100894062
 [ico-styleci]: https://styleci.io/repos/100894062/shield?style=flat-square
 
 [link-codeclimate]: https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb
 [link-codeclimate-coverage]: https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb/coverage
-[ico-codeclimate]:https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb/badges/gpa.svg?style=flat-square
-[ico-codeclimate-coverage]:https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb/badges/coverage.svg?style=flat-square
+[ico-codeclimate]: https://img.shields.io/codeclimate/github/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
+[ico-codeclimate-coverage]: https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb/badges/coverage.svg?style=flat-square
 [ico-codeclimate-issue-count]:https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb/badges/issue_count.svg?style=flat-square
 
 [link-gemnasium]: https://gemnasium.com/github.com/mostafamaklad/laravel-permission-mongodb
-[ico-gemnasium]: https://gemnasium.com/badges/github.com/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
+[ico-gemnasium]: https://img.shields.io/gemnasium/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
 
 [link-sensiolabs]: https://insight.sensiolabs.com/projects/9a0d8b6f-1b6d-4f9f-ba87-ed9ab66b7707
 [ico-sensiolabs]: https://insight.sensiolabs.com/projects/9a0d8b6f-1b6d-4f9f-ba87-ed9ab66b7707/mini.png
