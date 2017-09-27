@@ -10,6 +10,7 @@
 [![Dependency Status][ico-gemnasium]][link-gemnasium]
 [![SensioLabsInsight][ico-sensiolabs]][link-sensiolabs]
 [![Total Downloads][ico-downloads]][link-packagist]
+[![Laravel 5.3.x][ico-laravel-5.3]][link-laravel-5.3]
 [![Laravel 5.4.x][ico-laravel-5.4]][link-laravel-5.4]
 [![Laravel 5.5.x][ico-laravel-5.5]][link-laravel-5.5]
 
@@ -63,9 +64,11 @@ $user->can('edit articles');
 
 ## Installation
 
-This package can be used in Laravel 5.4 and up.
+This package can be used in Laravel 5.3 and up.
 
-> Note: use 1.3.3-alpha version if you are using Laravel 5.5
+> Note: use version 1.3.3 and up if you are using Laravel 5.3.x
+
+> Note: use version 1.4.0-alpha if you are using Laravel 5.5.x
 
 You can install the package via composer:
 
@@ -176,7 +179,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 }
 ```
 
-- note that if you need to use `HasRoles` trait with another model ex.`Page` you will also need to add `protected $guard_name = 'web';` as well to that model or you would get an error
+> Note: that if you need to use `HasRoles` trait with another model ex.`Page` you will also need to add `protected $guard_name = 'web';` as well to that model or you would get an error
 
 ```php
 use Jenssegers\Mongodb\Eloquent\Model as Model;
@@ -362,7 +365,7 @@ $user->givePermissionTo('delete articles');
 ```
 
 In the above example a role is given permission to edit articles and this role is assigned to a user.
-Now the user can edit articles and additionally delete articles. The permission of 'delete articles' is the user's direct permission because it is assigned directly to them.
+Now the user can edit articles and additionally delete articles. The permission of `delete articles` is the user's direct permission because it is assigned directly to them.
 When we call `$user->hasDirectPermission('delete articles')` it returns `true`, but `false` for `$user->hasDirectPermission('edit articles')`.
 
 This method is useful if one builds a form for setting permissions for roles and users in an application and wants to restrict or change inherited permissions of roles of the user, i.e. allowing to change only direct permissions of the user.
@@ -382,8 +385,8 @@ $user->getAllPermissions();
 
 All these responses are collections of `Maklad\Permission\Models\Permission` objects.
 
-If we follow the previous example, the first response will be a collection with the 'delete article' permission, the
-second will be a collection with the 'edit article' permission and the third will contain both.
+If we follow the previous example, the first response will be a collection with the `delete article` permission, the
+second will be a collection with the `edit article` permission and the third will contain both.
 
 ### Using Blade directives
 This package also adds Blade directives to verify whether the currently logged in user has all or any of a given list of roles.
@@ -525,7 +528,7 @@ You can protect your controllers similarly, by setting desired middleware in the
 ```php
 public function __construct
 {
-    $this->middleware(['role:super-admin','permission:publish articles']);
+    $this->middleware(['role:super-admin','permission:publish articles|edit articles']);
 }
 ```
 
@@ -549,6 +552,21 @@ php artisan permission:create-role writer web
 
 ```bash
 php artisan permission:create-permission 'edit articles' web
+```
+
+## Unit Testing
+
+In your application's tests, if you are not seeding roles and permissions as part of your test `setUp()` then you may run into a chicken/egg situation where roles and permissions aren't registered with the gate (because your tests create them after that gate registration is done). Working around this is simple: In your tests simply add a `setUp()` instruction to re-register the permissions, like this:
+
+```php
+    public function setUp()
+    {
+        // first include all the normal setUp operations
+        parent::setUp();
+
+        // now re-register all the roles and permissions
+        $this->app->make(\Maklad\Permission\PermissionRegistrar::class)->registerPermissions();
+    }
 ```
 
 ## Database Seeding
@@ -626,7 +644,7 @@ php artisan cache:forget spatie.permission.cache
 
 ### Cache Identifier
 
-TIP: If you are leveraging a caching service such as redis or memcached and there are other sites running on your server, you could run into cache clashes. It is prudent to set your own cache `prefix` in `/config/cache.php` for each application uniquely. This will prevent other applications from accidentally using/changing your cached data.
+> Note: If you are leveraging a caching service such as `redis` or `memcached` and there are other sites running on your server, you could run into cache clashes. It is prudent to set your own cache `prefix` in `/config/cache.php` for each application uniquely. This will prevent other applications from accidentally using/changing your cached data.
 
 ## Need a UI?
 
@@ -666,6 +684,8 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
 
+[link-laravel-5.3]: https://laravel.com/docs/5.3
+[ico-laravel-5.3]: https://img.shields.io/badge/Laravel-5.3.x-brightgreen.svg?style=flat-square
 [link-laravel-5.4]: https://laravel.com/docs/5.4
 [ico-laravel-5.4]: https://img.shields.io/badge/Laravel-5.4.x-brightgreen.svg?style=flat-square
 [link-laravel-5.5]: https://laravel.com/docs/5.5

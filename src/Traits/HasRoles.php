@@ -165,7 +165,7 @@ trait HasRoles
             return false;
         }
 
-        return $roles->intersect($this->roles)->isNotEmpty();
+        return ! $roles->intersect($this->roles)->isEmpty();
     }
 
     /**
