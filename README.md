@@ -10,6 +10,7 @@
 [![Dependency Status][ico-gemnasium]][link-gemnasium]
 [![SensioLabsInsight][ico-sensiolabs]][link-sensiolabs]
 [![Total Downloads][ico-downloads]][link-packagist]
+[![Laravel 5.3.x][ico-laravel-5.3]][link-laravel-5.3]
 [![Laravel 5.4.x][ico-laravel-5.4]][link-laravel-5.4]
 [![Laravel 5.5.x][ico-laravel-5.5]][link-laravel-5.5]
 
@@ -63,9 +64,11 @@ $user->can('edit articles');
 
 ## Installation
 
-This package can be used in Laravel 5.4 and up.
+This package can be used in Laravel 5.3 and up.
 
-> Note: use 1.3.3-alpha version if you are using Laravel 5.5
+> Note: use version 1.3.3 and up if you are using Laravel 5.3.x
+
+> Note: use version 1.4.0-alpha if you are using Laravel 5.5.x
 
 You can install the package via composer:
 
@@ -666,6 +669,8 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
 
+[link-laravel-5.3]: https://laravel.com/docs/5.3
+[ico-laravel-5.3]: https://img.shields.io/badge/Laravel-5.3.x-brightgreen.svg?style=flat-square
 [link-laravel-5.4]: https://laravel.com/docs/5.4
 [ico-laravel-5.4]: https://img.shields.io/badge/Laravel-5.4.x-brightgreen.svg?style=flat-square
 [link-laravel-5.5]: https://laravel.com/docs/5.5
