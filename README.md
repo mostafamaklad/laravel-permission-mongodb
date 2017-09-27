@@ -179,7 +179,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 }
 ```
 
-- note that if you need to use `HasRoles` trait with another model ex.`Page` you will also need to add `protected $guard_name = 'web';` as well to that model or you would get an error
+> Note: that if you need to use `HasRoles` trait with another model ex.`Page` you will also need to add `protected $guard_name = 'web';` as well to that model or you would get an error
 
 ```php
 use Jenssegers\Mongodb\Eloquent\Model as Model;
@@ -644,7 +644,7 @@ php artisan cache:forget spatie.permission.cache
 
 ### Cache Identifier
 
-TIP: If you are leveraging a caching service such as `redis` or `memcached` and there are other sites running on your server, you could run into cache clashes. It is prudent to set your own cache `prefix` in `/config/cache.php` for each application uniquely. This will prevent other applications from accidentally using/changing your cached data.
+> Note: If you are leveraging a caching service such as `redis` or `memcached` and there are other sites running on your server, you could run into cache clashes. It is prudent to set your own cache `prefix` in `/config/cache.php` for each application uniquely. This will prevent other applications from accidentally using/changing your cached data.
 
 ## Need a UI?
 
