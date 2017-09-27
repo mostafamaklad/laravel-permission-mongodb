@@ -1,6 +1,6 @@
 {
     "name": "mostafamaklad/laravel-permission-mongodb",
-    "description": "Permission handling for Laravel 5.4 and up using mongodb",
+    "description": "Permission handling for Laravel 5.3 and up using mongodb",
     "keywords": [
         "laravel",
         "security",
