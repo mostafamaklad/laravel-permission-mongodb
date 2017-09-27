@@ -365,7 +365,7 @@ $user->givePermissionTo('delete articles');
 ```
 
 In the above example a role is given permission to edit articles and this role is assigned to a user.
-Now the user can edit articles and additionally delete articles. The permission of 'delete articles' is the user's direct permission because it is assigned directly to them.
+Now the user can edit articles and additionally delete articles. The permission of `delete articles` is the user's direct permission because it is assigned directly to them.
 When we call `$user->hasDirectPermission('delete articles')` it returns `true`, but `false` for `$user->hasDirectPermission('edit articles')`.
 
 This method is useful if one builds a form for setting permissions for roles and users in an application and wants to restrict or change inherited permissions of roles of the user, i.e. allowing to change only direct permissions of the user.
@@ -385,8 +385,8 @@ $user->getAllPermissions();
 
 All these responses are collections of `Maklad\Permission\Models\Permission` objects.
 
-If we follow the previous example, the first response will be a collection with the 'delete article' permission, the
-second will be a collection with the 'edit article' permission and the third will contain both.
+If we follow the previous example, the first response will be a collection with the `delete article` permission, the
+second will be a collection with the `edit article` permission and the third will contain both.
 
 ### Using Blade directives
 This package also adds Blade directives to verify whether the currently logged in user has all or any of a given list of roles.
@@ -528,7 +528,7 @@ You can protect your controllers similarly, by setting desired middleware in the
 ```php
 public function __construct
 {
-    $this->middleware(['role:super-admin','permission:publish articles']);
+    $this->middleware(['role:super-admin','permission:publish articles|edit articles']);
 }
 ```
 
@@ -552,6 +552,21 @@ php artisan permission:create-role writer web
 
 ```bash
 php artisan permission:create-permission 'edit articles' web
+```
+
+## Unit Testing
+
+In your application's tests, if you are not seeding roles and permissions as part of your test `setUp()` then you may run into a chicken/egg situation where roles and permissions aren't registered with the gate (because your tests create them after that gate registration is done). Working around this is simple: In your tests simply add a `setUp()` instruction to re-register the permissions, like this:
+
+```php
+    public function setUp()
+    {
+        // first include all the normal setUp operations
+        parent::setUp();
+
+        // now re-register all the roles and permissions
+        $this->app->make(\Maklad\Permission\PermissionRegistrar::class)->registerPermissions();
+    }
 ```
 
 ## Database Seeding
@@ -629,7 +644,7 @@ php artisan cache:forget spatie.permission.cache
 
 ### Cache Identifier
 
-TIP: If you are leveraging a caching service such as redis or memcached and there are other sites running on your server, you could run into cache clashes. It is prudent to set your own cache `prefix` in `/config/cache.php` for each application uniquely. This will prevent other applications from accidentally using/changing your cached data.
+TIP: If you are leveraging a caching service such as `redis` or `memcached` and there are other sites running on your server, you could run into cache clashes. It is prudent to set your own cache `prefix` in `/config/cache.php` for each application uniquely. This will prevent other applications from accidentally using/changing your cached data.
 
 ## Need a UI?
 
