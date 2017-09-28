@@ -2,11 +2,9 @@
 
 namespace Maklad\Permission\Test;
 
-use Maklad\Permission\Helpers;
-use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Exceptions\PermissionAlreadyExists;
+use Maklad\Permission\Models\Permission;
 use Monolog\Logger;
-use Symfony\Component\Console\Helper\Helper;
 
 class PermissionTest extends TestCase
 {
@@ -52,7 +50,7 @@ class PermissionTest extends TestCase
         $this->testUser->givePermissionTo($this->testUserPermission);
 
         $this->assertCount(1, $this->testUserPermission->users);
-        $this->assertTrue($this->testUserPermission->users->first()->is($this->testUser));
+        $this->assertEquals(get_class($this->testUser), get_class($this->testUserPermission->users->first()));
         $this->assertInstanceOf(User::class, $this->testUserPermission->users->first());
 
         $this->testUser->delete();
