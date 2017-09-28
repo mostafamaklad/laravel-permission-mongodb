@@ -28,7 +28,7 @@ class RoleTest extends TestCase
         $this->testUser->assignRole($this->testUserRole);
 
         $this->assertCount(1, $this->testUserRole->users);
-        $this->assertTrue($this->testUserRole->users->first()->is($this->testUser));
+        $this->assertEquals(get_class($this->testUser), get_class($this->testUserRole->users->first()));
         $this->assertInstanceOf(User::class, $this->testUserRole->users->first());
 
         $this->testUser->delete();
