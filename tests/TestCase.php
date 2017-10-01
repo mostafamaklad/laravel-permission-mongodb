@@ -4,12 +4,12 @@ namespace Maklad\Permission\Test;
 
 use Jenssegers\Mongodb\MongodbServiceProvider;
 use Maklad\Permission\Helpers;
-use Monolog\Handler\TestHandler;
-use Maklad\Permission\PermissionRegistrar;
-use Maklad\Permission\Models\Role;
 use Maklad\Permission\Models\Permission;
-use Orchestra\Testbench\TestCase as Orchestra;
+use Maklad\Permission\Models\Role;
+use Maklad\Permission\PermissionRegistrar;
 use Maklad\Permission\PermissionServiceProvider;
+use Monolog\Handler\TestHandler;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
 {
@@ -156,9 +156,7 @@ abstract class TestCase extends Orchestra
     {
         \collect($this->app['log']->getMonolog()->getHandlers())->filter(function ($handler) {
             return $handler instanceof TestHandler;
-        })->first(function (TestHandler $handler) {
-            $handler->clear();
-        });
+        })->first()->clear();
     }
 
     protected function assertNotLogged($message, $level)
