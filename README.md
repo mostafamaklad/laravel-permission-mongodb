@@ -544,7 +544,7 @@ php artisan permission:create-role writer
 ```
 
 ```bash
-php artisan permission:create-permission edit articles
+php artisan permission:create-permission 'edit articles'
 ```
 
 When creating permissions and roles for specific guards you can specify the guard names as a second argument:
@@ -562,14 +562,14 @@ php artisan permission:create-permission 'edit articles' web
 In your application's tests, if you are not seeding roles and permissions as part of your test `setUp()` then you may run into a chicken/egg situation where roles and permissions aren't registered with the gate (because your tests create them after that gate registration is done). Working around this is simple: In your tests simply add a `setUp()` instruction to re-register the permissions, like this:
 
 ```php
-    public function setUp()
-    {
-        // first include all the normal setUp operations
-        parent::setUp();
+public function setUp()
+{
+    // first include all the normal setUp operations
+    parent::setUp();
 
-        // now re-register all the roles and permissions
-        $this->app->make(\Maklad\Permission\PermissionRegistrar::class)->registerPermissions();
-    }
+    // now re-register all the roles and permissions
+    $this->app->make(\Maklad\Permission\PermissionRegistrar::class)->registerPermissions();
+}
 ```
 
 ## Database Seeding
