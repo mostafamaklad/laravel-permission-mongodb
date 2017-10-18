@@ -529,7 +529,7 @@ Route::group(['middleware' => ['role:super-admin','permission:publish articles']
 You can protect your controllers similarly, by setting desired middleware in the constructor:
 
 ```php
-public function __construct
+public function __construct()
 {
     $this->middleware(['role:super-admin','permission:publish articles|edit articles']);
 }
