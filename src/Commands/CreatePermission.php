@@ -20,9 +20,9 @@ class CreatePermission extends Command
 
     public function handle()
     {
-        $permissionClass = \app(Permission::class);
+        $permission_class = \app(Permission::class);
 
-        $permission = $permissionClass::create([
+        $permission = $permission_class::create([
             'name'       => $this->argument('name'),
             'guard_name' => $this->argument('guard')
         ]);
