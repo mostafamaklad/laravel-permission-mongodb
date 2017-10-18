@@ -22,13 +22,13 @@ class CreateRole extends Command
 
     public function handle()
     {
-        $role_class       = \app(Role::class);
+        $roleClass       = \app(Role::class);
 
         $name        = $this->argument('name');
         $guard       = $this->argument('guard');
         $permissions = $this->option('permission');
 
-        $role = $role_class::create([
+        $role = $roleClass::create([
             'name'       => $name,
             'guard_name' => $guard
         ]);
@@ -36,7 +36,7 @@ class CreateRole extends Command
         $this->info("Role `{$role->name}` created");
 
         $role->givePermissionTo($permissions);
-        $permissions_str = $role->permissions->implode('name', '`, `');
-        $this->info("Permissions `{$permissions_str}` has been given to role `{$role->name}`");
+        $permissionsStr = $role->permissions->implode('name', '`, `');
+        $this->info("Permissions `{$permissionsStr}` has been given to role `{$role->name}`");
     }
 }
