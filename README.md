@@ -65,7 +65,7 @@ $user->can('edit articles');
 
 ## Installation
 
-This package can be used in Laravel 5.3 and up.
+This package can be used in Laravel 5.2 and up.
 
 > Note: use version 1.3.4 and up if you are using Laravel 5.2.x
 
@@ -544,7 +544,7 @@ php artisan permission:create-role writer
 ```
 
 ```bash
-php artisan permission:create-permission edit articles
+php artisan permission:create-permission 'edit articles'
 ```
 
 When creating permissions and roles for specific guards you can specify the guard names as a second argument:
@@ -562,14 +562,14 @@ php artisan permission:create-permission 'edit articles' web
 In your application's tests, if you are not seeding roles and permissions as part of your test `setUp()` then you may run into a chicken/egg situation where roles and permissions aren't registered with the gate (because your tests create them after that gate registration is done). Working around this is simple: In your tests simply add a `setUp()` instruction to re-register the permissions, like this:
 
 ```php
-    public function setUp()
-    {
-        // first include all the normal setUp operations
-        parent::setUp();
+public function setUp()
+{
+    // first include all the normal setUp operations
+    parent::setUp();
 
-        // now re-register all the roles and permissions
-        $this->app->make(\Maklad\Permission\PermissionRegistrar::class)->registerPermissions();
-    }
+    // now re-register all the roles and permissions
+    $this->app->make(\Maklad\Permission\PermissionRegistrar::class)->registerPermissions();
+}
 ```
 
 ## Database Seeding
@@ -703,23 +703,23 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [link-scrutinizer-build]: https://scrutinizer-ci.com/g/mostafamaklad/laravel-permission-mongodb/build-status/master
 [link-scrutinizer-coverage]: https://scrutinizer-ci.com/g/mostafamaklad/laravel-permission-mongodb/code-structure
 [ico-scrutinizer]: https://img.shields.io/scrutinizer/g/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
-[ico-scrutinizer-build]: https://scrutinizer-ci.com/g/mostafamaklad/laravel-permission-mongodb/badges/build.png?style=flat-square
+[ico-scrutinizer-build]: https://img.shields.io/scrutinizer/build/g/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
 [ico-scrutinizer-coverage]: https://img.shields.io/scrutinizer/coverage/g/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
 
 [link-coveralls]: https://coveralls.io/github/mostafamaklad/laravel-permission-mongodb
-[ico-coveralls]: https://coveralls.io/repos/github/mostafamaklad/laravel-permission-mongodb/badge.svg?style=flat-square
+[ico-coveralls]: https://img.shields.io/coveralls/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
 
 [link-styleci]: https://styleci.io/repos/100894062
 [ico-styleci]: https://styleci.io/repos/100894062/shield?style=flat-square
 
 [link-codeclimate]: https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb
 [link-codeclimate-coverage]: https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb/coverage
-[ico-codeclimate]:https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb/badges/gpa.svg?style=flat-square
-[ico-codeclimate-coverage]:https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb/badges/coverage.svg?style=flat-square
-[ico-codeclimate-issue-count]:https://codeclimate.com/github/mostafamaklad/laravel-permission-mongodb/badges/issue_count.svg?style=flat-square
+[ico-codeclimate]: https://img.shields.io/codeclimate/github/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
+[ico-codeclimate-coverage]: https://img.shields.io/codeclimate/coverage/github/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
+[ico-codeclimate-issue-count]: https://img.shields.io/codeclimate/issues/github/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
 
 [link-gemnasium]: https://gemnasium.com/github.com/mostafamaklad/laravel-permission-mongodb
-[ico-gemnasium]: https://gemnasium.com/badges/github.com/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
+[ico-gemnasium]: https://img.shields.io/gemnasium/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
 
 [link-sensiolabs]: https://insight.sensiolabs.com/projects/9a0d8b6f-1b6d-4f9f-ba87-ed9ab66b7707
 [ico-sensiolabs]: https://insight.sensiolabs.com/projects/9a0d8b6f-1b6d-4f9f-ba87-ed9ab66b7707/mini.png
