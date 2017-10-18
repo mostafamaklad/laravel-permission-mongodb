@@ -4,8 +4,12 @@ All Notable changes to `laravel-permission-mongodb` will be documented in this f
 
 ## 1.3.5 - 2017-10-18
 
+### Added
+ - Give Permissions to roles in Command Line
+
 ### Fixed
  - Fixed a bug where `Role`s and `Permission`s got detached when soft deleting a model
+
 
 ## 1.3.4 - 2017-09-28
 
