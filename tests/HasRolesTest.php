@@ -2,10 +2,10 @@
 
 namespace Maklad\Permission\Test;
 
-use Maklad\Permission\Models\Role;
-use Maklad\Permission\Exceptions\RoleDoesNotExist;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\Exceptions\PermissionDoesNotExist;
+use Maklad\Permission\Exceptions\RoleDoesNotExist;
+use Maklad\Permission\Models\Role;
 use Monolog\Logger;
 
 class HasRolesTest extends TestCase
@@ -484,5 +484,15 @@ class HasRolesTest extends TestCase
             collect(['edit-articles', 'edit-news']),
             $this->testUser->getPermissionNames()
         );
+    }
+
+    /** @test */
+    public function it_does_not_detach_roles_when_soft_deleting()
+    {
+        $user = SoftDeletingUser::create(['email' => 'test@example.com']);
+        $user->assignRole('testRole');
+        $user->delete();
+        $user = SoftDeletingUser::withTrashed()->find($user->id);
+        $this->assertTrue($user->hasRole('testRole'));
     }
 }

@@ -2,14 +2,19 @@
 
 All Notable changes to `laravel-permission-mongodb` will be documented in this file.
 
+## 1.3.5 - 2017-10-18
+
+### Fixed
+ - Fixed a bug where `Role`s and `Permission`s got detached when soft deleting a model
+
 ## 1.3.4 - 2017-09-28
 
-### added
+### Added
 - Add the support of `laravel 5.2`
 
 ## 1.3.3 - 2017-09-27
 
-### added
+### Added
 - Add the support of `laravel 5.3`
 
 
