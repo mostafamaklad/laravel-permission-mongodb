@@ -96,7 +96,7 @@ trait HasPermissions
         $expected = $this->getGuardNames();
         $given    = $roleOrPermission->guard_name;
 
-        if ( ! $expected->contains($given)) {
+        if (! $expected->contains($given)) {
             $helpers = new Helpers();
             throw new GuardDoesNotMatch($helpers->getGuardDoesNotMatchMessage($expected, $given));
         }
