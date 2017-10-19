@@ -20,13 +20,13 @@ class RoleMiddleware
      */
     public function handle($request, Closure $next, $role)
     {
-        if (auth()->guest()) {
-            \abort(403);
-        }
-
+        $unauthorizedRedirectUrl = config('permission.unauthorized_redirect_url');
         $roles = \is_array($role) ? $role : \explode('|', $role);
 
-        if (! auth()->user()->hasAnyRole($roles)) {
+        if (auth()->guest() || ! auth()->user()->hasAnyRole($roles)) {
+            if (null !== $unauthorizedRedirectUrl) {
+                return redirect($unauthorizedRedirectUrl);
+            }
             \abort(403);
         }
 

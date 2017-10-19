@@ -2,6 +2,12 @@
 
 All Notable changes to `laravel-permission-mongodb` will be documented in this file.
 
+## 1.4.0 - 2017-10-19
+
+### Added
+ - Add dynamic redirect on middleware
+
+
 ## 1.3.5 - 2017-10-18
 
 ### Added

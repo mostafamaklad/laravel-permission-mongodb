@@ -20,14 +20,13 @@ class PermissionMiddleware
      */
     public function handle($request, Closure $next, $permission)
     {
-        if (auth()->guest()) {
-            \abort(403);
-        }
-
+        $unauthorizedRedirectUrl = config('permission.unauthorized_redirect_url');
         $permissions = \is_array($permission) ? $permission : \explode('|', $permission);
 
-
-        if (! auth()->user()->hasAnyPermission($permissions)) {
+        if (auth()->guest() || ! auth()->user()->hasAnyPermission($permissions)) {
+            if (null !== $unauthorizedRedirectUrl) {
+                return redirect($unauthorizedRedirectUrl);
+            }
             \abort(403);
         }
 

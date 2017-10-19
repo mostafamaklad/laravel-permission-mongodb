@@ -2,6 +2,7 @@
 
 namespace Maklad\Permission\Test;
 
+use Illuminate\Support\Facades\Route;
 use Jenssegers\Mongodb\MongodbServiceProvider;
 use Maklad\Permission\Helpers;
 use Maklad\Permission\Models\Permission;
@@ -15,6 +16,7 @@ abstract class TestCase extends Orchestra
 {
     protected $helpers;
 
+    protected $unauthorized_redirect_url;
     /**
      * Flush the database after each test function
      */
@@ -63,6 +65,8 @@ abstract class TestCase extends Orchestra
         $this->clearLogTestHandler();
 
         $this->helpers = new Helpers();
+
+        $this->unauthorized_redirect_url = 'home';
     }
 
     /**
