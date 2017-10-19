@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 namespace Maklad\Permission\Traits;
 
 use Illuminate\Support\Collection;
@@ -35,7 +33,9 @@ trait HasRoles
      */
     public function roles(): BelongsToMany
     {
-        return $this->belongsToMany(\config('permission.models.role'))->withTimestamps();
+        $roleModel = config('permission.models.role');
+
+        return $this->belongsToMany($roleModel)->withTimestamps();
     }
 
     /**
@@ -43,7 +43,9 @@ trait HasRoles
      */
     public function permissions(): BelongsToMany
     {
-        return $this->belongsToMany(\config('permission.models.permission'))->withTimestamps();
+        $permissionModel = config('permission.models.permission');
+
+        return $this->belongsToMany($permissionModel)->withTimestamps();
     }
 
     /**
@@ -73,7 +75,7 @@ trait HasRoles
     {
         $permissions = $this->convertToPermissionModels($permissions);
 
-        $roles = \collect([]);
+        $roles = collect([]);
 
         foreach ($permissions as $permission) {
             $roles = $roles->merge($permission->roles);
@@ -93,7 +95,7 @@ trait HasRoles
      */
     public function assignRole(...$roles)
     {
-        $roles = \collect($roles)
+        $roles = collect($roles)
             ->flatten()
             ->map(function ($role) {
                 return $this->getStoredRole($role);
@@ -137,17 +139,17 @@ trait HasRoles
     /**
      * Determine if the model has (one of) the given role(s).
      *
-     * @param string|array|Role|\Illuminate\Support\Collection $roles
+     * @param string|array|Role|Collection $roles
      *
      * @return bool
      */
     public function hasRole($roles): bool
     {
-        if (\is_string($roles) && false !== \strpos($roles, '|')) {
-            $roles = \explode('|', $roles);
+        if (is_string($roles) && false !== strpos($roles, '|')) {
+            $roles = explode('|', $roles);
         }
 
-        if (\is_string($roles)) {
+        if (is_string($roles)) {
             return $this->roles->contains('name', $roles);
         }
 
@@ -155,7 +157,7 @@ trait HasRoles
             return $this->roles->contains('id', $roles->id);
         }
 
-        if (\is_array($roles)) {
+        if (is_array($roles)) {
             foreach ($roles as $role) {
                 if ($this->hasRole($role)) {
                     return true;
@@ -171,7 +173,7 @@ trait HasRoles
     /**
      * Determine if the model has any of the given role(s).
      *
-     * @param string|array|Role|\Illuminate\Support\Collection $roles
+     * @param string|array|Role|Collection $roles
      *
      * @return bool
      */
@@ -183,17 +185,17 @@ trait HasRoles
     /**
      * Determine if the model has all of the given role(s).
      *
-     * @param string|Role|\Illuminate\Support\Collection $roles
+     * @param string|Role|Collection $roles
      *
      * @return bool
      */
     public function hasAllRoles($roles): bool
     {
-        if (\is_string($roles) && false !== strpos($roles, '|')) {
-            $roles = \explode('|', $roles);
+        if (is_string($roles) && false !== strpos($roles, '|')) {
+            $roles = explode('|', $roles);
         }
 
-        if (\is_string($roles)) {
+        if (is_string($roles)) {
             return $this->roles->contains('name', $roles);
         }
 
@@ -201,7 +203,7 @@ trait HasRoles
             return $this->roles->contains('id', $roles->id);
         }
 
-        $roles = \collect()->make($roles)->map(function ($role) {
+        $roles = collect()->make($roles)->map(function ($role) {
             return $role instanceof Role ? $role->name : $role;
         });
 
@@ -218,8 +220,8 @@ trait HasRoles
      */
     public function hasPermissionTo($permission, $guardName = null): bool
     {
-        if (\is_string($permission)) {
-            $permission = \app(Permission::class)->findByName(
+        if (is_string($permission)) {
+            $permission = app(Permission::class)->findByName(
                 $permission,
                 $guardName ?? $this->getDefaultGuardName()
             );
@@ -237,7 +239,7 @@ trait HasRoles
      */
     public function hasAnyPermission(...$permissions): bool
     {
-        if (\is_array($permissions[0])) {
+        if (is_array($permissions[0])) {
             $permissions = $permissions[0];
         }
 
@@ -271,8 +273,8 @@ trait HasRoles
      */
     public function hasDirectPermission($permission): bool
     {
-        if (\is_string($permission)) {
-            $permission = \app(Permission::class)->findByName($permission, $this->getDefaultGuardName());
+        if (is_string($permission)) {
+            $permission = app(Permission::class)->findByName($permission, $this->getDefaultGuardName());
         }
 
         return $this->permissions->contains('id', $permission->id);
@@ -317,8 +319,8 @@ trait HasRoles
      */
     protected function getStoredRole($role): Role
     {
-        if (\is_string($role)) {
-            return \app(Role::class)->findByName($role, $this->getDefaultGuardName());
+        if (is_string($role)) {
+            return app(Role::class)->findByName($role, $this->getDefaultGuardName());
         }
 
         return $role;
@@ -354,12 +356,12 @@ trait HasRoles
      */
     private function convertToRoleModels($roles): Collection
     {
-        if (\is_array($roles)) {
-            $roles = \collect($roles);
+        if (is_array($roles)) {
+            $roles = collect($roles);
         }
 
         if (! $roles instanceof Collection) {
-            $roles = \collect([$roles]);
+            $roles = collect([$roles]);
         }
 
         $roles = $roles->map(function ($role) {

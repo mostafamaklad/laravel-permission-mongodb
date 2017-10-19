@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 namespace Maklad\Permission;
 
 use Illuminate\Contracts\Auth\Access\Gate;
@@ -15,13 +13,19 @@ use Maklad\Permission\Contracts\PermissionInterface as Permission;
  */
 class PermissionRegistrar
 {
-    /** @var \Illuminate\Contracts\Auth\Access\Gate */
+    /**
+     * @var Gate
+     */
     protected $gate;
 
-    /** @var \Illuminate\Contracts\Cache\Repository */
+    /**
+     * @var Repository
+     */
     protected $cache;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $cacheKey = 'maklad.permission.cache';
 
     public function __construct(Gate $gate, Repository $cache)
@@ -48,8 +52,8 @@ class PermissionRegistrar
 
     public function getPermissions(): Collection
     {
-        return $this->cache->remember($this->cacheKey, \config('permission.cache_expiration_time'), function () {
-            return \app(Permission::class)->with('roles')->get();
+        return $this->cache->remember($this->cacheKey, config('permission.cache_expiration_time'), function () {
+            return app(Permission::class)->with('roles')->get();
         });
     }
 }

@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 namespace Maklad\Permission\Traits;
 
 use Illuminate\Support\Collection;
@@ -19,14 +17,14 @@ trait HasPermissions
     /**
      * Grant the given permission(s) to a role.
      *
-     * @param string|array|Permission|\Illuminate\Support\Collection $permissions
+     * @param string|array|Permission|Collection $permissions
      *
      * @return $this
      * @throws GuardDoesNotMatch
      */
     public function givePermissionTo(...$permissions)
     {
-        $permissions = \collect($permissions)
+        $permissions = collect($permissions)
             ->flatten()
             ->map(function ($permission) {
                 return $this->getStoredPermission($permission);
@@ -46,7 +44,7 @@ trait HasPermissions
     /**
      * Remove all current permissions and set the given ones.
      *
-     * @param string|array|Permission|\Illuminate\Support\Collection $permissions
+     * @param string|array|Permission|Collection $permissions
      *
      * @return $this
      * @throws GuardDoesNotMatch
@@ -81,8 +79,8 @@ trait HasPermissions
      */
     protected function getStoredPermission($permissions): Permission
     {
-        if (\is_string($permissions)) {
-            return \app(Permission::class)->findByName($permissions, $this->getDefaultGuardName());
+        if (is_string($permissions)) {
+            return app(Permission::class)->findByName($permissions, $this->getDefaultGuardName());
         }
 
         return $permissions;
@@ -95,11 +93,11 @@ trait HasPermissions
      */
     protected function ensureModelSharesGuard(Model $roleOrPermission)
     {
-        if (! $this->getGuardNames()->contains($roleOrPermission->guard_name)) {
-            $expected = $this->getGuardNames();
-            $given = $roleOrPermission->guard_name;
-            $helpers = new Helpers();
+        $expected = $this->getGuardNames();
+        $given    = $roleOrPermission->guard_name;
 
+        if ( ! $expected->contains($given)) {
+            $helpers = new Helpers();
             throw new GuardDoesNotMatch($helpers->getGuardDoesNotMatchMessage($expected, $given));
         }
     }
@@ -107,22 +105,22 @@ trait HasPermissions
     protected function getGuardNames(): Collection
     {
         if ($this->guard_name) {
-            return \collect($this->guard_name);
+            return collect($this->guard_name);
         }
 
-        return \collect(\config('auth.guards'))
+        return collect(config('auth.guards'))
             ->map(function ($guard) {
-                return \config("auth.providers.{$guard['provider']}.model");
+                return config("auth.providers.{$guard['provider']}.model");
             })
             ->filter(function ($model) {
-                return \get_class($this) === $model;
+                return get_class($this) === $model;
             })
             ->keys();
     }
 
     protected function getDefaultGuardName(): string
     {
-        $default = \config('auth.defaults.guard');
+        $default = config('auth.defaults.guard');
 
         return $this->getGuardNames()->first() ?: $default;
     }
@@ -132,7 +130,7 @@ trait HasPermissions
      */
     public function forgetCachedPermissions()
     {
-        \app(PermissionRegistrar::class)->forgetCachedPermissions();
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
     }
 
     /**
@@ -144,12 +142,12 @@ trait HasPermissions
      */
     private function convertToPermissionModels($permissions): Collection
     {
-        if (\is_array($permissions)) {
-            $permissions = \collect($permissions);
+        if (is_array($permissions)) {
+            $permissions = collect($permissions);
         }
 
         if (! $permissions instanceof Collection) {
-            $permissions = \collect([$permissions]);
+            $permissions = collect([$permissions]);
         }
 
         $permissions = $permissions->map(function ($permission) {
