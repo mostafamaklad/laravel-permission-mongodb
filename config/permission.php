@@ -62,4 +62,12 @@ return [
      */
 
     'log_registration_exception' => true,
+
+    /*
+     * By default the RoleMiddleware and PermissionMiddleware will trigger an abort with
+     * http 403 status code if the user doesn't have the specified permission or role.
+     *
+     * To override the default 403 response, provide a named route here.
+     */
+    'unauthorized_redirect_url' => null,
 ];

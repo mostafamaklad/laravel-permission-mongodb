@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 namespace Maklad\Permission\Models;
 
 use Jenssegers\Mongodb\Eloquent\Model;
@@ -32,13 +30,13 @@ class Role extends Model implements RoleInterface
      */
     public function __construct(array $attributes = [])
     {
-        $attributes['guard_name'] = $attributes['guard_name'] ?? \config('auth.defaults.guard');
+        $attributes['guard_name'] = $attributes['guard_name'] ?? config('auth.defaults.guard');
 
         parent::__construct($attributes);
 
         $this->helpers = new Helpers();
 
-        $this->setTable(\config('permission.collection_names.roles'));
+        $this->setTable(config('permission.collection_names.roles'));
     }
 
     /**
@@ -51,7 +49,7 @@ class Role extends Model implements RoleInterface
      */
     public static function create(array $attributes = [])
     {
-        $attributes['guard_name'] = $attributes['guard_name'] ?? \config('auth.defaults.guard');
+        $attributes['guard_name'] = $attributes['guard_name'] ?? config('auth.defaults.guard');
 
         if (static::where('name', $attributes['name'])->where('guard_name', $attributes['guard_name'])->first()) {
             $name = $attributes['name'];
@@ -73,10 +71,9 @@ class Role extends Model implements RoleInterface
      */
     public function permissions(): BelongsToMany
     {
-        return $this->belongsToMany(
-            \config('permission.models.permission'),
-            \config('permission.collection_names.role_has_permissions')
-        );
+        $permissionModel = config('permission.models.permission');
+
+        return $this->belongsToMany($permissionModel);
     }
 
     /**
@@ -84,7 +81,9 @@ class Role extends Model implements RoleInterface
      */
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany($this->helpers->getModelForGuard($this->attributes['guard_name']));
+        $model = $this->helpers->getModelForGuard($this->attributes['guard_name']);
+
+        return $this->belongsToMany($model);
     }
 
     /**
@@ -98,7 +97,7 @@ class Role extends Model implements RoleInterface
      */
     public static function findByName(string $name, $guardName = null): RoleInterface
     {
-        $guardName = $guardName ?? \config('auth.defaults.guard');
+        $guardName = $guardName ?? config('auth.defaults.guard');
 
         $role = static::where('name', $name)->where('guard_name', $guardName)->first();
 
@@ -121,8 +120,8 @@ class Role extends Model implements RoleInterface
      */
     public function hasPermissionTo($permission): bool
     {
-        if (\is_string($permission)) {
-            $permission = \app(Permission::class)->findByName($permission, $this->getDefaultGuardName());
+        if (is_string($permission)) {
+            $permission = app(Permission::class)->findByName($permission, $this->getDefaultGuardName());
         }
 
         if (! $this->getGuardNames()->contains($permission->guard_name)) {

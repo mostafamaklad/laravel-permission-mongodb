@@ -5,8 +5,8 @@ namespace Maklad\Permission\Test;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Maklad\Permission\Middlewares\RoleMiddleware;
 use Maklad\Permission\Middlewares\PermissionMiddleware;
+use Maklad\Permission\Middlewares\RoleMiddleware;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class MiddlewareTest extends TestCase
@@ -27,11 +27,21 @@ class MiddlewareTest extends TestCase
     public function a_guest_cannot_access_a_route_protected_by_the_role_middleware()
     {
         $this->assertEquals(
-            $this->runMiddleware(
+            $this->getMiddlewareStatus(
                 $this->roleMiddleware,
                 'testRole'
             ),
             403
+        );
+
+        $this->app['config']->set('permission.unauthorized_redirect_url', $this->unauthorized_redirect_url);
+
+        $this->assertEquals(
+            $this->getMiddlewareRedirectUrl(
+                $this->roleMiddleware,
+                'testRole'
+            ),
+            url($this->unauthorized_redirect_url)
         );
     }
 
@@ -43,7 +53,7 @@ class MiddlewareTest extends TestCase
         $this->testUser->assignRole('testRole');
 
         $this->assertEquals(
-            $this->runMiddleware(
+            $this->getMiddlewareStatus(
                 $this->roleMiddleware,
                 'testRole'
             ),
@@ -59,7 +69,7 @@ class MiddlewareTest extends TestCase
         $this->testUser->assignRole('testRole');
 
         $this->assertEquals(
-            $this->runMiddleware(
+            $this->getMiddlewareStatus(
                 $this->roleMiddleware,
                 'testRole|testRole2'
             ),
@@ -67,7 +77,7 @@ class MiddlewareTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->runMiddleware(
+            $this->getMiddlewareStatus(
                 $this->roleMiddleware,
                 ['testRole2', 'testRole']
             ),
@@ -83,11 +93,21 @@ class MiddlewareTest extends TestCase
         $this->testUser->assignRole(['testRole']);
 
         $this->assertEquals(
-            $this->runMiddleware(
+            $this->getMiddlewareStatus(
                 $this->roleMiddleware,
                 'testRole2'
             ),
             403
+        );
+
+        $this->app['config']->set('permission.unauthorized_redirect_url', $this->unauthorized_redirect_url);
+
+        $this->assertEquals(
+            $this->getMiddlewareRedirectUrl(
+                $this->roleMiddleware,
+                'testRole2'
+            ),
+            url($this->unauthorized_redirect_url)
         );
     }
 
@@ -97,11 +117,21 @@ class MiddlewareTest extends TestCase
         Auth::login($this->testUser);
 
         $this->assertEquals(
-            $this->runMiddleware(
+            $this->getMiddlewareStatus(
                 $this->roleMiddleware,
                 'testRole|testRole2'
             ),
             403
+        );
+
+        $this->app['config']->set('permission.unauthorized_redirect_url', $this->unauthorized_redirect_url);
+
+        $this->assertEquals(
+            $this->getMiddlewareRedirectUrl(
+                $this->roleMiddleware,
+                'testRole|testRole2'
+            ),
+            url($this->unauthorized_redirect_url)
         );
     }
 
@@ -111,11 +141,21 @@ class MiddlewareTest extends TestCase
         Auth::login($this->testUser);
 
         $this->assertEquals(
-            $this->runMiddleware(
+            $this->getMiddlewareStatus(
                 $this->roleMiddleware,
                 ''
             ),
             403
+        );
+
+        $this->app['config']->set('permission.unauthorized_redirect_url', $this->unauthorized_redirect_url);
+
+        $this->assertEquals(
+            $this->getMiddlewareRedirectUrl(
+                $this->roleMiddleware,
+                ''
+            ),
+            url($this->unauthorized_redirect_url)
         );
     }
 
@@ -123,11 +163,21 @@ class MiddlewareTest extends TestCase
     public function a_guest_cannot_access_a_route_protected_by_the_permission_middleware()
     {
         $this->assertEquals(
-            $this->runMiddleware(
+            $this->getMiddlewareStatus(
                 $this->permissionMiddleware,
                 'edit-articles'
             ),
             403
+        );
+
+        $this->app['config']->set('permission.unauthorized_redirect_url', $this->unauthorized_redirect_url);
+
+        $this->assertEquals(
+            $this->getMiddlewareRedirectUrl(
+                $this->permissionMiddleware,
+                'edit-articles'
+            ),
+            url($this->unauthorized_redirect_url)
         );
     }
 
@@ -139,7 +189,7 @@ class MiddlewareTest extends TestCase
         $this->testUser->givePermissionTo('edit-articles');
 
         $this->assertEquals(
-            $this->runMiddleware(
+            $this->getMiddlewareStatus(
                 $this->permissionMiddleware,
                 'edit-articles'
             ),
@@ -155,7 +205,7 @@ class MiddlewareTest extends TestCase
         $this->testUser->givePermissionTo('edit-articles');
 
         $this->assertEquals(
-            $this->runMiddleware(
+            $this->getMiddlewareStatus(
                 $this->permissionMiddleware,
                 'edit-news|edit-articles'
             ),
@@ -163,7 +213,7 @@ class MiddlewareTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->runMiddleware(
+            $this->getMiddlewareStatus(
                 $this->permissionMiddleware,
                 ['edit-news', 'edit-articles']
             ),
@@ -179,11 +229,21 @@ class MiddlewareTest extends TestCase
         $this->testUser->givePermissionTo('edit-articles');
 
         $this->assertEquals(
-            $this->runMiddleware(
+            $this->getMiddlewareStatus(
                 $this->permissionMiddleware,
                 'edit-news'
             ),
             403
+        );
+
+        $this->app['config']->set('permission.unauthorized_redirect_url', $this->unauthorized_redirect_url);
+
+        $this->assertEquals(
+            $this->getMiddlewareRedirectUrl(
+                $this->permissionMiddleware,
+                'edit-news'
+            ),
+            url($this->unauthorized_redirect_url)
         );
     }
 
@@ -193,15 +253,25 @@ class MiddlewareTest extends TestCase
         Auth::login($this->testUser);
 
         $this->assertEquals(
-            $this->runMiddleware(
+            $this->getMiddlewareStatus(
                 $this->permissionMiddleware,
                 'edit-articles|edit-news'
             ),
             403
         );
+
+        $this->app['config']->set('permission.unauthorized_redirect_url', $this->unauthorized_redirect_url);
+
+        $this->assertEquals(
+            $this->getMiddlewareRedirectUrl(
+                $this->permissionMiddleware,
+                'edit-articles|edit-news'
+            ),
+            url($this->unauthorized_redirect_url)
+        );
     }
 
-    protected function runMiddleware($middleware, $parameter)
+    protected function getMiddlewareStatus($middleware, $parameter)
     {
         try {
             return $middleware->handle(new Request(), function () {
@@ -209,6 +279,17 @@ class MiddlewareTest extends TestCase
             }, $parameter)->status();
         } catch (HttpException $e) {
             return $e->getStatusCode();
+        }
+    }
+
+    protected function getMiddlewareRedirectUrl($middleware, $parameter)
+    {
+        try {
+            return $middleware->handle(new Request(), function () {
+                return (new Response())->setContent('<html></html>');
+            }, $parameter)->getTargetUrl();
+        } catch (HttpException $e) {
+            return $e;
         }
     }
 }

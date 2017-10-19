@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 namespace Maklad\Permission\Middlewares;
 
 use Closure;
@@ -20,15 +18,14 @@ class PermissionMiddleware
      */
     public function handle($request, Closure $next, $permission)
     {
-        if (auth()->guest()) {
-            \abort(403);
-        }
+        $redirectUrl = config('permission.unauthorized_redirect_url');
+        $permissions = is_array($permission) ? $permission : explode('|', $permission);
 
-        $permissions = \is_array($permission) ? $permission : \explode('|', $permission);
-
-
-        if (! auth()->user()->hasAnyPermission($permissions)) {
-            \abort(403);
+        if (auth()->guest() || ! auth()->user()->hasAnyPermission($permissions)) {
+            if (null !== $redirectUrl) {
+                return redirect($redirectUrl);
+            }
+            abort(403);
         }
 
         return $next($request);

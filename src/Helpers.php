@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 namespace Maklad\Permission;
 
 use Illuminate\Support\Collection;
@@ -18,9 +16,9 @@ class Helpers
      */
     public function getModelForGuard(string $guard)
     {
-        return \collect(\config('auth.guards'))
+        return collect(config('auth.guards'))
             ->map(function ($guard) {
-                return \config("auth.providers.{$guard['provider']}.model");
+                return config("auth.providers.{$guard['provider']}.model");
             })->get($guard);
     }
 

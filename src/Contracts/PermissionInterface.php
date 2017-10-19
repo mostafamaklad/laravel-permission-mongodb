@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 namespace Maklad\Permission\Contracts;
 
 use Jenssegers\Mongodb\Relations\BelongsToMany;

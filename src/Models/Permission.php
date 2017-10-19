@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 namespace Maklad\Permission\Models;
 
 use Illuminate\Support\Collection;
@@ -31,25 +29,26 @@ class Permission extends Model implements PermissionInterface
      */
     public function __construct(array $attributes = [])
     {
-        $attributes['guard_name'] = $attributes['guard_name'] ?? \config('auth.defaults.guard');
+        $attributes['guard_name'] = $attributes['guard_name'] ?? config('auth.defaults.guard');
 
         parent::__construct($attributes);
 
         $this->helpers = new Helpers();
 
-        $this->setTable(\config('permission.collection_names.permissions'));
+        $this->setTable(config('permission.collection_names.permissions'));
     }
 
     /**
      * Create new Permission
+     *
      * @param array $attributes
      *
-     * @return $this|\Illuminate\Database\Eloquent\Model
-     * @throws \Maklad\Permission\Exceptions\PermissionAlreadyExists
+     * @return $this|Model
+     * @throws PermissionAlreadyExists
      */
     public static function create(array $attributes = [])
     {
-        $attributes['guard_name'] = $attributes['guard_name'] ?? \config('auth.defaults.guard');
+        $attributes['guard_name'] = $attributes['guard_name'] ?? config('auth.defaults.guard');
 
         if (static::getPermissions()->where('name', $attributes['name'])->where(
             'guard_name',
@@ -74,10 +73,9 @@ class Permission extends Model implements PermissionInterface
      */
     public function roles(): BelongsToMany
     {
-        return $this->belongsToMany(
-            \config('permission.models.role'),
-            \config('permission.collection_names.role_has_permissions')
-        );
+        $roleModel = config('permission.models.role');
+
+        return $this->belongsToMany($roleModel);
     }
 
     /**
@@ -86,7 +84,9 @@ class Permission extends Model implements PermissionInterface
      */
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany($this->helpers->getModelForGuard($this->attributes['guard_name']));
+        $model = $this->helpers->getModelForGuard($this->attributes['guard_name']);
+
+        return $this->belongsToMany($model);
     }
 
     /**
@@ -100,7 +100,7 @@ class Permission extends Model implements PermissionInterface
      */
     public static function findByName(string $name, $guardName = null): PermissionInterface
     {
-        $guardName = $guardName ?? \config('auth.defaults.guard');
+        $guardName = $guardName ?? config('auth.defaults.guard');
 
         $permission = static::getPermissions()->where('name', $name)->where('guard_name', $guardName)->first();
 
@@ -118,6 +118,6 @@ class Permission extends Model implements PermissionInterface
      */
     protected static function getPermissions(): Collection
     {
-        return \app(PermissionRegistrar::class)->getPermissions();
+        return app(PermissionRegistrar::class)->getPermissions();
     }
 }

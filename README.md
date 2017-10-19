@@ -159,12 +159,20 @@ return [
      */
 
     'log_registration_exception' => true,
+    
+    /*
+     * By default the RoleMiddleware and PermissionMiddleware will trigger an abort with
+     * http 403 status code if the user doesn't have the specified permission or role.
+     *
+     * To override the default 403 response, provide an URL here.
+     */
+    'unauthorized_redirect_url' => null,
 ];
 ```
 
 ## Usage
 
-First add the `Maklad\Permission\Traits\HasRoles` trait to your `User` model(s):
+First, add the `Maklad\Permission\Traits\HasRoles` trait to your `User` model(s):
 
 ```php
 use Illuminate\Auth\Authenticatable;
@@ -367,7 +375,7 @@ $user->assignRole('writer');
 $user->givePermissionTo('delete articles');
 ```
 
-In the above example a role is given permission to edit articles and this role is assigned to a user.
+In the above example, a role is given permission to edit articles and this role is assigned to a user.
 Now the user can edit articles and additionally delete articles. The permission of `delete articles` is the user's direct permission because it is assigned directly to them.
 When we call `$user->hasDirectPermission('delete articles')` it returns `true`, but `false` for `$user->hasDirectPermission('edit articles')`.
 
@@ -460,7 +468,7 @@ or
 
 When using the default Laravel auth configuration all of the above methods will work out of the box, no extra configuration required.
 
-However when using multiple guards they will act like namespaces for your permissions and roles. Meaning every guard has its own set of permissions and roles that can be assigned to their user model.
+However, when using multiple guards they will act like namespaces for your permissions and roles. Meaning every guard has its own set of permissions and roles that can be assigned to their user model.
 
 ### Using permissions and roles with multiple guards
 
@@ -578,7 +586,7 @@ Two notes about Database Seeding:
 
 1. It is best to flush the `Maklad.permission.cache` before seeding, to avoid cache conflict errors. This can be done from an Artisan command (see Troubleshooting: Cache section, later) or directly in a seeder class (see example below).
 
-2. Here's a sample seeder, which clears the cache, creates permissions, and then assigns permissions to roles:
+2. Here's a sample seeder, which clears the cache, creates permissions and then assigns permissions to roles:
 ```php
 use Illuminate\Database\Seeder;
 use Maklad\Permission\Models\Role;
@@ -637,7 +645,7 @@ $role->revokePermissionTo('edit articles');
 $role->syncPermissions(params);
 ```
 
-HOWEVER, if you manipulate permission/role data directly in the database instead of calling the supplied methods, then you will not see the changes reflected in the application unless you manually reset the cache.
+However, if you manipulate permission/role data directly in the database instead of calling the supplied methods, then you will not see the changes reflected in the application unless you manually reset the cache.
 
 ### Manual cache reset
 To manually reset the cache for this package, run:

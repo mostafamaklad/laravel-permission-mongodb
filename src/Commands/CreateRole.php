@@ -1,10 +1,7 @@
 <?php
-declare(strict_types=1);
-
 namespace Maklad\Permission\Commands;
 
 use Illuminate\Console\Command;
-use Maklad\Permission\Contracts\PermissionInterface as Permission;
 use Maklad\Permission\Contracts\RoleInterface as Role;
 
 /**
@@ -22,7 +19,7 @@ class CreateRole extends Command
 
     public function handle()
     {
-        $roleClass       = \app(Role::class);
+        $roleClass = app(Role::class);
 
         $name        = $this->argument('name');
         $guard       = $this->argument('guard');

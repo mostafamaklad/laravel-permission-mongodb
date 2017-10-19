@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 namespace Maklad\Permission\Middlewares;
 
 use Closure;
@@ -20,14 +18,14 @@ class RoleMiddleware
      */
     public function handle($request, Closure $next, $role)
     {
-        if (auth()->guest()) {
-            \abort(403);
-        }
+        $redirectUrl = config('permission.unauthorized_redirect_url');
+        $roles = is_array($role) ? $role : explode('|', $role);
 
-        $roles = \is_array($role) ? $role : \explode('|', $role);
-
-        if (! auth()->user()->hasAnyRole($roles)) {
-            \abort(403);
+        if (auth()->guest() || ! auth()->user()->hasAnyRole($roles)) {
+            if (null !== $redirectUrl) {
+                return redirect($redirectUrl);
+            }
+            abort(403);
         }
 
         return $next($request);
