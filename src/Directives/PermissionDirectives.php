@@ -17,11 +17,10 @@ class PermissionDirectives
         $this->bladeCompiler = $bladeCompiler;
     }
 
-    public function role_directive()
+    public function roleDirective()
     {
         $this->bladeCompiler->directive('role', function ($arguments) {
-            $arguments = preg_replace('(\(|\)| )', '', $arguments);
-            list($role, $guard) = \explode(',', $arguments . ',');
+            list($role, $guard) = $this->extractRoleGuard($arguments);
 
             return "<?php if(auth({$guard})->check() && auth({$guard})->user()->hasRole({$role})): ?>";
         });
@@ -31,11 +30,10 @@ class PermissionDirectives
         });
     }
 
-    public function hasrole_directive()
+    public function hasroleDirective()
     {
         $this->bladeCompiler->directive('hasrole', function ($arguments) {
-            $arguments = preg_replace('(\(|\)| )', '', $arguments);
-            list($role, $guard) = \explode(',', $arguments . ',');
+            list($role, $guard) = $this->extractRoleGuard($arguments);
 
             return "<?php if(auth({$guard})->check() && auth({$guard})->user()->hasRole({$role})): ?>";
         });
@@ -44,11 +42,10 @@ class PermissionDirectives
         });
     }
 
-    public function hasanyrole_directive()
+    public function hasanyroleDirective()
     {
         $this->bladeCompiler->directive('hasanyrole', function ($arguments) {
-            $arguments = preg_replace('(\(|\)| )', '', $arguments);
-            list($roles, $guard) = \explode(',', $arguments . ',');
+            list($roles, $guard) = $this->extractRoleGuard($arguments);
 
             return "<?php if(auth({$guard})->check() && auth({$guard})->user()->hasAnyRole({$roles})): ?>";
         });
@@ -57,16 +54,20 @@ class PermissionDirectives
         });
     }
 
-    public function hasallroles_directive()
+    public function hasallrolesDirective()
     {
         $this->bladeCompiler->directive('hasallroles', function ($arguments) {
-            $arguments = preg_replace('(\(|\)| )', '', $arguments);
-            list($roles, $guard) = \explode(',', $arguments . ',');
+            list($roles, $guard) = $this->extractRoleGuard($arguments);
 
             return "<?php if(auth({$guard})->check() && auth({$guard})->user()->hasAllRoles({$roles})): ?>";
         });
         $this->bladeCompiler->directive('endhasallroles', function () {
             return '<?php endif; ?>';
         });
+    }
+
+    private function extractRoleGuard($arguments){
+        $arguments = preg_replace('(\(|\)| )', '', $arguments);
+        return \explode(',', $arguments . ',');
     }
 }
