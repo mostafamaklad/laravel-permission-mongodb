@@ -53,12 +53,12 @@ class PermissionServiceProvider extends ServiceProvider
     protected function registerBladeExtensions()
     {
         $this->app->afterResolving('blade.compiler', function (BladeCompiler $bladeCompiler) {
-            $permission_directives = new PermissionDirectives($bladeCompiler);
+            $permissionDirectives = new PermissionDirectives($bladeCompiler);
 
-            $permission_directives->role_directive();
-            $permission_directives->hasrole_directive();
-            $permission_directives->hasallroles_directive();
-            $permission_directives->hasanyrole_directive();
+            $permissionDirectives->roleDirective();
+            $permissionDirectives->roleDirective();
+            $permissionDirectives->roleDirective();
+            $permissionDirectives->roleDirective();
         });
     }
 }
