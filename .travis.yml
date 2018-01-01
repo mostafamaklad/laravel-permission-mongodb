@@ -33,9 +33,6 @@ addons:
 
 before_script:
   - pecl install mongodb
-  - mysql -e 'create database unittest;'
-  - travis_retry composer self-update
-  - travis_retry composer install --no-interaction
   - travis_retry composer self-update
   - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
 
