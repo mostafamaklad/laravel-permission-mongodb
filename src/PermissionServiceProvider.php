@@ -56,9 +56,9 @@ class PermissionServiceProvider extends ServiceProvider
             $permissionDirectives = new PermissionDirectives($bladeCompiler);
 
             $permissionDirectives->roleDirective();
-            $permissionDirectives->roleDirective();
-            $permissionDirectives->roleDirective();
-            $permissionDirectives->roleDirective();
+            $permissionDirectives->hasroleDirective();
+            $permissionDirectives->hasanyroleDirective();
+            $permissionDirectives->hasallrolesDirective();
         });
     }
 }

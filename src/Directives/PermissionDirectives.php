@@ -17,6 +17,9 @@ class PermissionDirectives
         $this->bladeCompiler = $bladeCompiler;
     }
 
+    /**
+     * Declare role directive
+     */
     public function roleDirective()
     {
         $this->bladeCompiler->directive('role', function ($arguments) {
@@ -30,6 +33,9 @@ class PermissionDirectives
         });
     }
 
+    /**
+     * Declare hasrole directive
+     */
     public function hasroleDirective()
     {
         $this->bladeCompiler->directive('hasrole', function ($arguments) {
@@ -42,6 +48,9 @@ class PermissionDirectives
         });
     }
 
+    /**
+     * Declare hasanyrole directive
+     */
     public function hasanyroleDirective()
     {
         $this->bladeCompiler->directive('hasanyrole', function ($arguments) {
@@ -54,6 +63,9 @@ class PermissionDirectives
         });
     }
 
+    /**
+     * Declare hasallroles directive
+     */
     public function hasallrolesDirective()
     {
         $this->bladeCompiler->directive('hasallroles', function ($arguments) {
@@ -66,7 +78,12 @@ class PermissionDirectives
         });
     }
 
-    private function extractRoleGuard($arguments)
+    /**
+     * @param $arguments
+     *
+     * @return array
+     */
+    private function extractRoleGuard($arguments): array
     {
         $arguments = preg_replace('(\(|\)| )', '', $arguments);
 
