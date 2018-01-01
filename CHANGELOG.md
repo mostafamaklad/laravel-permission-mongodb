@@ -2,6 +2,11 @@
 
 All Notable changes to `laravel-permission-mongodb` will be documented in this file.
 
+## 1.4.0 - 2018-01-01
+
+### Added
+ - Officially Support `laravel 5.5`
+
 ## 1.3.5 - 2017-10-18
 
 ### Added
