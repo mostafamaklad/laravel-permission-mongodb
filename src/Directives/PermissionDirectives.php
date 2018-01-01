@@ -66,8 +66,10 @@ class PermissionDirectives
         });
     }
 
-    private function extractRoleGuard($arguments){
+    private function extractRoleGuard($arguments)
+    {
         $arguments = preg_replace('(\(|\)| )', '', $arguments);
+
         return \explode(',', $arguments . ',');
     }
 }
