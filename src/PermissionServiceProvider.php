@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Maklad\Permission;
 
@@ -7,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\View\Compilers\BladeCompiler;
 use Maklad\Permission\Contracts\PermissionInterface as Permission;
 use Maklad\Permission\Contracts\RoleInterface as Role;
+use Maklad\Permission\Directives\PermissionDirectives;
 
 /**
  * Class PermissionServiceProvider
@@ -17,13 +17,13 @@ class PermissionServiceProvider extends ServiceProvider
     public function boot(PermissionRegistrar $permissionLoader)
     {
         $this->publishes([
-            __DIR__ . '/../config/permission.php' => $this->app->configPath() . '/permission.php'
+            __DIR__ . '/../config/permission.php' => $this->app->configPath() . '/permission.php',
         ], 'config');
 
         if ($this->app->runningInConsole()) {
             $this->commands([
                 Commands\CreateRole::class,
-                Commands\CreatePermission::class
+                Commands\CreatePermission::class,
             ]);
         }
 
@@ -53,45 +53,12 @@ class PermissionServiceProvider extends ServiceProvider
     protected function registerBladeExtensions()
     {
         $this->app->afterResolving('blade.compiler', function (BladeCompiler $bladeCompiler) {
-            $bladeCompiler->directive('role', function ($arguments) {
-                $arguments = preg_replace('(\(|\)| )', '', $arguments);
-                list($role, $guard) = \explode(',', $arguments . ',');
+            $permission_directives = new PermissionDirectives($bladeCompiler);
 
-                return "<?php if(auth({$guard})->check() && auth({$guard})->user()->hasRole({$role})): ?>";
-            });
-            $bladeCompiler->directive('endrole', function () {
-                return '<?php endif; ?>';
-            });
-
-            $bladeCompiler->directive('hasrole', function ($arguments) {
-                $arguments = preg_replace('(\(|\)| )', '', $arguments);
-                list($role, $guard) = \explode(',', $arguments . ',');
-
-                return "<?php if(auth({$guard})->check() && auth({$guard})->user()->hasRole({$role})): ?>";
-            });
-            $bladeCompiler->directive('endhasrole', function () {
-                return '<?php endif; ?>';
-            });
-
-            $bladeCompiler->directive('hasanyrole', function ($arguments) {
-                $arguments = preg_replace('(\(|\)| )', '', $arguments);
-                list($roles, $guard) = \explode(',', $arguments . ',');
-
-                return "<?php if(auth({$guard})->check() && auth({$guard})->user()->hasAnyRole({$roles})): ?>";
-            });
-            $bladeCompiler->directive('endhasanyrole', function () {
-                return '<?php endif; ?>';
-            });
-
-            $bladeCompiler->directive('hasallroles', function ($arguments) {
-                $arguments = preg_replace('(\(|\)| )', '', $arguments);
-                list($roles, $guard) = \explode(',', $arguments . ',');
-
-                return "<?php if(auth({$guard})->check() && auth({$guard})->user()->hasAllRoles({$roles})): ?>";
-            });
-            $bladeCompiler->directive('endhasallroles', function () {
-                return '<?php endif; ?>';
-            });
+            $permission_directives->role_directive();
+            $permission_directives->hasrole_directive();
+            $permission_directives->hasallroles_directive();
+            $permission_directives->hasanyrole_directive();
         });
     }
 }
