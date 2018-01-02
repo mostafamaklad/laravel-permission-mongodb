@@ -354,12 +354,12 @@ trait HasRoles
      */
     private function convertToRoleModels($roles): Collection
     {
-        if (\is_array($roles)) {
-            $roles = \collect($roles);
+        if (is_array($roles)) {
+            $roles = collect($roles);
         }
 
         if (! $roles instanceof Collection) {
-            $roles = \collect([$roles]);
+            $roles = collect([$roles]);
         }
 
         $roles = $roles->map(function ($role) {
