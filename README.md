@@ -67,12 +67,6 @@ $user->can('edit articles');
 
 This package can be used in Laravel 5.2 and up.
 
-> Note: use version 1.3.4 and up if you are using Laravel 5.2.x
-
-> Note: use version 1.3.3 and up if you are using Laravel 5.3.x
-
-> Note: use version 1.4.0-alpha if you are using Laravel 5.5.x
-
 You can install the package via composer:
 
 ``` bash
@@ -94,7 +88,7 @@ You can publish the config file with:
 php artisan vendor:publish --provider="Maklad\Permission\PermissionServiceProvider" --tag="config"
 ```
 
-When published, [the `config/permission.php` config file](https://github.com/mostafamaklad/laravel-permission-mongodb/blob/master/config/permission.php) contains:
+When published, the [`config/permission.php`](https://github.com/mostafamaklad/laravel-permission-mongodb/blob/master/config/permission.php) config file contains:
 
 ```php
 return [
