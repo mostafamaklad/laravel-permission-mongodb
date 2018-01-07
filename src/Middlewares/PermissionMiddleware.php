@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Maklad\Permission\Middlewares;
 
 use Closure;
+use Maklad\Permission\Exceptions\UnauthorizedException;
 
 /**
  * Class PermissionMiddleware
@@ -17,18 +18,19 @@ class PermissionMiddleware
      * @param $permission
      *
      * @return mixed
+     * @throws \Maklad\Permission\Exceptions\UnauthorizedException
      */
     public function handle($request, Closure $next, $permission)
     {
         if (auth()->guest()) {
-            \abort(403);
+            throw UnauthorizedException::notLoggedIn();
         }
 
         $permissions = \is_array($permission) ? $permission : \explode('|', $permission);
 
 
         if (! auth()->user()->hasAnyPermission($permissions)) {
-            \abort(403);
+            throw UnauthorizedException::forPermissions($permissions);
         }
 
         return $next($request);

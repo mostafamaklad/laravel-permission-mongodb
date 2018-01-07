@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Maklad\Permission\Middlewares;
 
 use Closure;
+use Maklad\Permission\Exceptions\UnauthorizedException;
 
 /**
  * Class RoleMiddleware
@@ -17,17 +18,18 @@ class RoleMiddleware
      * @param $role
      *
      * @return mixed
+     * @throws \Maklad\Permission\Exceptions\UnauthorizedException
      */
     public function handle($request, Closure $next, $role)
     {
         if (auth()->guest()) {
-            \abort(403);
+            throw UnauthorizedException::notLoggedIn();
         }
 
         $roles = \is_array($role) ? $role : \explode('|', $role);
 
         if (! auth()->user()->hasAnyRole($roles)) {
-            \abort(403);
+            throw UnauthorizedException::forRoles($roles);
         }
 
         return $next($request);
