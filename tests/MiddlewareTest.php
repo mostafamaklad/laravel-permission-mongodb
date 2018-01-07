@@ -5,9 +5,9 @@ namespace Maklad\Permission\Test;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Maklad\Permission\Middlewares\RoleMiddleware;
+use Maklad\Permission\Exceptions\UnauthorizedException;
 use Maklad\Permission\Middlewares\PermissionMiddleware;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Maklad\Permission\Middlewares\RoleMiddleware;
 
 class MiddlewareTest extends TestCase
 {
@@ -207,7 +207,7 @@ class MiddlewareTest extends TestCase
             return $middleware->handle(new Request(), function () {
                 return (new Response())->setContent('<html></html>');
             }, $parameter)->status();
-        } catch (HttpException $e) {
+        } catch (UnauthorizedException $e) {
             return $e->getStatusCode();
         }
     }
