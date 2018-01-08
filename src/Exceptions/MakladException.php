@@ -1,11 +1,4 @@
 <?php
-declare(strict_types=1);
-/**
- * Created by PhpStorm.
- * User: mostafamaklad
- * Date: 9/6/17
- * Time: 9:59 PM
- */
 
 namespace Maklad\Permission\Exceptions;
 

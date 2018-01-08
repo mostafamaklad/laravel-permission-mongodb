@@ -3,9 +3,9 @@
 namespace Maklad\Permission\Exceptions;
 
 /**
- * Class PermissionDoesNotExist
+ * Class UnauthorizedPermission
  * @package Maklad\Permission\Exceptions
  */
-class PermissionDoesNotExist extends MakladException
+class UnauthorizedPermission extends UnauthorizedException
 {
 }

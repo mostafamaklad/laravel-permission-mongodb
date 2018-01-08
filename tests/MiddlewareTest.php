@@ -5,9 +5,10 @@ namespace Maklad\Permission\Test;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Maklad\Permission\Middlewares\RoleMiddleware;
+use Maklad\Permission\Exceptions\UnauthorizedException;
 use Maklad\Permission\Middlewares\PermissionMiddleware;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Maklad\Permission\Middlewares\RoleMiddleware;
+use Monolog\Logger;
 
 class MiddlewareTest extends TestCase
 {
@@ -26,13 +27,22 @@ class MiddlewareTest extends TestCase
     /** @test */
     public function a_guest_cannot_access_a_route_protected_by_the_role_middleware()
     {
-        $this->assertEquals(
-            $this->runMiddleware(
-                $this->roleMiddleware,
-                'testRole'
-            ),
-            403
-        );
+        $can_logs = [false, true];
+
+        foreach ($can_logs as $can_log) {
+            $this->app['config']->set('permission.log_registration_exception', $can_log);
+
+            $this->assertEquals(
+                $this->runMiddleware(
+                    $this->roleMiddleware,
+                    'testRole'
+                ),
+                403
+            );
+
+            $message = $this->helpers->getUserNotLoggedINMessage();
+            $this->assertLogMessage($message, Logger::ALERT);
+        }
     }
 
     /** @test */
@@ -82,13 +92,22 @@ class MiddlewareTest extends TestCase
 
         $this->testUser->assignRole(['testRole']);
 
-        $this->assertEquals(
-            $this->runMiddleware(
-                $this->roleMiddleware,
-                'testRole2'
-            ),
-            403
-        );
+        $can_logs = [false, true];
+
+        foreach ($can_logs as $can_log) {
+            $this->app['config']->set('permission.log_registration_exception', $can_log);
+
+            $this->assertEquals(
+                $this->runMiddleware(
+                    $this->roleMiddleware,
+                    'testRole2'
+                ),
+                403
+            );
+
+            $message = $this->helpers->getUnauthorizedRoleMessage('testRole2');
+            $this->assertLogMessage($message, Logger::ALERT);
+        }
     }
 
     /** @test */
@@ -96,13 +115,22 @@ class MiddlewareTest extends TestCase
     {
         Auth::login($this->testUser);
 
-        $this->assertEquals(
-            $this->runMiddleware(
-                $this->roleMiddleware,
-                'testRole|testRole2'
-            ),
-            403
-        );
+        $can_logs = [false, true];
+
+        foreach ($can_logs as $can_log) {
+            $this->app['config']->set('permission.log_registration_exception', $can_log);
+
+            $this->assertEquals(
+                $this->runMiddleware(
+                    $this->roleMiddleware,
+                    'testRole|testRole2'
+                ),
+                403
+            );
+
+            $message = $this->helpers->getUnauthorizedRoleMessage('testRole, testRole2');
+            $this->assertLogMessage($message, Logger::ALERT);
+        }
     }
 
     /** @test */
@@ -110,25 +138,43 @@ class MiddlewareTest extends TestCase
     {
         Auth::login($this->testUser);
 
-        $this->assertEquals(
-            $this->runMiddleware(
-                $this->roleMiddleware,
-                ''
-            ),
-            403
-        );
+        $can_logs = [false, true];
+
+        foreach ($can_logs as $can_log) {
+            $this->app['config']->set('permission.log_registration_exception', $can_log);
+
+            $this->assertEquals(
+                $this->runMiddleware(
+                    $this->roleMiddleware,
+                    ''
+                ),
+                403
+            );
+
+            $message = $this->helpers->getUnauthorizedRoleMessage('');
+            $this->assertLogMessage($message, Logger::ALERT);
+        }
     }
 
     /** @test */
     public function a_guest_cannot_access_a_route_protected_by_the_permission_middleware()
     {
-        $this->assertEquals(
-            $this->runMiddleware(
-                $this->permissionMiddleware,
-                'edit-articles'
-            ),
-            403
-        );
+        $can_logs = [false, true];
+
+        foreach ($can_logs as $can_log) {
+            $this->app['config']->set('permission.log_registration_exception', $can_log);
+
+            $this->assertEquals(
+                $this->runMiddleware(
+                    $this->permissionMiddleware,
+                    'edit-articles'
+                ),
+                403
+            );
+
+            $message = $this->helpers->getUserNotLoggedINMessage();
+            $this->assertLogMessage($message, Logger::ALERT);
+        }
     }
 
     /** @test */
@@ -178,13 +224,22 @@ class MiddlewareTest extends TestCase
 
         $this->testUser->givePermissionTo('edit-articles');
 
-        $this->assertEquals(
-            $this->runMiddleware(
-                $this->permissionMiddleware,
-                'edit-news'
-            ),
-            403
-        );
+        $can_logs = [false, true];
+
+        foreach ($can_logs as $can_log) {
+            $this->app['config']->set('permission.log_registration_exception', $can_log);
+
+            $this->assertEquals(
+                $this->runMiddleware(
+                    $this->permissionMiddleware,
+                    'edit-news'
+                ),
+                403
+            );
+
+            $message = $this->helpers->getUnauthorizedPermissionMessage('edit-news');
+            $this->assertLogMessage($message, Logger::ALERT);
+        }
     }
 
     /** @test */
@@ -192,13 +247,22 @@ class MiddlewareTest extends TestCase
     {
         Auth::login($this->testUser);
 
-        $this->assertEquals(
-            $this->runMiddleware(
-                $this->permissionMiddleware,
-                'edit-articles|edit-news'
-            ),
-            403
-        );
+        $can_logs = [false, true];
+
+        foreach ($can_logs as $can_log) {
+            $this->app['config']->set('permission.log_registration_exception', $can_log);
+
+            $this->assertEquals(
+                $this->runMiddleware(
+                    $this->permissionMiddleware,
+                    'edit-articles|edit-news'
+                ),
+                403
+            );
+
+            $message = $this->helpers->getUnauthorizedPermissionMessage('edit-articles, edit-news');
+            $this->assertLogMessage($message, Logger::ALERT);
+        }
     }
 
     protected function runMiddleware($middleware, $parameter)
@@ -207,7 +271,7 @@ class MiddlewareTest extends TestCase
             return $middleware->handle(new Request(), function () {
                 return (new Response())->setContent('<html></html>');
             }, $parameter)->status();
-        } catch (HttpException $e) {
+        } catch (UnauthorizedException $e) {
             return $e->getStatusCode();
         }
     }
