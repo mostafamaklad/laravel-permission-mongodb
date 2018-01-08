@@ -2,6 +2,11 @@
 
 All Notable changes to `laravel-permission-mongodb` will be documented in this file.
 
+## 1.5.0 - 2018-01-08
+
+### Added
+ - Handle Http Exceptions as Unauthorized Exception
+ 
 ## 1.4.0 - 2018-01-01
 
 ### Added
