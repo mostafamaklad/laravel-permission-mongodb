@@ -95,7 +95,7 @@ class Helpers
      *
      * @return string
      */
-    public function getUnauthorizedPermissionsMessage(string $permissions): string
+    public function getUnauthorizedPermissionMessage(string $permissions): string
     {
         return "User does not have the right permissions `{$permissions}`.";
     }
