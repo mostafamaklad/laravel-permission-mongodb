@@ -33,7 +33,7 @@ class PermissionMiddleware
 
         if (! auth()->user()->hasAnyPermission($permissions)) {
             $helpers = new Helpers();
-            throw new UserNotLoggedIn(403, $helpers->getUnauthorizedPermissionsMessage(implode(', ', $permissions)));
+            throw new UserNotLoggedIn(403, $helpers->getUnauthorizedPermissionMessage(implode(', ', $permissions)));
         }
 
         return $next($request);
