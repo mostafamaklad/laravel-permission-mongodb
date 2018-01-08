@@ -158,7 +158,7 @@ return [
 
 ## Usage
 
-First add the `Maklad\Permission\Traits\HasRoles` trait to your `User` model(s):
+First, add the `Maklad\Permission\Traits\HasRoles` trait to your `User` model(s):
 
 ```php
 use Illuminate\Auth\Authenticatable;
@@ -361,7 +361,7 @@ $user->assignRole('writer');
 $user->givePermissionTo('delete articles');
 ```
 
-In the above example a role is given permission to edit articles and this role is assigned to a user.
+In the above example, a role is given permission to edit articles and this role is assigned to a user.
 Now the user can edit articles and additionally delete articles. The permission of `delete articles` is the user's direct permission because it is assigned directly to them.
 When we call `$user->hasDirectPermission('delete articles')` it returns `true`, but `false` for `$user->hasDirectPermission('edit articles')`.
 
@@ -458,7 +458,7 @@ However when using multiple guards they will act like namespaces for your permis
 
 ### Using permissions and roles with multiple guards
 
-By default the default guard (`config('auth.default.guard')`) will be used as the guard for new permissions and roles. When creating permissions and roles for specific guards you'll have to specify their `guard_name` on the model:
+By default the default guard (`config('auth.defaults.guard')`) will be used as the guard for new permissions and roles. When creating permissions and roles for specific guards you'll have to specify their `guard_name` on the model:
 
 ```php
 // Create a superadmin role for the admin users
@@ -529,9 +529,23 @@ public function __construct()
 }
 ```
 
+You can add something in Laravel exception handler:
+
+```php
+public function render($request, Exception $exception)
+{
+    if ($exception instanceof \Spatie\Permission\Exceptions\UnauthorizedException) {
+        // Code here ...
+    }
+
+    return parent::render($request, $exception);
+}
+
+```
+
 ## Using artisan commands
 
-You can create a role or permission from console with artisan commands.
+You can create a role or permission from a console with artisan commands.
 
 ```bash
 php artisan permission:create-role writer
@@ -663,7 +677,7 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) and [CONDUCT](CONDUCT.md) for details
 
 ## Security
 
-If you discover any security related issues, please email dev.mostafa.maklad@gmail.com instead of using the issue tracker.
+If you discover any security-related issues, please email dev.mostafa.maklad@gmail.com instead of using the issue tracker.
 
 ## Credits
 
