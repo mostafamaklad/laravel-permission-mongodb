@@ -79,4 +79,32 @@ class Helpers
     {
         return "There is no role named `{$name}` for guard `{$guardName}`.";
     }
+
+    /**
+     * @param string $roles
+     *
+     * @return string
+     */
+    public function getUnauthorizedRoleMessage(string $roles): string
+    {
+        return "User does not have the right roles `{$roles}`.";
+    }
+
+    /**
+     * @param string $permissions
+     *
+     * @return string
+     */
+    public function getUnauthorizedPermissionsMessage(string $permissions): string
+    {
+        return "User does not have the right permissions `{$permissions}`.";
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserNotLoggedINMessage(): string
+    {
+        return 'User is not logged in.';
+    }
 }

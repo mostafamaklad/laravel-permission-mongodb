@@ -2,6 +2,7 @@
 
 namespace Maklad\Permission\Exceptions;
 
+use http\Exception;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
@@ -10,18 +11,20 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  */
 class UnauthorizedException extends HttpException
 {
-    public static function forRoles(array $roles): self
-    {
-        return new static(403, 'User does not have the right roles.', null, []);
-    }
 
-    public static function forPermissions(array $permissions): self
+    /**
+     * UnauthorizedException constructor.
+     *
+     * @param $statusCode
+     * @param null $message
+     */
+    public function __construct($statusCode, $message = null)
     {
-        return new static(403, 'User does not have the right permissions.', null, []);
-    }
+        parent::__construct($statusCode, $message);
 
-    public static function notLoggedIn(): self
-    {
-        return new static(403, 'User is not logged in.', null, []);
+        if (\config('permission.log_registration_exception')) {
+            $logger = \app('log');
+            $logger->alert($message);
+        }
     }
 }
