@@ -52,15 +52,15 @@ class Role extends Model implements RoleInterface
     public static function create(array $attributes = [])
     {
         $attributes['guard_name'] = $attributes['guard_name'] ?? \config('auth.defaults.guard');
+        $helpers                  = new Helpers();
 
         if (static::where('name', $attributes['name'])->where('guard_name', $attributes['guard_name'])->first()) {
-            $name = $attributes['name'];
+            $name      = $attributes['name'];
             $guardName = $attributes['guard_name'];
-            $helpers = new Helpers();
             throw new RoleAlreadyExists($helpers->getRoleAlreadyExistsMessage($name, $guardName));
         }
 
-        if (app()::VERSION < '5.4') {
+        if ($helpers->isNotLumen() && app()::VERSION < '5.4') {
             return parent::create($attributes);
         }
 
@@ -127,7 +127,7 @@ class Role extends Model implements RoleInterface
 
         if (! $this->getGuardNames()->contains($permission->guard_name)) {
             $expected = $this->getGuardNames();
-            $given = $permission->guard_name;
+            $given    = $permission->guard_name;
 
             throw new GuardDoesNotMatch($this->helpers->getGuardDoesNotMatchMessage($expected, $given));
         }

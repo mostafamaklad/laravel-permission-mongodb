@@ -26,15 +26,15 @@ class PermissionRegistrar
 
     public function __construct(Gate $gate, Repository $cache)
     {
-        $this->gate   = $gate;
-        $this->cache  = $cache;
+        $this->gate  = $gate;
+        $this->cache = $cache;
     }
 
     public function registerPermissions(): bool
     {
         $this->getPermissions()->map(function (Permission $permission) {
             $this->gate->define($permission->name, function (Model $user) use ($permission) {
-                return $user->hasPermissionTo($permission);
+                return $user->hasPermissionTo($permission) ?: null;
             });
         });
 

@@ -40,6 +40,8 @@ $user->can('edit articles');
 
 ## Table of contents
 * [Installation](#installation)
+    * [Laravel](#laravel)
+    * [Lumen](#Lumen)
 * [Usage](#usage)
     * [Using "direct" permissions](#using-direct-permissions)
     * [Using permissions via roles](#using-permissions-via-roles)
@@ -65,6 +67,7 @@ $user->can('edit articles');
 
 ## Installation
 
+### Laravel
 This package can be used in Laravel 5.2 and up.
 
 You can install the package via composer:
@@ -156,6 +159,29 @@ return [
 ];
 ```
 
+### Lumen
+
+You can install the package via Composer:
+
+``` bash
+composer require mostafamaklad/laravel-permission-mongodb
+```
+
+Copy `vendor/mostafamaklad/laravel-permission-mongodb/config/permission.php` to `config/permission.php`.
+
+In `bootstrap/app.php`, add the following code below other services providers:
+
+```php
+$app->register(Maklad\Permission\PermissionServiceProvider::class);
+$app->configure('permission');
+```
+
+Then, run your migrations:
+
+```bash
+php artisan migrate
+```
+
 ## Usage
 
 First, add the `Maklad\Permission\Traits\HasRoles` trait to your `User` model(s):
@@ -224,7 +250,7 @@ $roles = $user->roles->pluck('name'); // Returns a collection
 $roles = $user->getRoleNames() // Returns a collection;
 ```
 
-The `HasRoles` trait also adds scopes to your models to scope the query to certain roles or permissions:
+The `HasRoles` trait also adds a `role` scope to your models to scope the query to certain roles or permissions:
 
 ```php
 $users = User::role('writer')->get(); // Returns only users with the role 'writer'
