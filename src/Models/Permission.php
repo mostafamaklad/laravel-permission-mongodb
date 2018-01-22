@@ -105,7 +105,7 @@ class Permission extends Model implements PermissionInterface
 
         $permission = static::getPermissions()->where('name', $name)->where('guard_name', $guardName)->first();
 
-        if ( ! $permission) {
+        if (! $permission) {
             $helpers = new Helpers();
             throw new PermissionDoesNotExist($helpers->getPermissionDoesNotExistMessage($name, $guardName));
         }

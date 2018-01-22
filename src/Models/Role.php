@@ -102,7 +102,7 @@ class Role extends Model implements RoleInterface
 
         $role = static::where('name', $name)->where('guard_name', $guardName)->first();
 
-        if ( ! $role) {
+        if (! $role) {
             $helpers = new Helpers();
             throw new RoleDoesNotExist($helpers->getRoleDoesNotExistMessage($name, $guardName));
         }
@@ -125,7 +125,7 @@ class Role extends Model implements RoleInterface
             $permission = \app(Permission::class)->findByName($permission, $this->getDefaultGuardName());
         }
 
-        if ( ! $this->getGuardNames()->contains($permission->guard_name)) {
+        if (! $this->getGuardNames()->contains($permission->guard_name)) {
             $expected = $this->getGuardNames();
             $given    = $permission->guard_name;
 
