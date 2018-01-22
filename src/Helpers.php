@@ -107,4 +107,9 @@ class Helpers
     {
         return 'User is not logged in.';
     }
+
+    public function isNotLumen(): bool
+    {
+        return ! stripos(app()->version(), 'lumen');
+    }
 }

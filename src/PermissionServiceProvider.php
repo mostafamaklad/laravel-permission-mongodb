@@ -16,9 +16,12 @@ class PermissionServiceProvider extends ServiceProvider
 {
     public function boot(PermissionRegistrar $permissionLoader)
     {
-        $this->publishes([
-            __DIR__ . '/../config/permission.php' => $this->app->configPath() . '/permission.php',
-        ], 'config');
+        $helpers = new Helpers();
+        if ($helpers->isNotLumen()) {
+            $this->publishes([
+                __DIR__ . '/../config/permission.php' => $this->app->configPath() . '/permission.php',
+            ], 'config');
+        }
 
         if ($this->app->runningInConsole()) {
             $this->commands([
@@ -34,10 +37,13 @@ class PermissionServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->mergeConfigFrom(
-            __DIR__ . '/../config/permission.php',
-            'permission'
-        );
+        $helpers = new Helpers();
+        if ($helpers->isNotLumen()) {
+            $this->mergeConfigFrom(
+                __DIR__ . '/../config/permission.php',
+                'permission'
+            );
+        }
 
         $this->registerBladeExtensions();
     }
