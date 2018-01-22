@@ -40,6 +40,8 @@ $user->can('edit articles');
 
 ## Table of contents
 * [Installation](#installation)
+    * [Laravel](#laravel)
+    * [Lumen](#Lumen)
 * [Usage](#usage)
     * [Using "direct" permissions](#using-direct-permissions)
     * [Using permissions via roles](#using-permissions-via-roles)
@@ -65,6 +67,7 @@ $user->can('edit articles');
 
 ## Installation
 
+### Laravel
 This package can be used in Laravel 5.2 and up.
 
 You can install the package via composer:
@@ -154,6 +157,29 @@ return [
 
     'log_registration_exception' => true,
 ];
+```
+
+### Lumen
+
+You can install the package via Composer:
+
+``` bash
+composer require mostafamaklad/laravel-permission-mongodb
+```
+
+Copy `vendor/mostafamaklad/laravel-permission-mongodb/config/permission.php` to `config/permission.php`.
+
+In `bootstrap/app.php`, add the following code below other services providers:
+
+```php
+$app->register(Maklad\Permission\PermissionServiceProvider::class);
+$app->configure('permission');
+```
+
+Then, run your migrations:
+
+```bash
+php artisan migrate
 ```
 
 ## Usage
