@@ -42,6 +42,7 @@ class Permission extends Model implements PermissionInterface
 
     /**
      * Create new Permission
+     *
      * @param array $attributes
      *
      * @return $this|\Illuminate\Database\Eloquent\Model
@@ -49,19 +50,19 @@ class Permission extends Model implements PermissionInterface
      */
     public static function create(array $attributes = [])
     {
+        $helpers                  = new Helpers();
         $attributes['guard_name'] = $attributes['guard_name'] ?? \config('auth.defaults.guard');
 
         if (static::getPermissions()->where('name', $attributes['name'])->where(
             'guard_name',
             $attributes['guard_name']
         )->first()) {
-            $name = $attributes['name'];
+            $name      = $attributes['name'];
             $guardName = $attributes['guard_name'];
-            $helpers = new Helpers();
             throw new PermissionAlreadyExists($helpers->getPermissionAlreadyExistsMessage($name, $guardName));
         }
 
-        if (app()::VERSION < '5.4') {
+        if ($helpers->isNotLumen() && app()::VERSION < '5.4') {
             return parent::create($attributes);
         }
 
@@ -104,7 +105,7 @@ class Permission extends Model implements PermissionInterface
 
         $permission = static::getPermissions()->where('name', $name)->where('guard_name', $guardName)->first();
 
-        if (! $permission) {
+        if ( ! $permission) {
             $helpers = new Helpers();
             throw new PermissionDoesNotExist($helpers->getPermissionDoesNotExistMessage($name, $guardName));
         }
