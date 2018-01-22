@@ -8,7 +8,6 @@
 [![StyleCI][ico-styleci]][link-styleci]
 [![Coverage Status][ico-coveralls]][link-coveralls]
 [![Dependency Status][ico-gemnasium]][link-gemnasium]
-[![SensioLabsInsight][ico-sensiolabs]][link-sensiolabs]
 [![Total Downloads][ico-downloads]][link-packagist]
 [![Laravel 5.3.x][ico-laravel-5.2]][link-laravel-5.2]
 [![Laravel 5.3.x][ico-laravel-5.3]][link-laravel-5.3]
