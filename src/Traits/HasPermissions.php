@@ -61,13 +61,21 @@ trait HasPermissions
     /**
      * Revoke the given permission.
      *
-     * @param Permission|string $permission
+     * @param string|array|Permission|\Illuminate\Support\Collection $permissions
      *
      * @return $this
+     * @throws \Maklad\Permission\Exceptions\GuardDoesNotMatch
      */
-    public function revokePermissionTo($permission)
+    public function revokePermissionTo(...$permissions)
     {
-        $this->permissions()->detach($this->getStoredPermission($permission));
+        \collect($permissions)
+            ->flatten()
+            ->map(function ($permission) {
+                $permission = $this->getStoredPermission($permission);
+                $this->permissions()->detach($permission);
+
+                return $permission;
+            });
 
         $this->forgetCachedPermissions();
 
@@ -75,17 +83,17 @@ trait HasPermissions
     }
 
     /**
-     * @param string|Permission $permissions
+     * @param string|Permission $permission
      *
      * @return Permission
      */
-    protected function getStoredPermission($permissions): Permission
+    protected function getStoredPermission($permission): Permission
     {
-        if (\is_string($permissions)) {
-            return \app(Permission::class)->findByName($permissions, $this->getDefaultGuardName());
+        if (\is_string($permission)) {
+            return \app(Permission::class)->findByName($permission, $this->getDefaultGuardName());
         }
 
-        return $permissions;
+        return $permission;
     }
 
     /**
@@ -97,8 +105,8 @@ trait HasPermissions
     {
         if (! $this->getGuardNames()->contains($roleOrPermission->guard_name)) {
             $expected = $this->getGuardNames();
-            $given = $roleOrPermission->guard_name;
-            $helpers = new Helpers();
+            $given    = $roleOrPermission->guard_name;
+            $helpers  = new Helpers();
 
             throw new GuardDoesNotMatch($helpers->getGuardDoesNotMatchMessage($expected, $given));
         }
