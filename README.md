@@ -40,7 +40,7 @@ $user->can('edit articles');
 ## Table of contents
 * [Installation](#installation)
     * [Laravel](#laravel)
-    * [Lumen](#Lumen)
+    * [Lumen](#lumen)
 * [Usage](#usage)
     * [Using "direct" permissions](#using-direct-permissions)
     * [Using permissions via roles](#using-permissions-via-roles)
@@ -173,12 +173,6 @@ In `bootstrap/app.php`, add the following code below other services providers:
 ```php
 $app->register(Maklad\Permission\PermissionServiceProvider::class);
 $app->configure('permission');
-```
-
-Then, run your migrations:
-
-```bash
-php artisan migrate
 ```
 
 ## Usage
