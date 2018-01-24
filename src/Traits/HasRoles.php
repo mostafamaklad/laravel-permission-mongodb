@@ -129,9 +129,7 @@ trait HasRoles
      */
     public function syncRoles(...$roles)
     {
-        foreach ($this->roles as $role) {
-            $role->users()->detach($this);
-        }
+        $this->roles()->detach();
 
         return $this->assignRole($roles);
     }
