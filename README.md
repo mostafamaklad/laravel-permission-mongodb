@@ -51,6 +51,7 @@ $user->can('edit articles');
     * [Using blade directives with multiple guards](#using-blade-directives-with-multiple-guards)
 * [Using a middleware](#using-a-middleware)
 * [Using artisan commands](#using-artisan-commands)
+* [Unit Testing](#unit-testing)
 * [Database Seeding](#database-seeding)
 * [Extending](#extending)
 * [Cache](#cache)
