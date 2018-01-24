@@ -554,7 +554,7 @@ You can add something in Laravel exception handler:
 ```php
 public function render($request, Exception $exception)
 {
-    if ($exception instanceof \Spatie\Permission\Exceptions\UnauthorizedException) {
+    if ($exception instanceof \Maklad\Permission\Exceptions\UnauthorizedException) {
         // Code here ...
     }
 
@@ -604,7 +604,7 @@ public function setUp()
 
 Two notes about Database Seeding:
 
-1. It is best to flush the `Maklad.permission.cache` before seeding, to avoid cache conflict errors. This can be done from an Artisan command (see Troubleshooting: Cache section, later) or directly in a seeder class (see example below).
+1. It is best to flush the `maklad.permission.cache` before seeding, to avoid cache conflict errors. This can be done from an Artisan command (see Troubleshooting: Cache section, later) or directly in a seeder class (see example below).
 
 2. Here's a sample seeder, which clears the cache, creates permissions, and then assigns permissions to roles:
 ```php
@@ -670,7 +670,7 @@ HOWEVER, if you manipulate permission/role data directly in the database instead
 ### Manual cache reset
 To manually reset the cache for this package, run:
 ```bash
-php artisan cache:forget spatie.permission.cache
+php artisan cache:forget maklad.permission.cache
 ```
 
 ### Cache Identifier
