@@ -53,7 +53,7 @@ trait HasPermissions
      */
     public function syncPermissions(...$permissions)
     {
-        $this->permissions()->detach();
+        $this->permissions()->sync([]);
 
         return $this->givePermissionTo($permissions);
     }
