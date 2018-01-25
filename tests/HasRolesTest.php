@@ -495,4 +495,17 @@ class HasRolesTest extends TestCase
         $user = SoftDeletingUser::withTrashed()->find($user->id);
         $this->assertTrue($user->hasRole('testRole'));
     }
+
+    /** @test */
+    public function it_can_give_and_revoke_multiple_roles()
+    {
+        $this->testUser->assignRole('testRole');
+        $this->testUser->assignRole('testRole2');
+
+        $this->testUser->removeRole('testRole', 'testRole2');
+
+        $this->assertFalse($this->testUser->hasRole('testRole'));
+
+        $this->assertFalse($this->testUser->hasRole('testRole2'));
+    }
 }
