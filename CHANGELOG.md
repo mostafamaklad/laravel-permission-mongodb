@@ -2,6 +2,14 @@
 
 All Notable changes to `laravel-permission-mongodb` will be documented in this file.
 
+## 1.5.2 - 2018-01-25
+
+### Added
+ - Added multiple Revoke Permissions
+ - Added multiple Remove Roles
+ - Remove SensioLabsInsight badge
+
+
 ## 1.5.1 - 2018-01-22
 
 ### Added
