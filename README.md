@@ -8,7 +8,6 @@
 [![StyleCI][ico-styleci]][link-styleci]
 [![Coverage Status][ico-coveralls]][link-coveralls]
 [![Dependency Status][ico-gemnasium]][link-gemnasium]
-[![SensioLabsInsight][ico-sensiolabs]][link-sensiolabs]
 [![Total Downloads][ico-downloads]][link-packagist]
 [![Laravel 5.3.x][ico-laravel-5.2]][link-laravel-5.2]
 [![Laravel 5.3.x][ico-laravel-5.3]][link-laravel-5.3]
@@ -41,7 +40,7 @@ $user->can('edit articles');
 ## Table of contents
 * [Installation](#installation)
     * [Laravel](#laravel)
-    * [Lumen](#Lumen)
+    * [Lumen](#lumen)
 * [Usage](#usage)
     * [Using "direct" permissions](#using-direct-permissions)
     * [Using permissions via roles](#using-permissions-via-roles)
@@ -52,6 +51,7 @@ $user->can('edit articles');
     * [Using blade directives with multiple guards](#using-blade-directives-with-multiple-guards)
 * [Using a middleware](#using-a-middleware)
 * [Using artisan commands](#using-artisan-commands)
+* [Unit Testing](#unit-testing)
 * [Database Seeding](#database-seeding)
 * [Extending](#extending)
 * [Cache](#cache)
@@ -174,12 +174,6 @@ In `bootstrap/app.php`, add the following code below other services providers:
 ```php
 $app->register(Maklad\Permission\PermissionServiceProvider::class);
 $app->configure('permission');
-```
-
-Then, run your migrations:
-
-```bash
-php artisan migrate
 ```
 
 ## Usage
@@ -560,7 +554,7 @@ You can add something in Laravel exception handler:
 ```php
 public function render($request, Exception $exception)
 {
-    if ($exception instanceof \Spatie\Permission\Exceptions\UnauthorizedException) {
+    if ($exception instanceof \Maklad\Permission\Exceptions\UnauthorizedException) {
         // Code here ...
     }
 
@@ -610,7 +604,7 @@ public function setUp()
 
 Two notes about Database Seeding:
 
-1. It is best to flush the `Maklad.permission.cache` before seeding, to avoid cache conflict errors. This can be done from an Artisan command (see Troubleshooting: Cache section, later) or directly in a seeder class (see example below).
+1. It is best to flush the `maklad.permission.cache` before seeding, to avoid cache conflict errors. This can be done from an Artisan command (see Troubleshooting: Cache section, later) or directly in a seeder class (see example below).
 
 2. Here's a sample seeder, which clears the cache, creates permissions, and then assigns permissions to roles:
 ```php
@@ -676,7 +670,7 @@ HOWEVER, if you manipulate permission/role data directly in the database instead
 ### Manual cache reset
 To manually reset the cache for this package, run:
 ```bash
-php artisan cache:forget spatie.permission.cache
+php artisan cache:forget maklad.permission.cache
 ```
 
 ### Cache Identifier

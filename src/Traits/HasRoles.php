@@ -113,11 +113,23 @@ trait HasRoles
     /**
      * Revoke the given role from the model.
      *
-     * @param string|Role $role
+     * @param array|string|Role ...$roles
+     *
+     * @return HasRoles
      */
-    public function removeRole($role)
+    public function removeRole(...$roles)
     {
-        $this->roles()->detach($this->getStoredRole($role));
+        \collect($roles)
+            ->flatten()
+            ->map(function ($role) {
+                $role = $this->getStoredRole($role);
+                $this->roles()->detach($this->getStoredRole($role));
+                return $role;
+            });
+
+        $this->forgetCachedPermissions();
+
+        return $this;
     }
 
     /**
