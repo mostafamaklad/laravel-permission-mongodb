@@ -274,4 +274,12 @@ class RoleTest extends TestCase
     {
         $this->assertEquals($this->app['config']->get('auth.defaults.guard'), $this->testUserRole->guard_name);
     }
+
+    /** @test */
+    public function it_creates_role_object_if_it_does_not_have_a_role_object()
+    {
+        $role = app(Role::class)->findOrCreate('other-role');
+
+        $this->assertFalse($this->testUser->hasRole($role));
+    }
 }
