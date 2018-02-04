@@ -56,8 +56,8 @@ class Role extends Model implements RoleInterface
         $helpers                  = new Helpers();
 
         if (static::where('name', $attributes['name'])->where('guard_name', $attributes['guard_name'])->first()) {
-            $name      = $attributes['name'];
-            $guardName = $attributes['guard_name'];
+            $name      = (string) $attributes['name'];
+            $guardName = (string) $attributes['guard_name'];
             throw new RoleAlreadyExists($helpers->getRoleAlreadyExistsMessage($name, $guardName));
         }
 
@@ -86,7 +86,7 @@ class Role extends Model implements RoleInterface
                       ->first();
 
         if (! $role) {
-            return static::create(['guard_name' => $guardName, 'name' => $name]);
+            return static::create(['name' => $name, 'guard_name' => $guardName]);
         }
 
         return $role;

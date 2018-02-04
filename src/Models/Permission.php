@@ -57,8 +57,8 @@ class Permission extends Model implements PermissionInterface
             'guard_name',
             $attributes['guard_name']
         )->first()) {
-            $name      = $attributes['name'];
-            $guardName = $attributes['guard_name'];
+            $name      = (string) $attributes['name'];
+            $guardName = (string) $attributes['guard_name'];
             throw new PermissionAlreadyExists($helpers->getPermissionAlreadyExistsMessage($name, $guardName));
         }
 
@@ -88,7 +88,7 @@ class Permission extends Model implements PermissionInterface
                             ->first();
 
         if (! $permission) {
-            return static::create(['guard_name' => $guardName, 'name' => $name]);
+            return static::create(['name' => $name, 'guard_name' => $guardName]);
         }
 
         return $permission;
