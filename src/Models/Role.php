@@ -5,6 +5,7 @@ namespace Maklad\Permission\Models;
 
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Relations\BelongsToMany;
+use Maklad\Permission\Contracts\PermissionInterface;
 use Maklad\Permission\Contracts\RoleInterface;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\Exceptions\RoleAlreadyExists;
@@ -68,6 +69,30 @@ class Role extends Model implements RoleInterface
     }
 
     /**
+     * Find or create role by its name (and optionally guardName).
+     *
+     * @param string $name
+     * @param string|null $guardName
+     *
+     * @return RoleInterface
+     * @throws \Maklad\Permission\Exceptions\RoleAlreadyExists
+     */
+    public static function findOrCreate(string $name, $guardName = null): RoleInterface
+    {
+        $guardName = $guardName ?? config('auth.defaults.guard');
+
+        $role = static::where('name', $name)
+                      ->where('guard_name', $guardName)
+                      ->first();
+
+        if (! $role) {
+            return static::create(['guard_name' => $guardName, 'name' => $name]);
+        }
+
+        return $role;
+    }
+
+    /**
      * A role may be given various permissions.
      * @return BelongsToMany
      */
@@ -100,7 +125,9 @@ class Role extends Model implements RoleInterface
     {
         $guardName = $guardName ?? \config('auth.defaults.guard');
 
-        $role = static::where('name', $name)->where('guard_name', $guardName)->first();
+        $role = static::where('name', $name)
+                      ->where('guard_name', $guardName)
+                      ->first();
 
         if (! $role) {
             $helpers = new Helpers();
