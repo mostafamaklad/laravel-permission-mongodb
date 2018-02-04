@@ -11,7 +11,7 @@ class PermissionTest extends TestCase
     /** @test */
     public function it_throws_an_exception_when_the_permission_already_exists()
     {
-        $can_logs  = [true, false];
+        $can_logs = [true, false];
 
         foreach ($can_logs as $can_log) {
             $this->app['config']->set('permission.log_registration_exception', $can_log);
@@ -55,5 +55,12 @@ class PermissionTest extends TestCase
 
         $this->testUser->delete();
         $this->assertEquals(0, $this->testUserPermission->users()->count());
+    }
+
+    /** @test */
+    public function it_creates_permission_object_if_it_does_not_have_a_permission_object()
+    {
+        $permission = app(Permission::class)->findOrCreate('other-permission');
+        $this->assertFalse($this->testUserRole->hasPermissionTo($permission));
     }
 }
