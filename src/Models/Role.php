@@ -86,7 +86,7 @@ class Role extends Model implements RoleInterface
                       ->first();
 
         if (! $role) {
-            return static::create(['name' => $name, 'guard_name' => $guardName]);
+            $role = static::create(['name' => $name, 'guard_name' => $guardName]);
         }
 
         return $role;
