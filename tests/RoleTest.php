@@ -276,10 +276,16 @@ class RoleTest extends TestCase
     }
 
     /** @test */
-    public function it_creates_role_object_if_it_does_not_have_a_role_object()
+    public function it_creates_role_object_with_findOrCreate_if_it_does_not_have_a_role_object()
     {
-        $role = app(Role::class)->findOrCreate('other-role');
+        $role = app(Role::class)->findOrCreate('another-role');
 
         $this->assertFalse($this->testUser->hasRole($role));
+
+        $this->testUser->assignRole($role);
+
+        $this->testUser = $this->testUser->fresh();
+
+        $this->assertTrue($this->testUser->hasRole('another-role'));
     }
 }

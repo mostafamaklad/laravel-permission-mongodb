@@ -88,7 +88,7 @@ class Permission extends Model implements PermissionInterface
                             ->first();
 
         if (! $permission) {
-            return static::create(['name' => $name, 'guard_name' => $guardName]);
+            $permission = static::create(['name' => $name, 'guard_name' => $guardName]);
         }
 
         return $permission;
