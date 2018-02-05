@@ -21,7 +21,7 @@ trait HasRoles
     public static function bootHasRoles()
     {
         static::deleting(function (Model $model) {
-            if (method_exists($model, 'isForceDeleting') && ! $model->isForceDeleting()) {
+            if (isset($model->forceDeleting) && !$model->forceDeleting) {
                 return;
             }
 
@@ -124,6 +124,7 @@ trait HasRoles
             ->map(function ($role) {
                 $role = $this->getStoredRole($role);
                 $this->roles()->detach($role);
+
                 return $role;
             });
 
