@@ -21,12 +21,12 @@ trait HasRoles
     public static function bootHasRoles()
     {
         static::deleting(function (Model $model) {
-            foreach ($model->roles as $role) {
-                $role->users()->detach($model);
+            if (isset($model->forceDeleting) && !$model->forceDeleting) {
+                return;
             }
-            foreach ($model->permissions as $permission) {
-                $permission->users()->detach($model);
-            }
+
+            $model->roles()->sync([]);
+            $model->permissions()->sync([]);
         });
     }
 
@@ -123,7 +123,8 @@ trait HasRoles
             ->flatten()
             ->map(function ($role) {
                 $role = $this->getStoredRole($role);
-                $this->roles()->detach($this->getStoredRole($role));
+                $this->roles()->detach($role);
+
                 return $role;
             });
 
@@ -141,7 +142,7 @@ trait HasRoles
      */
     public function syncRoles(...$roles)
     {
-        $this->roles()->detach();
+        $this->roles()->sync([]);
 
         return $this->assignRole($roles);
     }
@@ -343,7 +344,7 @@ trait HasRoles
      */
     public function getRoleNames(): Collection
     {
-        return $this->roles->pluck('name');
+        return $this->roles()->pluck('name');
     }
 
 
