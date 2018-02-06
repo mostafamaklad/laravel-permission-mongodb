@@ -5,6 +5,7 @@ namespace Maklad\Permission\Models;
 
 use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Relations\BelongsToMany;
+use Maklad\Permission\Contracts\PermissionInterface;
 use Maklad\Permission\Contracts\RoleInterface;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\Exceptions\RoleAlreadyExists;
@@ -55,8 +56,8 @@ class Role extends Model implements RoleInterface
         $helpers                  = new Helpers();
 
         if (static::where('name', $attributes['name'])->where('guard_name', $attributes['guard_name'])->first()) {
-            $name      = $attributes['name'];
-            $guardName = $attributes['guard_name'];
+            $name      = (string) $attributes['name'];
+            $guardName = (string) $attributes['guard_name'];
             throw new RoleAlreadyExists($helpers->getRoleAlreadyExistsMessage($name, $guardName));
         }
 
@@ -65,6 +66,30 @@ class Role extends Model implements RoleInterface
         }
 
         return static::query()->create($attributes);
+    }
+
+    /**
+     * Find or create role by its name (and optionally guardName).
+     *
+     * @param string $name
+     * @param string|null $guardName
+     *
+     * @return RoleInterface
+     * @throws \Maklad\Permission\Exceptions\RoleAlreadyExists
+     */
+    public static function findOrCreate(string $name, $guardName = null): RoleInterface
+    {
+        $guardName = $guardName ?? config('auth.defaults.guard');
+
+        $role = static::where('name', $name)
+                      ->where('guard_name', $guardName)
+                      ->first();
+
+        if (! $role) {
+            $role = static::create(['name' => $name, 'guard_name' => $guardName]);
+        }
+
+        return $role;
     }
 
     /**
@@ -100,7 +125,9 @@ class Role extends Model implements RoleInterface
     {
         $guardName = $guardName ?? \config('auth.defaults.guard');
 
-        $role = static::where('name', $name)->where('guard_name', $guardName)->first();
+        $role = static::where('name', $name)
+                      ->where('guard_name', $guardName)
+                      ->first();
 
         if (! $role) {
             $helpers = new Helpers();

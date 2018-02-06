@@ -57,8 +57,8 @@ class Permission extends Model implements PermissionInterface
             'guard_name',
             $attributes['guard_name']
         )->first()) {
-            $name      = $attributes['name'];
-            $guardName = $attributes['guard_name'];
+            $name      = (string) $attributes['name'];
+            $guardName = (string) $attributes['guard_name'];
             throw new PermissionAlreadyExists($helpers->getPermissionAlreadyExistsMessage($name, $guardName));
         }
 
@@ -67,6 +67,31 @@ class Permission extends Model implements PermissionInterface
         }
 
         return static::query()->create($attributes);
+    }
+
+    /**
+     * Find or create permission by its name (and optionally guardName).
+     *
+     * @param string $name
+     * @param string|null $guardName
+     *
+     * @return PermissionInterface
+     * @throws \Maklad\Permission\Exceptions\PermissionAlreadyExists
+     */
+    public static function findOrCreate(string $name, $guardName = null): PermissionInterface
+    {
+        $guardName = $guardName ?? config('auth.defaults.guard');
+
+        $permission = static::getPermissions()
+                            ->where('name', $name)
+                            ->where('guard_name', $guardName)
+                            ->first();
+
+        if (! $permission) {
+            $permission = static::create(['name' => $name, 'guard_name' => $guardName]);
+        }
+
+        return $permission;
     }
 
     /**
