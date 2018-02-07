@@ -2,6 +2,16 @@
 
 All Notable changes to `laravel-permission-mongodb` will be documented in this file.
 
+## 1.5.3 - 2018-02-07
+
+### Added
+ - add findOrCreate to Permissions
+ - add findOrCreate to Roles
+ 
+### Fixed
+ - use sync([]) instead of detach()
+ - fix soft deleting in laravel 5.2 and 5.3
+
 ## 1.5.2 - 2018-01-25
 
 ### Added
