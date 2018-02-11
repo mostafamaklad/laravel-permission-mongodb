@@ -23,7 +23,7 @@ class PermissionMiddleware
      */
     public function handle($request, Closure $next, $permission)
     {
-        if (auth()->guest()) {
+        if (app('auth')->guest()) {
             $helpers = new Helpers();
             throw new UserNotLoggedIn(403, $helpers->getUserNotLoggedINMessage());
         }
@@ -31,7 +31,7 @@ class PermissionMiddleware
         $permissions = \is_array($permission) ? $permission : \explode('|', $permission);
 
 
-        if (! auth()->user()->hasAnyPermission($permissions)) {
+        if (! app('auth')->user()->hasAnyPermission($permissions)) {
             $helpers = new Helpers();
             throw new UserNotLoggedIn(403, $helpers->getUnauthorizedPermissionMessage(implode(', ', $permissions)));
         }

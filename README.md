@@ -167,13 +167,33 @@ You can install the package via Composer:
 composer require mostafamaklad/laravel-permission-mongodb
 ```
 
-Copy `vendor/mostafamaklad/laravel-permission-mongodb/config/permission.php` to `config/permission.php`.
+Copy the required files:
 
-In `bootstrap/app.php`, add the following code below other services providers:
+```bash
+cp vendor/mostafamaklad/laravel-permission-mongodb/config/permission.php config/permission.php
+```
+
+You will also need to create another configuration file at `config/auth.php`. Get it on the Laravel repository or just run the following command:
+
+```bash
+curl -Ls https://raw.githubusercontent.com/laravel/lumen-framework/5.5/config/auth.php -o config/auth.php
+```
+
+Then, in `bootstrap/app.php`, register the middlewares:
 
 ```php
-$app->register(Maklad\Permission\PermissionServiceProvider::class);
+$app->routeMiddleware([
+    'auth'       => App\Http\Middleware\Authenticate::class,
+    'permission' => Maklad\Permission\Middlewares\PermissionMiddleware::class,
+    'role'       => Maklad\Permission\Middlewares\RoleMiddleware::class,
+]);
+```
+
+As well as the configuration and the service provider:
+
+```php
 $app->configure('permission');
+$app->register(Maklad\Permission\PermissionServiceProvider::class);
 ```
 
 ## Usage
