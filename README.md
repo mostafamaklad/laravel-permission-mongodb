@@ -13,6 +13,7 @@
 [![Laravel 5.3.x][ico-laravel-5.3]][link-laravel-5.3]
 [![Laravel 5.4.x][ico-laravel-5.4]][link-laravel-5.4]
 [![Laravel 5.5.x][ico-laravel-5.5]][link-laravel-5.5]
+[![Laravel 5.6.x][ico-laravel-5.6]][link-laravel-5.6]
 
 This package allows you to manage user permissions and roles in a database.
 It is inspired from [laravel-permission][link-laravel-permission]. Same code same every thing but it is compatible with [laravel-mongodb][link-laravel-mongodb]
@@ -167,13 +168,33 @@ You can install the package via Composer:
 composer require mostafamaklad/laravel-permission-mongodb
 ```
 
-Copy `vendor/mostafamaklad/laravel-permission-mongodb/config/permission.php` to `config/permission.php`.
+Copy the required files:
 
-In `bootstrap/app.php`, add the following code below other services providers:
+```bash
+cp vendor/mostafamaklad/laravel-permission-mongodb/config/permission.php config/permission.php
+```
+
+You will also need to create another configuration file at `config/auth.php`. Get it on the Laravel repository or just run the following command:
+
+```bash
+curl -Ls https://raw.githubusercontent.com/laravel/lumen-framework/5.5/config/auth.php -o config/auth.php
+```
+
+Then, in `bootstrap/app.php`, register the middlewares:
 
 ```php
-$app->register(Maklad\Permission\PermissionServiceProvider::class);
+$app->routeMiddleware([
+    'auth'       => App\Http\Middleware\Authenticate::class,
+    'permission' => Maklad\Permission\Middlewares\PermissionMiddleware::class,
+    'role'       => Maklad\Permission\Middlewares\RoleMiddleware::class,
+]);
+```
+
+As well as the configuration and the service provider:
+
+```php
 $app->configure('permission');
+$app->register(Maklad\Permission\PermissionServiceProvider::class);
 ```
 
 ## Usage
@@ -723,6 +744,8 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [ico-laravel-5.4]: https://img.shields.io/badge/Laravel-5.4.x-brightgreen.svg?style=flat-square
 [link-laravel-5.5]: https://laravel.com/docs/5.5
 [ico-laravel-5.5]: https://img.shields.io/badge/Laravel-5.5.x-brightgreen.svg?style=flat-square
+[link-laravel-5.6]: https://laravel.com/docs/5.6
+[ico-laravel-5.6]: https://img.shields.io/badge/Laravel-5.6.x-brightgreen.svg?style=flat-square
 
 [link-travis]: https://travis-ci.org/mostafamaklad/laravel-permission-mongodb
 [ico-travis]: https://img.shields.io/travis/mostafamaklad/laravel-permission-mongodb/master.svg?style=flat-square
