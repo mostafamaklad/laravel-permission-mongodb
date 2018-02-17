@@ -2,6 +2,12 @@
 
 All Notable changes to `laravel-permission-mongodb` will be documented in this file.
 
+## 1.6.0 - 2018-02-17
+
+### Added
+ - Officially support `laravel 5.6`
+ - Improve Lumen support
+ 
 ## 1.5.3 - 2018-02-07
 
 ### Added
