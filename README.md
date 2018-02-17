@@ -13,6 +13,7 @@
 [![Laravel 5.3.x][ico-laravel-5.3]][link-laravel-5.3]
 [![Laravel 5.4.x][ico-laravel-5.4]][link-laravel-5.4]
 [![Laravel 5.5.x][ico-laravel-5.5]][link-laravel-5.5]
+[![Laravel 5.6.x][ico-laravel-5.6]][link-laravel-5.6]
 
 This package allows you to manage user permissions and roles in a database.
 It is inspired from [laravel-permission][link-laravel-permission]. Same code same every thing but it is compatible with [laravel-mongodb][link-laravel-mongodb]
@@ -743,6 +744,8 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [ico-laravel-5.4]: https://img.shields.io/badge/Laravel-5.4.x-brightgreen.svg?style=flat-square
 [link-laravel-5.5]: https://laravel.com/docs/5.5
 [ico-laravel-5.5]: https://img.shields.io/badge/Laravel-5.5.x-brightgreen.svg?style=flat-square
+[link-laravel-5.6]: https://laravel.com/docs/5.6
+[ico-laravel-5.6]: https://img.shields.io/badge/Laravel-5.6.x-brightgreen.svg?style=flat-square
 
 [link-travis]: https://travis-ci.org/mostafamaklad/laravel-permission-mongodb
 [ico-travis]: https://img.shields.io/travis/mostafamaklad/laravel-permission-mongodb/master.svg?style=flat-square
