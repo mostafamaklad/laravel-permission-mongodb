@@ -5,6 +5,7 @@ namespace Maklad\Permission\Traits;
 
 use Illuminate\Support\Collection;
 use Jenssegers\Mongodb\Eloquent\Model;
+use Jenssegers\Mongodb\Relations\BelongsToMany;
 use Maklad\Permission\Contracts\PermissionInterface as Permission;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\Helpers;
@@ -17,6 +18,26 @@ use Maklad\Permission\PermissionRegistrar;
 trait HasPermissions
 {
     /**
+     * A role may be given various permissions.
+     * @return BelongsToMany
+     */
+    public function permissions(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            config('permission.models.permission'),
+            config('permission.collection_names.role_has_permissions')
+        );
+    }
+
+    /**
+     * A role belongs to some users of the model associated with its guard.
+     */
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany($this->helpers->getModelForGuard($this->attributes['guard_name']));
+    }
+
+    /**
      * Grant the given permission(s) to a role.
      *
      * @param string|array|Permission|\Illuminate\Support\Collection $permissions
@@ -26,7 +47,7 @@ trait HasPermissions
      */
     public function givePermissionTo(...$permissions)
     {
-        $permissions = \collect($permissions)
+        $permissions = collect($permissions)
             ->flatten()
             ->map(function ($permission) {
                 return $this->getStoredPermission($permission);
@@ -68,7 +89,7 @@ trait HasPermissions
      */
     public function revokePermissionTo(...$permissions)
     {
-        \collect($permissions)
+        collect($permissions)
             ->flatten()
             ->map(function ($permission) {
                 $permission = $this->getStoredPermission($permission);
@@ -115,12 +136,12 @@ trait HasPermissions
     protected function getGuardNames(): Collection
     {
         if ($this->guard_name) {
-            return \collect($this->guard_name);
+            return collect($this->guard_name);
         }
 
-        return \collect(\config('auth.guards'))
+        return collect(config('auth.guards'))
             ->map(function ($guard) {
-                return \config("auth.providers.{$guard['provider']}.model");
+                return config("auth.providers.{$guard['provider']}.model");
             })
             ->filter(function ($model) {
                 return \get_class($this) === $model;
@@ -130,7 +151,7 @@ trait HasPermissions
 
     protected function getDefaultGuardName(): string
     {
-        $default = \config('auth.defaults.guard');
+        $default = config('auth.defaults.guard');
 
         return $this->getGuardNames()->first() ?: $default;
     }
@@ -140,7 +161,7 @@ trait HasPermissions
      */
     public function forgetCachedPermissions()
     {
-        \app(PermissionRegistrar::class)->forgetCachedPermissions();
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
     }
 
     /**
@@ -153,11 +174,11 @@ trait HasPermissions
     private function convertToPermissionModels($permissions): Collection
     {
         if (\is_array($permissions)) {
-            $permissions = \collect($permissions);
+            $permissions = collect($permissions);
         }
 
         if (! $permissions instanceof Collection) {
-            $permissions = \collect([$permissions]);
+            $permissions = collect([$permissions]);
         }
 
         $permissions = $permissions->map(function ($permission) {

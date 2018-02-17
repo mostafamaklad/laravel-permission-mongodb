@@ -23,14 +23,14 @@ class RoleMiddleware
      */
     public function handle($request, Closure $next, $role)
     {
-        if (auth()->guest()) {
+        if (app('auth')->guest()) {
             $helpers = new Helpers();
             throw new UserNotLoggedIn(403, $helpers->getUserNotLoggedINMessage());
         }
 
         $roles = \is_array($role) ? $role : \explode('|', $role);
 
-        if (! auth()->user()->hasAnyRole($roles)) {
+        if (! app('auth')->user()->hasAnyRole($roles)) {
             $helpers = new Helpers();
             throw new UserNotLoggedIn(403, $helpers->getUnauthorizedRoleMessage(implode(', ', $roles)));
         }
