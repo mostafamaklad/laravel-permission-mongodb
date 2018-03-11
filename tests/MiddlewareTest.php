@@ -93,7 +93,7 @@ class MiddlewareTest extends TestCase
         $this->testUser->assignRole(['testRole']);
 
         $can_logs = [false, true];
-        $show_permissions = [false, true];
+        $show_permissions = [true, false];
 
         foreach ($can_logs as $can_log) {
             config('permission.log_registration_exception', $can_log);
@@ -120,7 +120,7 @@ class MiddlewareTest extends TestCase
         Auth::login($this->testUser);
 
         $can_logs = [false, true];
-        $show_permissions = [false, true];
+        $show_permissions = [true, false];
 
         foreach ($can_logs as $can_log) {
             config('permission.log_registration_exception', $can_log);
@@ -149,7 +149,7 @@ class MiddlewareTest extends TestCase
         Auth::login($this->testUser);
 
         $can_logs = [false, true];
-        $show_permissions = [false, true];
+        $show_permissions = [true, false];
 
         foreach ($can_logs as $can_log) {
             config('permission.log_registration_exception', $can_log);
@@ -240,7 +240,7 @@ class MiddlewareTest extends TestCase
         $this->testUser->givePermissionTo('edit-articles');
 
         $can_logs = [false, true];
-        $show_permissions = [false, true];
+        $show_permissions = [true, false];
 
         foreach ($can_logs as $can_log) {
             config('permission.log_registration_exception', $can_log);
@@ -268,7 +268,7 @@ class MiddlewareTest extends TestCase
         Auth::login($this->testUser);
 
         $can_logs = [false, true];
-        $show_permissions = [false, true];
+        $show_permissions = [true, false];
 
         foreach ($can_logs as $can_log) {
             config('permission.log_registration_exception', $can_log);
