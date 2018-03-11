@@ -52,7 +52,7 @@ return [
      * role is updated. Then the cache will be flushed immediately.
      */
 
-    'cache_expiration_time'      => 60 * 24,
+    'cache_expiration_time' => 60 * 24,
 
     /*
      * By default we'll make an entry in the application log when the permissions
@@ -60,5 +60,14 @@ return [
      *
      * If for some reason you want to disable that logging, set this value to false.
      */
+
     'log_registration_exception' => true,
+
+    /*
+     * When set to true, the required permission/role names are added to the exception
+     * message. This could be considered an information leak in some contexts, so
+     * the default setting is false here for optimum safety.
+     */
+
+    'display_permission_in_exception' => false,
 ];
