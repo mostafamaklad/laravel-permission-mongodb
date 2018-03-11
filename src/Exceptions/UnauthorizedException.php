@@ -34,4 +34,24 @@ class UnauthorizedException extends HttpException
         $this->requiredRoles       = $requiredRoles;
         $this->requiredPermissions = $requiredPermissions;
     }
+
+    /**
+     * Return Required Roles
+     *
+     * @return array
+     */
+    public function getRequiredRoles(): array
+    {
+        return $this->requiredRoles;
+    }
+
+    /**
+     * Return Required Permissions
+     *
+     * @return array
+     */
+    public function getRequiredPermissions(): array
+    {
+        return $this->requiredPermissions;
+    }
 }
