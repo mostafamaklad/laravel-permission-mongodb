@@ -74,7 +74,7 @@ abstract class TestCase extends Orchestra
     {
         return [
             PermissionServiceProvider::class,
-            MongodbServiceProvider::class
+            MongodbServiceProvider::class,
         ];
     }
 
@@ -91,7 +91,7 @@ abstract class TestCase extends Orchestra
             'port'     => '27017',
             'driver'   => 'mongodb',
             'database' => 'laravel_permission_mongodb_test',
-            'prefix'   => ''
+            'prefix'   => '',
         ]);
 
         $app['config']->set('view.paths', [__DIR__ . '/resources/views']);
@@ -178,9 +178,9 @@ abstract class TestCase extends Orchestra
     protected function hasLog($message, $level)
     {
         return \collect($this->app['log']->getMonolog()->getHandlers())->filter(function ($handler) use (
-            $message,
-            $level
-        ) {
+                $message,
+                $level
+            ) {
             return $handler instanceof TestHandler && $handler->hasRecordThatContains($message, $level);
         })->count() > 0;
     }
@@ -194,6 +194,18 @@ abstract class TestCase extends Orchestra
             $this->assertLogged($message, $level);
         } else {
             $this->assertNotLogged($message, $level);
+        }
+    }
+
+    /**
+     * @param $message
+     */
+    protected function assertShowPermission($message, $role_permission)
+    {
+        if (\config('permission.display_permission_in_exception')) {
+            $this->assertContains($role_permission, $message);
+        } else {
+            $this->assertNotContains($role_permission, $message);
         }
     }
 }

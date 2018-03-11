@@ -41,7 +41,7 @@ class RoleTest extends TestCase
         $can_logs = [true, false];
 
         foreach ($can_logs as $can_log) {
-            $this->app['config']->set('permission.log_registration_exception', $can_log);
+            config('permission.log_registration_exception', $can_log);
 
             try {
                 $this->expectException(RoleAlreadyExists::class);
@@ -69,7 +69,7 @@ class RoleTest extends TestCase
         $can_logs = [true, false];
 
         foreach ($can_logs as $can_log) {
-            $this->app['config']->set('permission.log_registration_exception', $can_log);
+            config('permission.log_registration_exception', $can_log);
 
             try {
                 $this->expectException(PermissionDoesNotExist::class);
@@ -88,7 +88,7 @@ class RoleTest extends TestCase
         $can_logs = [true, false];
 
         foreach ($can_logs as $can_log) {
-            $this->app['config']->set('permission.log_registration_exception', $can_log);
+            config('permission.log_registration_exception', $can_log);
 
             try {
                 $this->expectException(GuardDoesNotMatch::class);
@@ -137,7 +137,7 @@ class RoleTest extends TestCase
         $can_logs = [true, false];
 
         foreach ($can_logs as $can_log) {
-            $this->app['config']->set('permission.log_registration_exception', $can_log);
+            config('permission.log_registration_exception', $can_log);
 
             try {
                 $this->testUserRole->givePermissionTo('edit-articles');
@@ -158,7 +158,7 @@ class RoleTest extends TestCase
         $can_logs = [true, false];
 
         foreach ($can_logs as $can_log) {
-            $this->app['config']->set('permission.log_registration_exception', $can_log);
+            config('permission.log_registration_exception', $can_log);
 
             try {
                 $this->expectException(GuardDoesNotMatch::class);
@@ -219,7 +219,7 @@ class RoleTest extends TestCase
         $can_logs = [true, false];
 
         foreach ($can_logs as $can_log) {
-            $this->app['config']->set('permission.log_registration_exception', $can_log);
+            config('permission.log_registration_exception', $can_log);
 
             try {
                 $this->expectException(PermissionDoesNotExist::class);
@@ -246,7 +246,7 @@ class RoleTest extends TestCase
         $can_logs = [true, false];
 
         foreach ($can_logs as $can_log) {
-            $this->app['config']->set('permission.log_registration_exception', $can_log);
+            config('permission.log_registration_exception', $can_log);
 
             try {
                 $this->expectException(GuardDoesNotMatch::class);
