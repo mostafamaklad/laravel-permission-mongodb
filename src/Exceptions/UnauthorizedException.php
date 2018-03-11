@@ -2,7 +2,6 @@
 
 namespace Maklad\Permission\Exceptions;
 
-use http\Exception;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
@@ -12,13 +11,18 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class UnauthorizedException extends HttpException
 {
 
+    private $requiredRoles = [];
+    private $requiredPermissions = [];
+
     /**
      * UnauthorizedException constructor.
      *
      * @param $statusCode
      * @param null $message
+     * @param array $requiredRoles
+     * @param array $requiredPermissions
      */
-    public function __construct($statusCode, $message = null)
+    public function __construct($statusCode, $message = null, $requiredRoles = [], $requiredPermissions = [])
     {
         parent::__construct($statusCode, $message);
 
@@ -26,5 +30,8 @@ class UnauthorizedException extends HttpException
             $logger = \app('log');
             $logger->alert($message);
         }
+
+        $this->requiredRoles       = $requiredRoles;
+        $this->requiredPermissions = $requiredPermissions;
     }
 }

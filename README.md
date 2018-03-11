@@ -157,6 +157,14 @@ return [
      */
 
     'log_registration_exception' => true,
+    
+    /*
+     * When set to true, the required permission/role names are added to the exception
+     * message. This could be considered an information leak in some contexts, so
+     * the default setting is false here for optimum safety.
+     */
+    
+    'display_permission_in_exception' => false,
 ];
 ```
 

@@ -30,7 +30,7 @@ class MiddlewareTest extends TestCase
         $can_logs = [false, true];
 
         foreach ($can_logs as $can_log) {
-            $this->app['config']->set('permission.log_registration_exception', $can_log);
+            config('permission.log_registration_exception', $can_log);
 
             $this->assertEquals(
                 $this->runMiddleware(
@@ -93,10 +93,10 @@ class MiddlewareTest extends TestCase
         $this->testUser->assignRole(['testRole']);
 
         $can_logs = [false, true];
+        $show_permissions = [false, true];
 
         foreach ($can_logs as $can_log) {
-            $this->app['config']->set('permission.log_registration_exception', $can_log);
-
+            config('permission.log_registration_exception', $can_log);
             $this->assertEquals(
                 $this->runMiddleware(
                     $this->roleMiddleware,
@@ -105,8 +105,12 @@ class MiddlewareTest extends TestCase
                 403
             );
 
-            $message = $this->helpers->getUnauthorizedRoleMessage('testRole2');
-            $this->assertLogMessage($message, Logger::ALERT);
+            foreach ($show_permissions as $show_permission) {
+                config('permission.display_permission_in_exception', $show_permission);
+                $message = $this->helpers->getUnauthorizedRoleMessage('testRole2');
+                $this->assertShowPermission($message, 'testRole2');
+                $this->assertLogMessage($message, Logger::ALERT);
+            }
         }
     }
 
@@ -116,9 +120,10 @@ class MiddlewareTest extends TestCase
         Auth::login($this->testUser);
 
         $can_logs = [false, true];
+        $show_permissions = [false, true];
 
         foreach ($can_logs as $can_log) {
-            $this->app['config']->set('permission.log_registration_exception', $can_log);
+            config('permission.log_registration_exception', $can_log);
 
             $this->assertEquals(
                 $this->runMiddleware(
@@ -128,8 +133,13 @@ class MiddlewareTest extends TestCase
                 403
             );
 
-            $message = $this->helpers->getUnauthorizedRoleMessage('testRole, testRole2');
-            $this->assertLogMessage($message, Logger::ALERT);
+            foreach ($show_permissions as $show_permission) {
+                config('permission.display_permission_in_exception', $show_permission);
+                $message = $this->helpers->getUnauthorizedRoleMessage('testRole, testRole2');
+                $this->assertShowPermission($message, 'testRole');
+                $this->assertShowPermission($message, 'testRole2');
+                $this->assertLogMessage($message, Logger::ALERT);
+            }
         }
     }
 
@@ -139,9 +149,10 @@ class MiddlewareTest extends TestCase
         Auth::login($this->testUser);
 
         $can_logs = [false, true];
+        $show_permissions = [false, true];
 
         foreach ($can_logs as $can_log) {
-            $this->app['config']->set('permission.log_registration_exception', $can_log);
+            config('permission.log_registration_exception', $can_log);
 
             $this->assertEquals(
                 $this->runMiddleware(
@@ -151,8 +162,12 @@ class MiddlewareTest extends TestCase
                 403
             );
 
-            $message = $this->helpers->getUnauthorizedRoleMessage('');
-            $this->assertLogMessage($message, Logger::ALERT);
+            foreach ($show_permissions as $show_permission) {
+                config('permission.display_permission_in_exception', $show_permission);
+                $message = $this->helpers->getUnauthorizedRoleMessage('test');
+                $this->assertShowPermission($message, 'test');
+                $this->assertLogMessage($message, Logger::ALERT);
+            }
         }
     }
 
@@ -162,7 +177,7 @@ class MiddlewareTest extends TestCase
         $can_logs = [false, true];
 
         foreach ($can_logs as $can_log) {
-            $this->app['config']->set('permission.log_registration_exception', $can_log);
+            config('permission.log_registration_exception', $can_log);
 
             $this->assertEquals(
                 $this->runMiddleware(
@@ -225,9 +240,10 @@ class MiddlewareTest extends TestCase
         $this->testUser->givePermissionTo('edit-articles');
 
         $can_logs = [false, true];
+        $show_permissions = [false, true];
 
         foreach ($can_logs as $can_log) {
-            $this->app['config']->set('permission.log_registration_exception', $can_log);
+            config('permission.log_registration_exception', $can_log);
 
             $this->assertEquals(
                 $this->runMiddleware(
@@ -237,8 +253,12 @@ class MiddlewareTest extends TestCase
                 403
             );
 
-            $message = $this->helpers->getUnauthorizedPermissionMessage('edit-news');
-            $this->assertLogMessage($message, Logger::ALERT);
+            foreach ($show_permissions as $show_permission) {
+                config('permission.display_permission_in_exception', $show_permission);
+                $message = $this->helpers->getUnauthorizedPermissionMessage('edit-news');
+                $this->assertShowPermission($message, 'edit-news');
+                $this->assertLogMessage($message, Logger::ALERT);
+            }
         }
     }
 
@@ -248,9 +268,10 @@ class MiddlewareTest extends TestCase
         Auth::login($this->testUser);
 
         $can_logs = [false, true];
+        $show_permissions = [false, true];
 
         foreach ($can_logs as $can_log) {
-            $this->app['config']->set('permission.log_registration_exception', $can_log);
+            config('permission.log_registration_exception', $can_log);
 
             $this->assertEquals(
                 $this->runMiddleware(
@@ -260,8 +281,13 @@ class MiddlewareTest extends TestCase
                 403
             );
 
-            $message = $this->helpers->getUnauthorizedPermissionMessage('edit-articles, edit-news');
-            $this->assertLogMessage($message, Logger::ALERT);
+            foreach ($show_permissions as $show_permission) {
+                config('permission.display_permission_in_exception', $show_permission);
+                $message = $this->helpers->getUnauthorizedPermissionMessage('edit-articles, edit-news');
+                $this->assertShowPermission($message, 'edit-articles');
+                $this->assertShowPermission($message, 'edit-news');
+                $this->assertLogMessage($message, Logger::ALERT);
+            }
         }
     }
 
