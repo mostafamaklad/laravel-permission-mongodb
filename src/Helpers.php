@@ -87,9 +87,9 @@ class Helpers
      */
     public function getUnauthorizedRoleMessage(string $roles): string
     {
-        $message = 'User does not have the right roles.';
-        if (config('permission.display_permission_in_exception')) {
-            $message = "User does not have the right roles `{$roles}`.";
+        $message = "User does not have the right roles `{$roles}`.";
+        if (! config('permission.display_permission_in_exception')) {
+            $message = 'User does not have the right roles.';
         }
 
         return $message;
@@ -102,9 +102,9 @@ class Helpers
      */
     public function getUnauthorizedPermissionMessage(string $permissions): string
     {
-        $message = 'User does not have the right permissions.';
-        if (config('permission.display_permission_in_exception')) {
-            $message = "User does not have the right permissions `{$permissions}`.";
+        $message = "User does not have the right permissions `{$permissions}`.";
+        if (! config('permission.display_permission_in_exception')) {
+            $message = 'User does not have the right permissions.';
         }
 
         return $message;
