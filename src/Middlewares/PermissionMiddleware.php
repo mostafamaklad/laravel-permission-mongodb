@@ -32,10 +32,13 @@ class PermissionMiddleware
         $permissions = \is_array($permission) ? $permission : \explode('|', $permission);
 
 
-        if ( ! app('auth')->user()->hasAnyPermission($permissions)) {
+        if (! app('auth')->user()->hasAnyPermission($permissions)) {
             $helpers = new Helpers();
-            throw new UnauthorizedPermission(403,
-                $helpers->getUnauthorizedPermissionMessage(implode(', ', $permissions)), $permissions);
+            throw new UnauthorizedPermission(
+                403,
+                $helpers->getUnauthorizedPermissionMessage(implode(', ', $permissions)),
+                $permissions
+            );
         }
 
         return $next($request);
