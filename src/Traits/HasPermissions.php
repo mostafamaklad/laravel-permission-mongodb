@@ -8,6 +8,7 @@ use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Relations\BelongsToMany;
 use Maklad\Permission\Contracts\PermissionInterface as Permission;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
+use Maklad\Permission\Guard;
 use Maklad\Permission\Helpers;
 use Maklad\Permission\PermissionRegistrar;
 
@@ -107,6 +108,7 @@ trait HasPermissions
      * @param string|Permission $permission
      *
      * @return Permission
+     * @throws \ReflectionException
      */
     protected function getStoredPermission($permission): Permission
     {
@@ -121,10 +123,11 @@ trait HasPermissions
      * @param Model $roleOrPermission
      *
      * @throws GuardDoesNotMatch
+     * @throws \ReflectionException
      */
     protected function ensureModelSharesGuard(Model $roleOrPermission)
     {
-        if (! $this->getGuardNames()->contains($roleOrPermission->guard_name)) {
+        if ( ! $this->getGuardNames()->contains($roleOrPermission->guard_name)) {
             $expected = $this->getGuardNames();
             $given    = $roleOrPermission->guard_name;
             $helpers  = new Helpers();
@@ -133,27 +136,22 @@ trait HasPermissions
         }
     }
 
+    /**
+     * @return Collection
+     * @throws \ReflectionException
+     */
     protected function getGuardNames(): Collection
     {
-        if ($this->guard_name) {
-            return collect($this->guard_name);
-        }
-
-        return collect(config('auth.guards'))
-            ->map(function ($guard) {
-                return config("auth.providers.{$guard['provider']}.model");
-            })
-            ->filter(function ($model) {
-                return \get_class($this) === $model;
-            })
-            ->keys();
+        return Guard::getNames($this);
     }
 
+    /**
+     * @return string
+     * @throws \ReflectionException
+     */
     protected function getDefaultGuardName(): string
     {
-        $default = config('auth.defaults.guard');
-
-        return $this->getGuardNames()->first() ?: $default;
+        return Guard::getDefaultName($this);
     }
 
     /**
@@ -177,7 +175,7 @@ trait HasPermissions
             $permissions = collect($permissions);
         }
 
-        if (! $permissions instanceof Collection) {
+        if ( ! $permissions instanceof Collection) {
             $permissions = collect([$permissions]);
         }
 

@@ -8,6 +8,7 @@ use Maklad\Permission\Contracts\RoleInterface;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\Exceptions\RoleAlreadyExists;
 use Maklad\Permission\Exceptions\RoleDoesNotExist;
+use Maklad\Permission\Guard;
 use Maklad\Permission\Helpers;
 use Maklad\Permission\Traits\HasPermissions;
 use Maklad\Permission\Traits\RefreshesPermissionCache;
@@ -28,10 +29,12 @@ class Role extends Model implements RoleInterface
      * Role constructor.
      *
      * @param array $attributes
+     *
+     * @throws \ReflectionException
      */
     public function __construct(array $attributes = [])
     {
-        $attributes['guard_name'] = $attributes['guard_name'] ?? config('auth.defaults.guard');
+        $attributes['guard_name'] = $attributes['guard_name'] ?? Guard::getDefaultName(static::class);
 
         parent::__construct($attributes);
 
@@ -47,10 +50,11 @@ class Role extends Model implements RoleInterface
      * @throws RoleAlreadyExists
      * @internal param array $attributes§
      *
+     * @throws \ReflectionException
      */
     public static function create(array $attributes = [])
     {
-        $attributes['guard_name'] = $attributes['guard_name'] ?? \config('auth.defaults.guard');
+        $attributes['guard_name'] = $attributes['guard_name'] ?? Guard::getDefaultName(static::class);
         $helpers                  = new Helpers();
 
         if (static::where('name', $attributes['name'])->where('guard_name', $attributes['guard_name'])->first()) {
@@ -74,10 +78,11 @@ class Role extends Model implements RoleInterface
      *
      * @return RoleInterface
      * @throws \Maklad\Permission\Exceptions\RoleAlreadyExists
+     * @throws \ReflectionException
      */
     public static function findOrCreate(string $name, $guardName = null): RoleInterface
     {
-        $guardName = $guardName ?? config('auth.defaults.guard');
+        $guardName = $guardName ?? Guard::getDefaultName(static::class);
 
         $role = static::where('name', $name)
                       ->where('guard_name', $guardName)
@@ -98,10 +103,11 @@ class Role extends Model implements RoleInterface
      *
      * @return RoleInterface
      * @throws RoleDoesNotExist
+     * @throws \ReflectionException
      */
     public static function findByName(string $name, $guardName = null): RoleInterface
     {
-        $guardName = $guardName ?? config('auth.defaults.guard');
+        $guardName = $guardName ?? Guard::getDefaultName(static::class);
 
         $role = static::where('name', $name)
                       ->where('guard_name', $guardName)
