@@ -127,7 +127,7 @@ trait HasPermissions
      */
     protected function ensureModelSharesGuard(Model $roleOrPermission)
     {
-        if ( ! $this->getGuardNames()->contains($roleOrPermission->guard_name)) {
+        if (! $this->getGuardNames()->contains($roleOrPermission->guard_name)) {
             $expected = $this->getGuardNames();
             $given    = $roleOrPermission->guard_name;
             $helpers  = new Helpers();
@@ -175,7 +175,7 @@ trait HasPermissions
             $permissions = collect($permissions);
         }
 
-        if ( ! $permissions instanceof Collection) {
+        if (! $permissions instanceof Collection) {
             $permissions = collect([$permissions]);
         }
 
