@@ -34,7 +34,7 @@ class Permission extends Model implements PermissionInterface
      */
     public function __construct(array $attributes = [])
     {
-        $attributes['guard_name'] = $attributes['guard_name'] ?? Guard::getDefaultName(static::class);
+        $attributes['guard_name'] = $attributes['guard_name'] ?? (new Guard())->getDefaultName(static::class);
 
         parent::__construct($attributes);
 
@@ -55,7 +55,7 @@ class Permission extends Model implements PermissionInterface
     public static function create(array $attributes = [])
     {
         $helpers                  = new Helpers();
-        $attributes['guard_name'] = $attributes['guard_name'] ?? Guard::getDefaultName(static::class);
+        $attributes['guard_name'] = $attributes['guard_name'] ?? (new Guard())->getDefaultName(static::class);
 
         if (static::getPermissions()->where('name', $attributes['name'])->where(
             'guard_name',
@@ -85,7 +85,7 @@ class Permission extends Model implements PermissionInterface
      */
     public static function findOrCreate(string $name, $guardName = null): PermissionInterface
     {
-        $guardName = $guardName ?? Guard::getDefaultName(static::class);
+        $guardName = $guardName ?? (new Guard())->getDefaultName(static::class);
 
         $permission = static::getPermissions()
                             ->where('name', $name)
@@ -132,7 +132,7 @@ class Permission extends Model implements PermissionInterface
      */
     public static function findByName(string $name, $guardName = null): PermissionInterface
     {
-        $guardName = $guardName ?? Guard::getDefaultName(static::class);
+        $guardName = $guardName ?? (new Guard())->getDefaultName(static::class);
 
         $permission = static::getPermissions()->where('name', $name)->where('guard_name', $guardName)->first();
 
