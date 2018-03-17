@@ -9,6 +9,7 @@ use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Relations\BelongsToMany;
 use Maklad\Permission\Contracts\PermissionInterface as Permission;
 use Maklad\Permission\Contracts\RoleInterface as Role;
+use ReflectionException;
 
 /**
  * Trait HasRoles
@@ -228,6 +229,7 @@ trait HasRoles
      * @param string|null $guardName
      *
      * @return bool
+     * @throws ReflectionException
      */
     public function hasPermissionTo($permission, $guardName = null): bool
     {
@@ -281,6 +283,7 @@ trait HasRoles
      * @param string|Permission $permission
      *
      * @return bool
+     * @throws ReflectionException
      */
     public function hasDirectPermission($permission): bool
     {
@@ -327,6 +330,7 @@ trait HasRoles
      * @param String|Role $role role name
      *
      * @return Role
+     * @throws ReflectionException
      */
     protected function getStoredRole($role): Role
     {

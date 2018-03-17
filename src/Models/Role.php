@@ -12,6 +12,7 @@ use Maklad\Permission\Guard;
 use Maklad\Permission\Helpers;
 use Maklad\Permission\Traits\HasPermissions;
 use Maklad\Permission\Traits\RefreshesPermissionCache;
+use ReflectionException;
 
 /**
  * Class Role
@@ -34,7 +35,7 @@ class Role extends Model implements RoleInterface
      */
     public function __construct(array $attributes = [])
     {
-        $attributes['guard_name'] = $attributes['guard_name'] ?? Guard::getDefaultName(static::class);
+        $attributes['guard_name'] = $attributes['guard_name'] ?? (new Guard())->getDefaultName(static::class);
 
         parent::__construct($attributes);
 
@@ -54,7 +55,7 @@ class Role extends Model implements RoleInterface
      */
     public static function create(array $attributes = [])
     {
-        $attributes['guard_name'] = $attributes['guard_name'] ?? Guard::getDefaultName(static::class);
+        $attributes['guard_name'] = $attributes['guard_name'] ?? (new Guard())->getDefaultName(static::class);
         $helpers                  = new Helpers();
 
         if (static::where('name', $attributes['name'])->where('guard_name', $attributes['guard_name'])->first()) {
@@ -82,7 +83,7 @@ class Role extends Model implements RoleInterface
      */
     public static function findOrCreate(string $name, $guardName = null): RoleInterface
     {
-        $guardName = $guardName ?? Guard::getDefaultName(static::class);
+        $guardName = $guardName ?? (new Guard())->getDefaultName(static::class);
 
         $role = static::where('name', $name)
                       ->where('guard_name', $guardName)
@@ -107,7 +108,7 @@ class Role extends Model implements RoleInterface
      */
     public static function findByName(string $name, $guardName = null): RoleInterface
     {
-        $guardName = $guardName ?? Guard::getDefaultName(static::class);
+        $guardName = $guardName ?? (new Guard())->getDefaultName(static::class);
 
         $role = static::where('name', $name)
                       ->where('guard_name', $guardName)
@@ -129,6 +130,7 @@ class Role extends Model implements RoleInterface
      * @return bool
      *
      * @throws GuardDoesNotMatch
+     * @throws ReflectionException
      */
     public function hasPermissionTo($permission): bool
     {

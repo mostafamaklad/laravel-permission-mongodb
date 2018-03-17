@@ -142,7 +142,7 @@ trait HasPermissions
      */
     protected function getGuardNames(): Collection
     {
-        return Guard::getNames($this);
+        return (new Guard())->getNames($this);
     }
 
     /**
@@ -151,7 +151,7 @@ trait HasPermissions
      */
     protected function getDefaultGuardName(): string
     {
-        return Guard::getDefaultName($this);
+        return (new Guard())->getDefaultName($this);
     }
 
     /**

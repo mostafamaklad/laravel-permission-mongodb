@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: mostafamaklad
- * Date: 12/03/2018
- * Time: 2:23 PM
- */
-
 namespace Maklad\Permission;
 
 use Illuminate\Support\Collection;
@@ -25,7 +18,7 @@ class Guard
      * @return Collection
      * @throws \ReflectionException
      */
-    public static function getNames($model) : Collection
+    public function getNames($model) : Collection
     {
         if (\is_object($model)) {
             $guardName = $model->guard_name ?? null;
@@ -57,9 +50,9 @@ class Guard
      * @return string
      * @throws \ReflectionException
      */
-    public static function getDefaultName($class): string
+    public function getDefaultName($class): string
     {
         $default = config('auth.defaults.guard');
-        return static::getNames($class)->first() ?: $default;
+        return $this->getNames($class)->first() ?: $default;
     }
 }
