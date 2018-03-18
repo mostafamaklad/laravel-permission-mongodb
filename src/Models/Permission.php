@@ -9,6 +9,7 @@ use Jenssegers\Mongodb\Relations\BelongsToMany;
 use Maklad\Permission\Contracts\PermissionInterface;
 use Maklad\Permission\Exceptions\PermissionAlreadyExists;
 use Maklad\Permission\Exceptions\PermissionDoesNotExist;
+use Maklad\Permission\Guard;
 use Maklad\Permission\Helpers;
 use Maklad\Permission\PermissionRegistrar;
 use Maklad\Permission\Traits\RefreshesPermissionCache;
@@ -28,10 +29,12 @@ class Permission extends Model implements PermissionInterface
      * Permission constructor.
      *
      * @param array $attributes
+     *
+     * @throws \ReflectionException
      */
     public function __construct(array $attributes = [])
     {
-        $attributes['guard_name'] = $attributes['guard_name'] ?? \config('auth.defaults.guard');
+        $attributes['guard_name'] = $attributes['guard_name'] ?? (new Guard())->getDefaultName(static::class);
 
         parent::__construct($attributes);
 
@@ -47,11 +50,12 @@ class Permission extends Model implements PermissionInterface
      *
      * @return $this|\Illuminate\Database\Eloquent\Model
      * @throws \Maklad\Permission\Exceptions\PermissionAlreadyExists
+     * @throws \ReflectionException
      */
     public static function create(array $attributes = [])
     {
         $helpers                  = new Helpers();
-        $attributes['guard_name'] = $attributes['guard_name'] ?? \config('auth.defaults.guard');
+        $attributes['guard_name'] = $attributes['guard_name'] ?? (new Guard())->getDefaultName(static::class);
 
         if (static::getPermissions()->where('name', $attributes['name'])->where(
             'guard_name',
@@ -77,10 +81,11 @@ class Permission extends Model implements PermissionInterface
      *
      * @return PermissionInterface
      * @throws \Maklad\Permission\Exceptions\PermissionAlreadyExists
+     * @throws \ReflectionException
      */
     public static function findOrCreate(string $name, $guardName = null): PermissionInterface
     {
-        $guardName = $guardName ?? config('auth.defaults.guard');
+        $guardName = $guardName ?? (new Guard())->getDefaultName(static::class);
 
         $permission = static::getPermissions()
                             ->where('name', $name)
@@ -123,10 +128,11 @@ class Permission extends Model implements PermissionInterface
      *
      * @return PermissionInterface
      * @throws PermissionDoesNotExist
+     * @throws \ReflectionException
      */
     public static function findByName(string $name, $guardName = null): PermissionInterface
     {
-        $guardName = $guardName ?? \config('auth.defaults.guard');
+        $guardName = $guardName ?? (new Guard())->getDefaultName(static::class);
 
         $permission = static::getPermissions()->where('name', $name)->where('guard_name', $guardName)->first();
 

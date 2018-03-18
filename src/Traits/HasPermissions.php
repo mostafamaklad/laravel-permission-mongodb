@@ -8,6 +8,7 @@ use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Relations\BelongsToMany;
 use Maklad\Permission\Contracts\PermissionInterface as Permission;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
+use Maklad\Permission\Guard;
 use Maklad\Permission\Helpers;
 use Maklad\Permission\PermissionRegistrar;
 
@@ -107,6 +108,7 @@ trait HasPermissions
      * @param string|Permission $permission
      *
      * @return Permission
+     * @throws \ReflectionException
      */
     protected function getStoredPermission($permission): Permission
     {
@@ -121,6 +123,7 @@ trait HasPermissions
      * @param Model $roleOrPermission
      *
      * @throws GuardDoesNotMatch
+     * @throws \ReflectionException
      */
     protected function ensureModelSharesGuard(Model $roleOrPermission)
     {
@@ -133,27 +136,22 @@ trait HasPermissions
         }
     }
 
+    /**
+     * @return Collection
+     * @throws \ReflectionException
+     */
     protected function getGuardNames(): Collection
     {
-        if ($this->guard_name) {
-            return collect($this->guard_name);
-        }
-
-        return collect(config('auth.guards'))
-            ->map(function ($guard) {
-                return config("auth.providers.{$guard['provider']}.model");
-            })
-            ->filter(function ($model) {
-                return \get_class($this) === $model;
-            })
-            ->keys();
+        return (new Guard())->getNames($this);
     }
 
+    /**
+     * @return string
+     * @throws \ReflectionException
+     */
     protected function getDefaultGuardName(): string
     {
-        $default = config('auth.defaults.guard');
-
-        return $this->getGuardNames()->first() ?: $default;
+        return (new Guard())->getDefaultName($this);
     }
 
     /**
