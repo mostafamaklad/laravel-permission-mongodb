@@ -9,11 +9,6 @@
 [![Coverage Status][ico-coveralls]][link-coveralls]
 [![Dependency Status][ico-gemnasium]][link-gemnasium]
 [![Total Downloads][ico-downloads]][link-packagist]
-[![Laravel 5.3.x][ico-laravel-5.2]][link-laravel-5.2]
-[![Laravel 5.3.x][ico-laravel-5.3]][link-laravel-5.3]
-[![Laravel 5.4.x][ico-laravel-5.4]][link-laravel-5.4]
-[![Laravel 5.5.x][ico-laravel-5.5]][link-laravel-5.5]
-[![Laravel 5.6.x][ico-laravel-5.6]][link-laravel-5.6]
 
 This package allows you to manage user permissions and roles in a database.
 It is inspired from [laravel-permission][link-laravel-permission]. Same code same every thing but it is compatible with [laravel-mongodb][link-laravel-mongodb]
@@ -649,17 +644,17 @@ class RolesAndPermissionsSeeder extends Seeder
         app()['cache']->forget('maklad.permission.cache');
         
         // create permissions
-        Permission::create(['name' => 'edit articles']);
-        Permission::create(['name' => 'delete articles']);
-        Permission::create(['name' => 'publish articles']);
-        Permission::create(['name' => 'unpublish articles']);
+        Permission::firstOrCreate(['name' => 'edit articles']);
+        Permission::firstOrCreate(['name' => 'delete articles']);
+        Permission::firstOrCreate(['name' => 'publish articles']);
+        Permission::firstOrCreate(['name' => 'unpublish articles']);
         
         // create roles and assign existing permissions
-        $role = Role::create(['name' => 'writer']);
+        $role = Role::firstOrCreate(['name' => 'writer']);
         $role->givePermissionTo('edit articles');
         $role->givePermissionTo('delete articles');
         
-        $role = Role::create(['name' => 'admin']);
+        $role = Role::firstOrCreate(['name' => 'admin']);
         $role->givePermissionTo('publish articles');
         $role->givePermissionTo('unpublish articles');
     }
