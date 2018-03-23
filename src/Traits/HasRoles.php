@@ -82,7 +82,7 @@ trait HasRoles
         $roles = $roles->unique();
 
         return $query->orWhereIn('permission_ids', $permissions->pluck('_id'))
-                     ->orWhereIn('role_ids', $roles->pluck('_id'));
+            ->orWhereIn('role_ids', $roles->pluck('_id'));
     }
 
     /**
@@ -161,25 +161,15 @@ trait HasRoles
             $roles = \explode('|', $roles);
         }
 
-        if (\is_string($roles)) {
-            return $this->roles->contains('name', $roles);
+        if (\is_string($roles) || $roles instanceof Role) {
+            return $this->roles->contains('name', $roles->name ?? $roles);
         }
 
-        if ($roles instanceof Role) {
-            return $this->roles->contains('id', $roles->id);
-        }
+        $roles = \collect()->make($roles)->map(function ($role) {
+            return $role instanceof Role ? $role->name : $role;
+        });
 
-        if (\is_array($roles)) {
-            foreach ($roles as $role) {
-                if ($this->hasRole($role)) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        return ! $roles->intersect($this->roles)->isEmpty();
+        return ! $roles->intersect($this->roles->pluck('name'))->isEmpty();
     }
 
     /**
@@ -207,12 +197,8 @@ trait HasRoles
             $roles = \explode('|', $roles);
         }
 
-        if (\is_string($roles)) {
-            return $this->roles->contains('name', $roles);
-        }
-
-        if ($roles instanceof Role) {
-            return $this->roles->contains('id', $roles->id);
+        if (\is_string($roles) || $roles instanceof Role) {
+            return $this->hasRole($roles);
         }
 
         $roles = \collect()->make($roles)->map(function ($role) {
@@ -375,7 +361,7 @@ trait HasRoles
             $roles = collect($roles);
         }
 
-        if (! $roles instanceof Collection) {
+        if (!$roles instanceof Collection) {
             $roles = collect([$roles]);
         }
 
