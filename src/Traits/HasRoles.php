@@ -165,13 +165,11 @@ trait HasRoles
             return $this->roles->contains('name', $roles->name ?? $roles);
         }
 
-        foreach ($roles as $role) {
-            if ($this->hasRole($role)) {
-                return true;
-            }
-        }
+        $roles = \collect()->make($roles)->map(function ($role) {
+            return $role instanceof Role ? $role->name : $role;
+        });
 
-        return false;
+        return ! $roles->intersect($this->roles->pluck('name'))->isEmpty();
     }
 
     /**
@@ -202,6 +200,7 @@ trait HasRoles
         if (\is_string($roles) || $roles instanceof Role) {
             return $this->hasRole($roles);
         }
+
         $roles = \collect()->make($roles)->map(function ($role) {
             return $role instanceof Role ? $role->name : $role;
         });
