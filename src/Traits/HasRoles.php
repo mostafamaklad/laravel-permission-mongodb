@@ -82,7 +82,7 @@ trait HasRoles
         $roles = $roles->unique();
 
         return $query->orWhereIn('permission_ids', $permissions->pluck('_id'))
-                     ->orWhereIn('role_ids', $roles->pluck('_id'));
+            ->orWhereIn('role_ids', $roles->pluck('_id'));
     }
 
     /**
@@ -160,26 +160,19 @@ trait HasRoles
         if (\is_string($roles) && false !== \strpos($roles, '|')) {
             $roles = \explode('|', $roles);
         }
-
-        if (\is_string($roles)) {
-            return $this->roles->contains('name', $roles);
-        }
-
-        if ($roles instanceof Role) {
-            return $this->roles->contains('id', $roles->id);
-        }
-
-        if (\is_array($roles)) {
+        $hasRole = false;
+        if (\is_string($roles) || $roles instanceof Role) {
+            $hasRole = $this->roles->contains('name', $roles->name ?? $roles);
+        } else {
             foreach ($roles as $role) {
                 if ($this->hasRole($role)) {
-                    return true;
+                    $hasRole = true;
+                    break;
                 }
             }
-
-            return false;
         }
 
-        return ! $roles->intersect($this->roles)->isEmpty();
+        return $hasRole;
     }
 
     /**
@@ -207,19 +200,16 @@ trait HasRoles
             $roles = \explode('|', $roles);
         }
 
-        if (\is_string($roles)) {
-            return $this->roles->contains('name', $roles);
+        if (\is_string($roles) || $roles instanceof Role) {
+            $hasRoles = $this->hasRole($roles);
+        } else {
+            $roles = \collect()->make($roles)->map(function ($role) {
+                return $role instanceof Role ? $role->name : $role;
+            });
+
+            $hasRoles = $roles->intersect($this->roles->pluck('name')) == $roles;
         }
-
-        if ($roles instanceof Role) {
-            return $this->roles->contains('id', $roles->id);
-        }
-
-        $roles = \collect()->make($roles)->map(function ($role) {
-            return $role instanceof Role ? $role->name : $role;
-        });
-
-        return $roles->intersect($this->roles->pluck('name')) == $roles;
+        return $hasRoles;
     }
 
     /**
@@ -375,7 +365,7 @@ trait HasRoles
             $roles = collect($roles);
         }
 
-        if (! $roles instanceof Collection) {
+        if (!$roles instanceof Collection) {
             $roles = collect([$roles]);
         }
 
