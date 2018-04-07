@@ -90,7 +90,7 @@ trait HasRoles
      *
      * @param array|string|Role ...$roles
      *
-     * @return $this
+     * @return array|Role|string
      */
     public function assignRole(...$roles)
     {
@@ -108,7 +108,7 @@ trait HasRoles
 
         $this->forgetCachedPermissions();
 
-        return $this;
+        return $roles;
     }
 
     /**
@@ -116,7 +116,7 @@ trait HasRoles
      *
      * @param array|string|Role ...$roles
      *
-     * @return HasRoles
+     * @return array|Role|string
      */
     public function removeRole(...$roles)
     {
@@ -131,7 +131,7 @@ trait HasRoles
 
         $this->forgetCachedPermissions();
 
-        return $this;
+        return $roles;
     }
 
     /**
