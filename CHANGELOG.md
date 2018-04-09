@@ -2,6 +2,11 @@
 
 All Notable changes to `laravel-permission-mongodb` will be documented in this file.
 
+## 1.7.1 - 2018-04-09
+
+### Added
+ - Allow missing guard driver param (Spark compatibility)
+
 ## 1.7.0 - 2018-03-21
 
 ### Added
