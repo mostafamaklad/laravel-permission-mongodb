@@ -52,12 +52,12 @@ abstract class TestCase extends Orchestra
 
         $this->reloadPermissions();
 
-        $this->testUser           = User::first();
-        $this->testUserRole       = \app(Role::class)->where('name', 'testRole')->first();
+        $this->testUser = User::first();
+        $this->testUserRole = \app(Role::class)->where('name', 'testRole')->first();
         $this->testUserPermission = \app(Permission::class)->where('name', 'edit-articles')->first();
 
-        $this->testAdmin           = Admin::first();
-        $this->testAdminRole       = \app(Role::class)->where('name', 'testAdminRole')->first();
+        $this->testAdmin = Admin::first();
+        $this->testAdminRole = \app(Role::class)->where('name', 'testAdminRole')->first();
         $this->testAdminPermission = \app(Permission::class)->where('name', 'admin-permission')->first();
 
         $this->clearLogTestHandler();
@@ -87,11 +87,11 @@ abstract class TestCase extends Orchestra
     {
         $app['config']->set('database.default', 'mongodb');
         $app['config']->set('database.connections.mongodb', [
-            'host'     => 'localhost',
-            'port'     => '27017',
-            'driver'   => 'mongodb',
+            'host' => 'localhost',
+            'port' => '27017',
+            'driver' => 'mongodb',
             'database' => 'laravel_permission_mongodb_test',
-            'prefix'   => '',
+            'prefix' => '',
         ]);
 
         $app['config']->set('view.paths', [__DIR__ . '/resources/views']);
@@ -137,7 +137,7 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * Refresh the testuser.
+     * Refresh the testUser.
      */
     public function refreshTestUser()
     {
@@ -207,5 +207,13 @@ abstract class TestCase extends Orchestra
         } else {
             $this->assertNotContains($role_permission, $message);
         }
+    }
+
+    /**
+     * Refresh the testUserPermission.
+     */
+    public function refreshTestUserPermission()
+    {
+        $this->testUserPermission = $this->testUserPermission->fresh();
     }
 }

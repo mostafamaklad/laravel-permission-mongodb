@@ -12,6 +12,7 @@ use Maklad\Permission\Exceptions\PermissionDoesNotExist;
 use Maklad\Permission\Guard;
 use Maklad\Permission\Helpers;
 use Maklad\Permission\PermissionRegistrar;
+use Maklad\Permission\Traits\HasRoles;
 use Maklad\Permission\Traits\RefreshesPermissionCache;
 
 /**
@@ -20,6 +21,7 @@ use Maklad\Permission\Traits\RefreshesPermissionCache;
  */
 class Permission extends Model implements PermissionInterface
 {
+    use HasRoles;
     use RefreshesPermissionCache;
 
     public $guarded = ['id'];
