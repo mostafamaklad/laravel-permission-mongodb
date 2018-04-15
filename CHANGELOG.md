@@ -2,6 +2,11 @@
 
 All Notable changes to `laravel-permission-mongodb` will be documented in this file.
 
+## 1.8.0 - 2018-04-15
+
+### Added
+ - Allow assign/sync/remove Roles from Permission model
+ 
 ## 1.7.1 - 2018-04-09
 
 ### Added
