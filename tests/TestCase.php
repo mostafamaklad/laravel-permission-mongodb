@@ -181,8 +181,8 @@ abstract class TestCase extends Orchestra
                 $message,
                 $level
             ) {
-                return $handler instanceof TestHandler && $handler->hasRecordThatContains($message, $level);
-            })->count() > 0;
+            return $handler instanceof TestHandler && $handler->hasRecordThatContains($message, $level);
+        })->count() > 0;
     }
 
     /**
