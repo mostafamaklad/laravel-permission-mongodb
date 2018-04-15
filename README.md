@@ -655,24 +655,27 @@ class RolesAndPermissionsSeeder extends Seeder
         $role->givePermissionTo('delete articles');
         
         $role = Role::firstOrCreate(['name' => 'admin']);
-        $role->givePermissionTo('publish articles');
-        $role->givePermissionTo('unpublish articles');
+        $role->givePermissionTo(['publish articles', 'unpublish articles']);
     }
 }
 ```
 
 ## Extending
+If you need to EXTEND the existing `Role` or `Permission` models note that:
+
+- Your `Role` model needs to extend the `Maklad\Permission\Models\Role` model
+- Your `Permission` model needs to extend the `Maklad\Permission\Models\Permission` model
 
 If you need to extend or replace the existing `Role` or `Permission` models you just need to
 keep the following things in mind:
 
 - Your `Role` model needs to implement the `Maklad\Permission\Contracts\Role` contract
 - Your `Permission` model needs to implement the `Maklad\Permission\Contracts\Permission` contract
-- You must publish the configuration with this command:
+
+In BOTH cases, whether extending or replacing, you will need to specify your new models in the configuration. To do this you must update the `models.role` and `models.permission` values in the configuration file after publishing the configuration with this command:
   ```bash
   php artisan vendor:publish --provider="Maklad\Permission\PermissionServiceProvider" --tag="config"
   ```
-  And update the `models.role` and `models.permission` values
 
 ## Cache
 

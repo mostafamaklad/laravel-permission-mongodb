@@ -125,8 +125,10 @@ class HasPermissionsTest extends TestCase
         $user1->givePermissionTo($this->testUserPermission->name);
         $scopedUsers1 = User::permission($this->testUserPermission)->get();
         $scopedUsers2 = User::permission([$this->testUserPermission])->get();
+        $scopedUsers3 = User::permission(collect([$this->testUserPermission]))->get();
         $this->assertEquals($scopedUsers1->count(), 1);
         $this->assertEquals($scopedUsers2->count(), 1);
+        $this->assertEquals($scopedUsers3->count(), 1);
     }
     /** @test */
     public function it_can_scope_users_without_permissions_only_role()
