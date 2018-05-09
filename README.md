@@ -1,5 +1,7 @@
 # laravel-permission-mongodb
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ec86198bdc74492183c5ed1e4ad7bd60)](https://app.codacy.com/app/mostafamaklad/laravel-permission-mongodb?utm_source=github.com&utm_medium=referral&utm_content=mostafamaklad/laravel-permission-mongodb&utm_campaign=badger)
+
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
 [![Build Status][ico-travis]][link-travis]
