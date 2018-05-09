@@ -5,6 +5,7 @@
 [![Build Status][ico-travis]][link-travis]
 [![Scrutinizer][ico-scrutinizer]][link-scrutinizer]
 [![Maintainability][ico-codeclimate-maintainability]][link-codeclimate-maintainability]
+[![Codacy Badge][ico-codacy]][link-codacy]
 [![StyleCI][ico-styleci]][link-styleci]
 [![Coverage Status][ico-coveralls]][link-coveralls]
 [![Dependency Status][ico-gemnasium]][link-gemnasium]
@@ -800,6 +801,9 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [ico-codeclimate-coverage]: https://img.shields.io/codeclimate/coverage/github/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
 [ico-codeclimate-issue-count]: https://img.shields.io/codeclimate/issues/github/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
 [ico-codeclimate-maintainability]: https://api.codeclimate.com/v1/badges/005c3644a2db6b364514/maintainability
+
+[link-codacy]: https://www.codacy.com/app/mostafamaklad/laravel-permission-mongodb?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mostafamaklad/laravel-permission-mongodb&amp;utm_campaign=Badge_Grade
+[ico-codacy]: https://api.codacy.com/project/badge/Grade/11620283b18945e2beb77e59ddc90624
 
 [link-gemnasium]: https://gemnasium.com/github.com/mostafamaklad/laravel-permission-mongodb
 [ico-gemnasium]: https://img.shields.io/gemnasium/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
