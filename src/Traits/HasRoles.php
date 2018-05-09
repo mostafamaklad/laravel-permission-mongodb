@@ -27,7 +27,6 @@ trait HasRoles
             }
 
             $model->roles()->sync([]);
-            $model->permissions()->sync([]);
         });
     }
 
@@ -37,14 +36,6 @@ trait HasRoles
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(\config('permission.models.role'))->withTimestamps();
-    }
-
-    /**
-     * A model may have multiple direct permissions.
-     */
-    public function permissions(): BelongsToMany
-    {
-        return $this->belongsToMany(\config('permission.models.permission'))->withTimestamps();
     }
 
     /**
@@ -60,29 +51,6 @@ trait HasRoles
         $roles = $this->convertToRoleModels($roles);
 
         return $query->whereIn('role_ids', $roles->pluck('_id'));
-    }
-
-    /**
-     * Scope the model query to certain permissions only.
-     *
-     * @param Builder $query
-     * @param string|array|Permission|Collection $permissions
-     *
-     * @return Builder
-     */
-    public function scopePermission(Builder $query, $permissions): Builder
-    {
-        $permissions = $this->convertToPermissionModels($permissions);
-
-        $roles = \collect([]);
-
-        foreach ($permissions as $permission) {
-            $roles = $roles->merge($permission->roles);
-        }
-        $roles = $roles->unique();
-
-        return $query->orWhereIn('permission_ids', $permissions->pluck('_id'))
-            ->orWhereIn('role_ids', $roles->pluck('_id'));
     }
 
     /**
@@ -209,108 +177,6 @@ trait HasRoles
     }
 
     /**
-     * Determine if the model may perform the given permission.
-     *
-     * @param string|Permission $permission
-     * @param string|null $guardName
-     *
-     * @return bool
-     * @throws ReflectionException
-     */
-    public function hasPermissionTo($permission, $guardName = null): bool
-    {
-        if (\is_string($permission)) {
-            $permission = \app(Permission::class)->findByName(
-                $permission,
-                $guardName ?? $this->getDefaultGuardName()
-            );
-        }
-
-        return $this->hasDirectPermission($permission) || $this->hasPermissionViaRole($permission);
-    }
-
-    /**
-     * Determine if the model has any of the given permissions.
-     *
-     * @param array ...$permissions
-     *
-     * @return bool
-     */
-    public function hasAnyPermission(...$permissions): bool
-    {
-        if (\is_array($permissions[0])) {
-            $permissions = $permissions[0];
-        }
-
-        foreach ($permissions as $permission) {
-            if ($this->hasPermissionTo($permission)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Determine if the model has, via roles, the given permission.
-     *
-     * @param Permission $permission
-     *
-     * @return bool
-     */
-    protected function hasPermissionViaRole(Permission $permission): bool
-    {
-        return $this->hasRole($permission->roles);
-    }
-
-    /**
-     * Determine if the model has the given permission.
-     *
-     * @param string|Permission $permission
-     *
-     * @return bool
-     * @throws ReflectionException
-     */
-    public function hasDirectPermission($permission): bool
-    {
-        if (\is_string($permission)) {
-            $permission = \app(Permission::class)->findByName($permission, $this->getDefaultGuardName());
-        }
-
-        return $this->permissions->contains('id', $permission->id);
-    }
-
-    /**
-     * Return all permissions the directory coupled to the model.
-     */
-    public function getDirectPermissions(): Collection
-    {
-        return $this->permissions;
-    }
-
-    /**
-     * Return all the permissions the model has via roles.
-     */
-    public function getPermissionsViaRoles(): Collection
-    {
-        return $this->load('roles', 'roles.permissions')
-            ->roles->flatMap(function (Role $role) {
-                return $role->permissions;
-            })->sort()->values();
-    }
-
-    /**
-     * Return all the permissions the model has, both directly and via roles.
-     */
-    public function getAllPermissions(): Collection
-    {
-        return $this->permissions
-            ->merge($this->getPermissionsViaRoles())
-            ->sort()
-            ->values();
-    }
-
-    /**
      * Return Role object
      *
      * @param String|Role $role role name
@@ -335,17 +201,6 @@ trait HasRoles
     public function getRoleNames(): Collection
     {
         return $this->roles()->pluck('name');
-    }
-
-
-    /**
-     * Return a collection of permission names associated with this user.
-     *
-     * @return Collection
-     */
-    public function getPermissionNames(): Collection
-    {
-        return $this->getAllPermissions()->pluck('name');
     }
 
     /**
