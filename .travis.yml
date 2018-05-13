@@ -37,3 +37,4 @@ after_success:
   - sh -c 'php vendor/bin/coveralls -v'
   - CODECLIMATE_REPO_TOKEN="d1e37bee7168ee1746010705b5a942b491d6d984dfa22eb873d7914335eb3065" vendor/bin/test-reporter --stdout > codeclimate.json
   - "curl -X POST -d @codeclimate.json -H 'Content-Type: application/json' -H 'User-Agent: Code Climate (PHP Test Reporter v0.1.1)' https://codeclimate.com/test_reports"
+  - php vendor/bin/codacycoverage clover build/coverage/xml
