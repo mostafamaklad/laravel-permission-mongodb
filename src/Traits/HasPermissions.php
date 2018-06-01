@@ -236,13 +236,13 @@ trait HasPermissions
     /**
      * Determine if the model may perform the given permission.
      *
-     * @param string|Permission $permission
-     * @param string|null $guardName
-     *
+     * @param $permission
+     * @param null $guardName
+     * @param null $orgId
      * @return bool
      * @throws \ReflectionException
      */
-    public function hasPermissionTo($permission, $guardName = null): bool
+    public function hasPermissionTo($permission, $guardName = null, $orgId = null): bool
     {
         if (\is_string($permission)) {
             $permission = \app(Permission::class)->findByName(
@@ -251,32 +251,23 @@ trait HasPermissions
             );
         }
 
-        return $this->hasDirectPermission($permission) || $this->hasPermissionViaRole($permission);
+        return $this->hasDirectPermission($permission) || $this->hasPermissionViaRole($permission) || $this->hasPermissionViaOrg($permission, null, $orgId);
     }
 
-    public function getPermissionOf($permission, $guardName = null, $org_id = null)
+    /**
+     * Determine if the model has, via organization, the given permission.
+     *
+     * @param $permission
+     * @param null $guardName
+     * @param null $orgId
+     * @return bool
+     */
+    public function hasPermissionViaOrg($permission, $guardName = null, $orgId = null)
     {
-        if ($this instanceof Users) {
-            $roleAssignment_datas = RoleAssignment::where('organization_id', $org_id)->get();
-            $user = $this->toArray();
+        $roleIds = $permission->roles()->pluck('_id')->toArray();
+        $roleAssignments = \app(RoleAssignment::class)->where('organization_id', $orgId)->whereIn('_id', $this->role_assignment_ids)->whereIn('role_ids', $roleIds)->get();
 
-            foreach ($roleAssignment_datas as $roleAssignment_data) {
-                if (array_key_exists($roleAssignment_data->_id, $user)) {
-                    $role_assignment_id = $roleAssignment_data->_id;
-                }
-            }
-
-            foreach ($user[$role_assignment_id]['role_id'] as $key => $value) {
-                $role = Role::where('_id', $value)->first();
-                if ($role->hasPermissionTo($permission)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        } else {
-            return $this->hasPermissionTo($permission);
-        }
+        return $roleAssignments->count() > 0;
     }
 
     /**

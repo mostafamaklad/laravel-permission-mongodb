@@ -26,6 +26,12 @@ return [
 
         'role' => Maklad\Permission\Models\Role::class,
 
+       /*
+        * Role Assignment model
+        */
+
+        'role_assignment' => Maklad\Permission\Models\RoleAssignment::class,
+
     ],
 
     'collection_names' => [
@@ -45,6 +51,14 @@ return [
          */
 
         'permissions' => 'permissions',
+
+        /*
+         * When using the "HasPermissions" trait from this package, we need to know which
+         * table should be used to retrieve your permissions. We have chosen a basic
+         * default value but you may easily change it to any table you like.
+         */
+
+        'role_assignments' => 'role_assignments',
     ],
 
     /*
