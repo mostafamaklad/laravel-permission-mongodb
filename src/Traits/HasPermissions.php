@@ -13,6 +13,8 @@ use Maklad\Permission\Guard;
 use Maklad\Permission\Helpers;
 use Maklad\Permission\Models\Role;
 use Maklad\Permission\PermissionRegistrar;
+use Maklad\Permission\Models\RoleAssignment;
+use Metabuyer\Models\Users;
 
 /**
  * Trait HasPermissions
@@ -250,6 +252,31 @@ trait HasPermissions
         }
 
         return $this->hasDirectPermission($permission) || $this->hasPermissionViaRole($permission);
+    }
+
+    public function getPermissionOf($permission, $guardName = null, $org_id = null)
+    {
+        if ($this instanceof Users) {
+            $roleAssignment_datas = RoleAssignment::where('organization_id', $org_id)->get();
+            $user = $this->toArray();
+
+            foreach ($roleAssignment_datas as $roleAssignment_data) {
+                if (array_key_exists($roleAssignment_data->_id, $user)) {
+                    $role_assignment_id = $roleAssignment_data->_id;
+                }
+            }
+
+            foreach ($user[$role_assignment_id]['role_id'] as $key => $value) {
+                $role = Role::where('_id', $value)->first();
+                if ($role->hasPermissionTo($permission)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        } else {
+            return $this->hasPermissionTo($permission);
+        }
     }
 
     /**
