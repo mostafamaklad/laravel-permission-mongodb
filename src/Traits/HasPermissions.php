@@ -11,6 +11,7 @@ use Maklad\Permission\Contracts\PermissionInterface as Permission;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\Guard;
 use Maklad\Permission\Helpers;
+use Maklad\Permission\Models\Organization;
 use Maklad\Permission\Models\Role;
 use Maklad\Permission\PermissionRegistrar;
 use Maklad\Permission\Models\RoleAssignment;
@@ -263,8 +264,10 @@ trait HasPermissions
      */
     public function hasPermissionViaOrg($permission, $guardName = null, $orgId = null)
     {
+        $organization = \app(Organization::class)->where('_id', $orgId)->first();
+
         $roleIds = $permission->roles()->pluck('_id')->toArray();
-        $roleAssignments = \app(RoleAssignment::class)->where('organization_id', $orgId)->whereIn('_id', $this->role_assignment_ids)->whereIn('role_ids', $roleIds)->get();
+        $roleAssignments = \app(RoleAssignment::class)->where('organization_id', $orgId)->where('weight', '<=', $organization->weight)->whereIn('_id', $this->role_assignment_ids)->whereIn('role_ids', $roleIds)->get();
 
         return $roleAssignments->count() > 0;
     }
