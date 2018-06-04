@@ -13,6 +13,7 @@ use Maklad\Permission\Guard;
 use Maklad\Permission\Helpers;
 use Maklad\Permission\Models\Role;
 use Maklad\Permission\PermissionRegistrar;
+use Maklad\Permission\Models\RoleAssignment;
 
 /**
  * Trait HasPermissions
@@ -234,13 +235,13 @@ trait HasPermissions
     /**
      * Determine if the model may perform the given permission.
      *
-     * @param string|Permission $permission
-     * @param string|null $guardName
-     *
+     * @param $permission
+     * @param null $guardName
+     * @param null $orgId
      * @return bool
      * @throws \ReflectionException
      */
-    public function hasPermissionTo($permission, $guardName = null): bool
+    public function hasPermissionTo($permission, $guardName = null, $orgId = null): bool
     {
         if (\is_string($permission)) {
             $permission = \app(Permission::class)->findByName(
@@ -249,7 +250,23 @@ trait HasPermissions
             );
         }
 
-        return $this->hasDirectPermission($permission) || $this->hasPermissionViaRole($permission);
+        return $this->hasDirectPermission($permission) || $this->hasPermissionViaRole($permission) || $this->hasPermissionViaOrg($permission, null, $orgId);
+    }
+
+    /**
+     * Determine if the model has, via organization, the given permission.
+     *
+     * @param $permission
+     * @param null $guardName
+     * @param null $orgId
+     * @return bool
+     */
+    public function hasPermissionViaOrg($permission, $guardName = null, $orgId = null)
+    {
+        $roleIds = $permission->roles()->pluck('_id')->toArray();
+        $roleAssignments = \app(RoleAssignment::class)->where('organization_id', $orgId)->whereIn('_id', $this->role_assignment_ids)->whereIn('role_ids', $roleIds)->get();
+
+        return $roleAssignments->count() > 0;
     }
 
     /**
