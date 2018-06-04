@@ -265,6 +265,9 @@ trait HasPermissions
     public function hasPermissionViaOrg($permission, $guardName = null, $orgId = null)
     {
         $organization = \app(Organization::class)->where('_id', $orgId)->first();
+        if($organization == null){
+            return false;
+        }
 
         $roleIds = $permission->roles()->pluck('_id')->toArray();
         $roleAssignments = \app(RoleAssignment::class)->where('organization_id', $orgId)->where('weight', '<=', $organization->weight)->whereIn('_id', $this->role_assignment_ids)->whereIn('role_ids', $roleIds)->get();
