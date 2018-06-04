@@ -14,7 +14,6 @@ use Maklad\Permission\Helpers;
 use Maklad\Permission\Models\Role;
 use Maklad\Permission\PermissionRegistrar;
 use Maklad\Permission\Models\RoleAssignment;
-use Metabuyer\Models\Users;
 
 /**
  * Trait HasPermissions
