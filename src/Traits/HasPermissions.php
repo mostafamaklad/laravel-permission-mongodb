@@ -265,7 +265,7 @@ trait HasPermissions
     public function hasPermissionViaOrg($permission, $guardName = null, $orgId = null)
     {
         $organization = \app(Organization::class)->where('_id', $orgId)->first();
-        if($organization == null){
+        if(empty($organization)){
             return false;
         }
 
