@@ -65,7 +65,7 @@ trait HasRoles
     public function assignRole(...$roles)
     {
         $class = get_class($this);
-        $organization = \app(Organization::class)->where('class', $class)->get()->first();
+        $organization = \app(Organization::class)->where('class', $class)->first();
 
         $roleAssignment = \app(RoleAssignment::class)->create(['organization_id' => $organization->_id, 'weight' => $organization->weight]);
 
