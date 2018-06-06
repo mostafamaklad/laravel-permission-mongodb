@@ -9,6 +9,8 @@ use Jenssegers\Mongodb\Eloquent\Model;
 use Jenssegers\Mongodb\Relations\BelongsToMany;
 use Maklad\Permission\Contracts\PermissionInterface as Permission;
 use Maklad\Permission\Contracts\RoleInterface as Role;
+use Maklad\Permission\Models\Organization;
+use Maklad\Permission\Models\RoleAssignment;
 use ReflectionException;
 
 /**
@@ -54,7 +56,7 @@ trait HasRoles
     }
 
     /**
-     * Assign the given role to the model.
+     * Assign the given role to the Role Assignment.
      *
      * @param array|string|Role ...$roles
      *
@@ -62,6 +64,11 @@ trait HasRoles
      */
     public function assignRole(...$roles)
     {
+        $class = get_class($this);
+        $organization = \app(Organization::class)->where('class', $class)->get()->first();
+
+        $roleAssignment = \app(RoleAssignment::class)->create(['organization_id' => $organization->_id, 'weight' => $organization->weight]);
+
         $roles = \collect($roles)
             ->flatten()
             ->map(function ($role) {
@@ -72,9 +79,9 @@ trait HasRoles
             })
             ->all();
 
-        $this->roles()->saveMany($roles);
+        $roleAssignment->roles()->saveMany($roles);
 
-        $this->forgetCachedPermissions();
+        $roleAssignment->forgetCachedPermissions();
 
         return $roles;
     }
