@@ -25,6 +25,7 @@ class RoleAssignment extends Model
 
     protected $fillable = [
         'organization_id',
-        'weight'
+        'weight',
+        'role_ids'
     ];
 }
