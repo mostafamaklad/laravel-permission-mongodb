@@ -96,9 +96,9 @@ trait HasRoles
      * @param mixed ...$roles
      * @return bool
      */
-    public function assignOrgRole($organization = null, ...$roles)
+    public function assignOrgRole($organization, ...$roles)
     {
-        $roles = \collect($roles)
+        $roleIds = \collect($roles)
             ->flatten()
             ->map(function ($role) {
                 return $this->getStoredRole($role);
@@ -106,22 +106,26 @@ trait HasRoles
             ->pluck('_id')
             ->all();
 
-        $roleAssignment = \app(RoleAssignment::class)
-            ->where('organization_id', $organization->_id)
-            ->whereIn('role_ids', $roles)
-            ->first();
-
-        if ((!isset($roleAssignment) && empty($roleAssignment)) ||
-            (!empty($this->role_assignment_ids) && in_array($roleAssignment['_id'], $this->role_assignment_ids))){
+        if (empty($organization)) {
             return false;
         }
 
-        $roleAssignmentIds = array();
-        if (isset($this->role_assignment_ids) && !empty($this->role_assignment_ids)) {
-            $roleAssignmentIds = $this->role_assignment_ids;
+        $roleAssignment = \app(RoleAssignment::class)
+            ->where('organization_id', is_object($organization) ? $organization->_id : $organization)
+            ->whereIn('role_ids', $roleIds)
+            ->first();
+
+        if (empty($roleAssignment) ||
+            (!empty($this->role_assignment_ids) && in_array($roleAssignment->_id, $this->role_assignment_ids))) {
+            return false;
         }
 
-        array_push($roleAssignmentIds, $roleAssignment['_id']);
+        $roleAssignmentIds = [];
+        if (!empty($this->role_assignment_ids)) {
+            $roleAssignmentIds = $this->role_assignment_ids ?? [];
+        }
+
+        $roleAssignmentIds[] = $roleAssignment->_id;
         $this->role_assignment_ids = $roleAssignmentIds;
 
         return $this->save();
