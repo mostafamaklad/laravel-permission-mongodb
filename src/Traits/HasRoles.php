@@ -110,8 +110,10 @@ trait HasRoles
             return false;
         }
 
+        $organizationId = is_object($organization) ? $organization->_id : $organization;
+
         $roleAssignment = \app(RoleAssignment::class)
-            ->where('organization_id', is_object($organization) ? $organization->_id : $organization)
+            ->where('organization_id', $organizationId)
             ->whereIn('role_ids', $roleIds)
             ->first();
 
