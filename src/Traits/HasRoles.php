@@ -67,7 +67,10 @@ trait HasRoles
         $class = get_class($this);
         $organization = \app(Organization::class)->where('class', $class)->first();
 
-        $roleAssignment = \app(RoleAssignment::class)->create(['organization_id' => $organization->_id, 'weight' => $organization->weight]);
+        $roleAssignment = \app(RoleAssignment::class)->create([
+            'organization_id' => $organization->_id,
+            'weight' => $organization->weight
+        ]);
 
         $roles = \collect($roles)
             ->flatten()
@@ -84,6 +87,50 @@ trait HasRoles
         $roleAssignment->forgetCachedPermissions();
 
         return $roles;
+    }
+
+    /**
+     * Assign the given role to the User.
+     *
+     * @param null $organization
+     * @param mixed ...$roles
+     * @return bool
+     */
+    public function assignOrgRole($organization, ...$roles)
+    {
+        $roleIds = \collect($roles)
+            ->flatten()
+            ->map(function ($role) {
+                return $this->getStoredRole($role);
+            })
+            ->pluck('_id')
+            ->all();
+
+        if (empty($organization)) {
+            return false;
+        }
+
+        $organizationId = is_object($organization) ? $organization->_id : $organization;
+
+        $roleAssignment = \app(RoleAssignment::class)
+            ->where('organization_id', $organizationId)
+            ->whereIn('role_ids', $roleIds)
+            ->first();
+
+        if (empty($roleAssignment) ||
+            (!empty($this->role_assignment_ids) && in_array($roleAssignment->_id, $this->role_assignment_ids))) {
+            return false;
+        }
+
+        $roleAssignmentIds = [];
+        if (!empty($this->role_assignment_ids)) {
+            $roleAssignmentIds = $this->role_assignment_ids ?? [];
+        }
+
+        $roleAssignmentIds[] = $roleAssignment->_id;
+        $this->role_assignment_ids = $roleAssignmentIds;
+
+        return $this->save();
     }
 
     /**
