@@ -102,13 +102,36 @@ trait HasRoles
      */
     public function assignOrgRole($organization, ...$roles)
     {
-        $roleIds = \collect($roles)
+        $roles = \collect($roles)
             ->flatten()
             ->map(function ($role) {
                 return $this->getStoredRole($role);
             })
-            ->pluck('_id')
             ->all();
+
+        $roleIds = [];
+        $allRoles = [];
+        $allPermissions = [];
+        foreach ($roles as $role) {
+            $roleIds[] = $role['_id'];
+
+            $eachRole = [];
+            $eachRole['_id'] = $role['_id'];
+            $eachRole['name'] = $role['name'];
+            $eachRole['guard_name'] = $role['guard_name'];
+
+            foreach ($role['permission_ids'] as $key => $value) {
+                $permission = \app(\Maklad\Permission\Models\Permission::class)->where('_id', $value)->first();
+
+                $eachPermission = [];
+                $eachPermission['_id'] = $permission->_id;
+                $eachPermission['name'] = $permission->name;
+                $eachPermission['guard_name'] = $permission->guard_name;
+                $allPermissions[] = (object)$eachPermission;
+            }
+            $eachRole['permissions'] = $allPermissions;
+            $allRoles[] = (object)$eachRole;
+        }
 
         if (empty($organization)) {
             return false;
@@ -127,12 +150,24 @@ trait HasRoles
         }
 
         $roleAssignmentIds = [];
-        if (!empty($this->role_assignment_ids)) {
+        $roleAssignmentObjs = [];
+        if (!empty($this->role_assignment_ids) && !empty($this->role_assignments)) {
             $roleAssignmentIds = $this->role_assignment_ids ?? [];
+            $roleAssignmentObjs = $this->role_assignments ?? [];
         }
 
         $roleAssignmentIds[] = $roleAssignment->_id;
         $this->role_assignment_ids = $roleAssignmentIds;
+
+        $eachRoleAssignment = [];
+        $eachRoleAssignment['_id'] = $roleAssignment->_id;
+        $eachRoleAssignment['weight'] = $roleAssignment->weight;
+        $eachRoleAssignment['organization_id'] = $roleAssignment->organization_id;
+        $eachRoleAssignment = (object)$eachRoleAssignment;
+
+        $eachRoleAssignment->roles = $allRoles;
+        $roleAssignmentObjs[] = $eachRoleAssignment;
+        $this->role_assignments = $roleAssignmentObjs;
 
         return $this->save();
     }
