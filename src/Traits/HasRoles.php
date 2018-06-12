@@ -94,6 +94,39 @@ trait HasRoles
     }
 
     /**
+     * Prepare role data with assign permissions.
+     *
+     * @param $role
+     * @return array
+     */
+    public function prepareRoles($role)
+    {
+        $roleData = [];
+
+        if (empty($role)) {
+            $roleData;
+        }
+
+        $roleData['_id'] = $role['_id'];
+        $roleData['name'] = $role['name'];
+        $roleData['guard_name'] = $role['guard_name'];
+
+        $allPermissions = [];
+        foreach ($role['permission_ids'] as $key => $value) {
+            $permission = \app(\Maklad\Permission\Models\Permission::class)->where('_id', $value)->first();
+
+            $eachPermission = [];
+            $eachPermission['_id'] = $permission->_id;
+            $eachPermission['name'] = $permission->name;
+            $eachPermission['guard_name'] = $permission->guard_name;
+            $allPermissions[] = $eachPermission;
+        }
+        $roleData['permissions'] = $allPermissions;
+
+        return $roleData;
+    }
+
+    /**
      * Assign the given role to the User.
      *
      * @param null $organization
@@ -102,39 +135,21 @@ trait HasRoles
      */
     public function assignOrgRole($organization, ...$roles)
     {
-        $roles = \collect($roles)
+        $allRoles = \collect($roles)
             ->flatten()
             ->map(function ($role) {
-                return $this->getStoredRole($role);
-            })
-            ->all();
+                $role = $this->getStoredRole($role);
 
-        $roleIds = [];
-        $allRoles = [];
-        $allPermissions = [];
-        foreach ($roles as $role) {
-            $roleIds[] = $role['_id'];
+                return $this->prepareRoles($role);
+            });
 
-            $eachRole = [];
-            $eachRole['_id'] = $role['_id'];
-            $eachRole['name'] = $role['name'];
-            $eachRole['guard_name'] = $role['guard_name'];
-
-            foreach ($role['permission_ids'] as $key => $value) {
-                $permission = \app(\Maklad\Permission\Models\Permission::class)->where('_id', $value)->first();
-
-                $eachPermission = [];
-                $eachPermission['_id'] = $permission->_id;
-                $eachPermission['name'] = $permission->name;
-                $eachPermission['guard_name'] = $permission->guard_name;
-                $allPermissions[] = (object)$eachPermission;
-            }
-            $eachRole['permissions'] = $allPermissions;
-            $allRoles[] = (object)$eachRole;
+        if(empty($allRoles) || empty($organization)){
+            return false;
         }
 
-        if (empty($organization)) {
-            return false;
+        $roleIds = [];
+        foreach($allRoles as $key => $value){
+            $roleIds[] = $value['_id'];
         }
 
         $organizationId = is_object($organization) ? $organization->_id : $organization;
@@ -163,9 +178,8 @@ trait HasRoles
         $eachRoleAssignment['_id'] = $roleAssignment->_id;
         $eachRoleAssignment['weight'] = $roleAssignment->weight;
         $eachRoleAssignment['organization_id'] = $roleAssignment->organization_id;
-        $eachRoleAssignment = (object)$eachRoleAssignment;
 
-        $eachRoleAssignment->roles = $allRoles;
+        $eachRoleAssignment['roles'] = $allRoles->toArray();
         $roleAssignmentObjs[] = $eachRoleAssignment;
         $this->role_assignments = $roleAssignmentObjs;
 
