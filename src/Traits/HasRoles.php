@@ -94,6 +94,34 @@ trait HasRoles
     }
 
     /**
+     * Prepare role data with assign permissions.
+     *
+     * @param $role
+     * @return array
+     */
+    public function prepareRoles($role)
+    {
+        $roleData = [];
+
+        if (empty($role)) {
+            return $roleData;
+        }
+
+        $roleData['_id'] = $role['_id'];
+        $roleData['name'] = $role['name'];
+        $roleData['guard_name'] = $role['guard_name'];
+
+        $permissions = \app(\Maklad\Permission\Models\Permission::class)
+            ->whereIn('_id', $role['permission_ids'])
+            ->get(['_id', 'name', 'guard_name'])
+            ->toArray();
+
+        $roleData['permissions'] = $permissions;
+
+        return $roleData;
+    }
+
+    /**
      * Assign the given role to the User.
      *
      * @param null $organization
@@ -102,17 +130,20 @@ trait HasRoles
      */
     public function assignOrgRole($organization, ...$roles)
     {
-        $roleIds = \collect($roles)
+        $roles = \collect($roles)
             ->flatten()
             ->map(function ($role) {
-                return $this->getStoredRole($role);
-            })
-            ->pluck('_id')
-            ->all();
+                $role = $this->getStoredRole($role);
 
-        if (empty($organization)) {
+                return $this->prepareRoles($role);
+            })
+            ->toArray();
+
+        if (empty($roles) || empty($organization)) {
             return false;
         }
+
+        $roleIds = array_column($roles, '_id');
 
         $organizationId = is_object($organization) ? $organization->_id : $organization;
 
@@ -127,12 +158,22 @@ trait HasRoles
         }
 
         $roleAssignmentIds = [];
-        if (!empty($this->role_assignment_ids)) {
-            $roleAssignmentIds = $this->role_assignment_ids ?? [];
+        $roleAssignmentObjs = [];
+        if (!empty($this->role_assignment_ids) && !empty($this->role_assignments)) {
+            $roleAssignmentIds = $this->role_assignment_ids;
+            $roleAssignmentObjs = $this->role_assignments;
         }
 
         $roleAssignmentIds[] = $roleAssignment->_id;
         $this->role_assignment_ids = $roleAssignmentIds;
+
+        $roleAssignmentObjs[] = [
+            '_id' => $roleAssignment->_id,
+            'weight' => $roleAssignment->weight,
+            'organization_id' => $roleAssignment->organization_id,
+            'roles' => $roles
+        ];
+        $this->role_assignments = $roleAssignmentObjs;
 
         return $this->save();
     }
