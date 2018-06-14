@@ -175,7 +175,10 @@ trait HasRoles
         ];
         $this->role_assignments = $roleAssignmentObjs;
 
-        return $this->save();
+        $isSaved = $this->save();
+        $this->forgetCachedPermissions();
+
+        return $isSaved;
     }
 
     /**
