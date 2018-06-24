@@ -2,7 +2,6 @@
 
 namespace Maklad\Permission\Traits;
 
-use Jenssegers\Mongodb\Eloquent\Model;
 use Maklad\Permission\PermissionRegistrar;
 
 /**
