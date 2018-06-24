@@ -8,7 +8,6 @@
 [![Codacy Badge][ico-codacy]][link-codacy]
 [![StyleCI][ico-styleci]][link-styleci]
 [![Coverage Status][ico-coveralls]][link-coveralls]
-[![Dependency Status][ico-gemnasium]][link-gemnasium]
 [![Total Downloads][ico-downloads]][link-packagist]
 
 This package allows you to manage user permissions and roles in a database.
@@ -745,7 +744,7 @@ composer test
 
 ## Contributing
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) and [CONDUCT](CONDUCT.md) for details.
+Please see [CONTRIBUTING](.github/CONTRIBUTING.md) and [CONDUCT](.github/CONDUCT.md) for details.
 
 ## Security
 
@@ -804,9 +803,6 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 
 [link-codacy]: https://www.codacy.com/app/mostafamaklad/laravel-permission-mongodb?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mostafamaklad/laravel-permission-mongodb&amp;utm_campaign=Badge_Grade
 [ico-codacy]: https://api.codacy.com/project/badge/Grade/11620283b18945e2beb77e59ddc90624
-
-[link-gemnasium]: https://gemnasium.com/github.com/mostafamaklad/laravel-permission-mongodb
-[ico-gemnasium]: https://img.shields.io/gemnasium/mostafamaklad/laravel-permission-mongodb.svg?style=flat-square
 
 [link-sensiolabs]: https://insight.sensiolabs.com/projects/9a0d8b6f-1b6d-4f9f-ba87-ed9ab66b7707
 [ico-sensiolabs]: https://insight.sensiolabs.com/projects/9a0d8b6f-1b6d-4f9f-ba87-ed9ab66b7707/mini.png

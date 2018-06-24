@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Maklad\Permission\Traits;
 
@@ -37,10 +36,7 @@ trait HasPermissions
      */
     public function permissions(): BelongsToMany
     {
-        return $this->belongsToMany(
-            config('permission.models.permission'),
-            config('permission.collection_names.role_has_permissions')
-        );
+        return $this->belongsToMany(config('permission.models.permission'));
     }
 
     /**
