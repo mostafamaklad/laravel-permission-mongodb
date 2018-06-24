@@ -2,6 +2,12 @@
 
 All Notable changes to `laravel-permission-mongodb` will be documented in this file.
 
+
+## 1.8.1 - 2018-06-24
+
+### Changed
+ - Move permission functionality from HasRoles Trait to HasPermissions Trait
+
 ## 1.8.0 - 2018-04-15
 
 ### Added
