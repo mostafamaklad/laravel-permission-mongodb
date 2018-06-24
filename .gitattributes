@@ -9,3 +9,7 @@
 /.scrutinizer.yml   export-ignore
 /tests              export-ignore
 /.editorconfig      export-ignore
+/.styleci.yml       export-ignore
+/_config.yml        export-ignore
+/codacy.yml         export-ignore
+/build              export-ignore

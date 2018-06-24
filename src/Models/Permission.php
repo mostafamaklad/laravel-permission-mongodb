@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace Maklad\Permission\Models;
 
@@ -42,7 +41,7 @@ class Permission extends Model implements PermissionInterface
 
         $this->helpers = new Helpers();
 
-        $this->setTable(\config('permission.collection_names.permissions'));
+        $this->setTable(config('permission.collection_names.permissions'));
     }
 
     /**
@@ -107,10 +106,7 @@ class Permission extends Model implements PermissionInterface
      */
     public function roles(): BelongsToMany
     {
-        return $this->belongsToMany(
-            \config('permission.models.role'),
-            \config('permission.collection_names.role_has_permissions')
-        );
+        return $this->belongsToMany(config('permission.models.role'));
     }
 
     /**

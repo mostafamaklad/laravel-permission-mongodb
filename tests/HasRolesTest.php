@@ -3,7 +3,6 @@
 namespace Maklad\Permission\Test;
 
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
-use Maklad\Permission\Exceptions\PermissionDoesNotExist;
 use Maklad\Permission\Exceptions\RoleDoesNotExist;
 use Maklad\Permission\Models\Role;
 use Monolog\Logger;

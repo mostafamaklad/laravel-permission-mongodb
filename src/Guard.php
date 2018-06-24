@@ -1,4 +1,5 @@
 <?php
+
 namespace Maklad\Permission;
 
 use Illuminate\Support\Collection;
