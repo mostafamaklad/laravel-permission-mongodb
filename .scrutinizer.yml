@@ -1,8 +1,6 @@
 build:
-    dependencies:
-        before:
-            - pecl install mongodb
     environment:
+        php: 7.1
         mongodb: true
         selenium: true
     tests:
