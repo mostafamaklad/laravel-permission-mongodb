@@ -1,6 +1,5 @@
 build:
     environment:
-        php: 7.0
         mongodb: true
         selenium: true
     tests:
