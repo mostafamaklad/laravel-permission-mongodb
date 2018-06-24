@@ -1,7 +1,4 @@
 build:
-    dependencies:
-        before:
-            - pecl install mongodb
     environment:
         mongodb: true
         selenium: true
