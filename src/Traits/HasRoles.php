@@ -223,63 +223,88 @@ trait HasRoles
     }
 
     /**
-     * Determine if the model has (one of) the given role(s).
+     * Determine given data present in array or not
      *
-     * @param string|array|Role|\Illuminate\Support\Collection $roles
-     *
+     * @param $needle
+     * @param $haystack
+     * @param bool $strict
      * @return bool
      */
-    public function hasRole($roles): bool
+    public function inMultiDimensionalArray($needle, $haystack, $strict = false)
+    {
+        foreach ($haystack as $item) {
+            if (($strict ? $item === $needle : $item == $needle) ||
+                (is_array($item) && $this->inMultiDimensionalArray($needle, $item, $strict))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Determine if the model has (one of) the given role(s).
+     *
+     * @param $roles
+     * @param $roleAssignmentId
+     * @param $allRoles
+     * @return bool
+     */
+    public function hasRole($roles, $roleAssignmentId, $allRoles): bool
     {
         if (\is_string($roles) && false !== \strpos($roles, '|')) {
             $roles = \explode('|', $roles);
         }
 
-        if (\is_string($roles) || $roles instanceof Role) {
-            return $this->roles->contains('name', $roles->name ?? $roles);
+        if (empty($roleAssignmentId)) {
+            return false;
         }
 
-        $roles = \collect()->make($roles)->map(function ($role) {
-            return $role instanceof Role ? $role->name : $role;
-        });
+        $isRoleAvailable = false;
 
-        return ! $roles->intersect($this->roles->pluck('name'))->isEmpty();
+        foreach ($this->role_assignments as $roleAssignment) {
+            if (in_array($roleAssignmentId, $roleAssignment)) {
+                foreach ($roles as $role) {
+                    if ($this->inMultiDimensionalArray($role, $roleAssignment['roles'])) {
+                        $isRoleAvailable = true;
+                    } else {
+                        if ($allRoles) {
+                            $isRoleAvailable = false;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $isRoleAvailable;
     }
 
     /**
      * Determine if the model has any of the given role(s).
      *
-     * @param string|array|Role|\Illuminate\Support\Collection $roles
-     *
+     * @param $roles
+     * @param $organization
      * @return bool
      */
-    public function hasAnyRole($roles): bool
+    public function hasAnyRole($roles, $organization): bool
     {
-        return $this->hasRole($roles);
+        $roleAssignment = RoleAssignment::where('organization_id', $organization->_id)->first();
+
+        return $this->hasRole($roles, $roleAssignment->_id, false);
     }
 
     /**
      * Determine if the model has all of the given role(s).
      *
-     * @param string|Role|\Illuminate\Support\Collection $roles
-     *
+     * @param $roles
+     * @param $organization
      * @return bool
      */
-    public function hasAllRoles($roles): bool
+    public function hasAllRoles($roles, $organization): bool
     {
-        if (\is_string($roles) && false !== strpos($roles, '|')) {
-            $roles = \explode('|', $roles);
-        }
+        $roleAssignment = RoleAssignment::where('organization_id', $organization->_id)->first();
 
-        if (\is_string($roles) || $roles instanceof Role) {
-            return $this->hasRole($roles);
-        }
-
-        $roles = \collect()->make($roles)->map(function ($role) {
-            return $role instanceof Role ? $role->name : $role;
-        });
-
-        return $roles->intersect($this->roles->pluck('name')) == $roles;
+        return $this->hasRole($roles, $roleAssignment->_id, true);
     }
 
     /**
