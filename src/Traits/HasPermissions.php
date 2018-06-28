@@ -238,11 +238,11 @@ trait HasPermissions
      *
      * @param $permission
      * @param null $guardName
-     * @param null $orgId
+     * @param null $organization
      * @return bool
      * @throws \ReflectionException
      */
-    public function hasPermissionTo($permission, $guardName = null, $orgId = null): bool
+    public function hasPermissionTo($permission, $guardName = null, $organization = null): bool
     {
         if (\is_string($permission)) {
             $permission = \app(Permission::class)->findByName(
@@ -251,7 +251,28 @@ trait HasPermissions
             );
         }
 
-        return $this->hasDirectPermission($permission) || $this->hasPermissionViaRole($permission) || $this->hasPermissionViaOrg($permission, null, $orgId);
+        return $this->hasDirectPermission($permission)
+            || $this->hasPermissionViaRole($permission)
+            || $this->hasPermissionViaOrg($permission, null, $organization);
+    }
+
+    /**
+     * Determine given data present in array or not
+     *
+     * @param $needle
+     * @param $haystack
+     * @param bool $strict
+     * @return bool
+     */
+    public function inMultiDimensionalArray($needle, $haystack, $strict = false)
+    {
+        foreach ($haystack as $item) {
+            if (($strict ? $item === $needle : $item == $needle) ||
+                (is_array($item) && $this->inMultiDimensionalArray($needle, $item, $strict))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -259,18 +280,32 @@ trait HasPermissions
      *
      * @param $permission
      * @param null $guardName
-     * @param null $orgId
+     * @param null $organization
      * @return bool
      */
-    public function hasPermissionViaOrg($permission, $guardName = null, $orgId = null)
+    public function hasPermissionViaOrg($permission, $guardName = null, $organization = null)
     {
-        $organization = \app(Organization::class)->where('_id', $orgId)->first();
-        if(empty($organization)){
-            return false;
+        if (empty($organization)) {
+            $isPermissionAvailable = false;
+            foreach ($this->role_assignments as $roleAssignment) {
+                foreach ($roleAssignment['roles'] as $role) {
+                    if ($this->inMultiDimensionalArray($permission['name'], $role['permissions'])) {
+                        $isPermissionAvailable = true;
+                    }
+                }
+            }
+
+            return $isPermissionAvailable;
         }
 
         $roleIds = $permission->roles()->pluck('_id')->toArray();
-        $roleAssignments = \app(RoleAssignment::class)->where('organization_id', $orgId)->where('weight', '<=', $organization->weight)->whereIn('_id', $this->role_assignment_ids)->whereIn('role_ids', $roleIds)->get();
+
+        $roleAssignments = \app(RoleAssignment::class)
+            ->where('organization_id', $organization->_id)
+            ->where('weight', '<=', $organization->weight)
+            ->whereIn('_id', $this->role_assignment_ids)
+            ->whereIn('role_ids', $roleIds)
+            ->get();
 
         return $roleAssignments->count() > 0;
     }
@@ -278,19 +313,19 @@ trait HasPermissions
     /**
      * Determine if the model has any of the given permissions.
      *
-     * @param array ...$permissions
-     *
+     * @param null $organization
+     * @param mixed ...$permissions
      * @return bool
      * @throws \ReflectionException
      */
-    public function hasAnyPermission(...$permissions): bool
+    public function hasAnyPermission($organization = null, ...$permissions): bool
     {
         if (\is_array($permissions[0])) {
             $permissions = $permissions[0];
         }
 
         foreach ($permissions as $permission) {
-            if ($this->hasPermissionTo($permission)) {
+            if ($this->hasPermissionTo($permission, null, $organization)) {
                 return true;
             }
         }
