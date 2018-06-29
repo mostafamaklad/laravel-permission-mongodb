@@ -223,26 +223,6 @@ trait HasRoles
     }
 
     /**
-     * Determine given data present in array or not
-     *
-     * @param $needle
-     * @param $haystack
-     * @param bool $strict
-     * @return bool
-     */
-    public function inMultiDimensionalArray($needle, $haystack, $strict = false)
-    {
-        foreach ($haystack as $item) {
-            if (($strict ? $item === $needle : $item == $needle) ||
-                (is_array($item) && $this->inMultiDimensionalArray($needle, $item, $strict))) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Determine if the model has (one of) the given role(s).
      *
      * @param $roles
