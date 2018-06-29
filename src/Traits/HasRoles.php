@@ -256,27 +256,38 @@ trait HasRoles
             $roles = \explode('|', $roles);
         }
 
+        $roleArray = [];
         if (empty($roleAssignmentId)) {
-            return false;
-        }
+            foreach ($this->role_assignments as $roleAssignment) {
+                foreach ($roleAssignment['roles'] as $value) {
+                    array_push($roleArray, $value['name']);
+                }
+            }
 
-        $isRoleAvailable = false;
-
-        foreach ($this->role_assignments as $roleAssignment) {
-            if (in_array($roleAssignmentId, $roleAssignment)) {
-                foreach ($roles as $role) {
-                    if ($this->inMultiDimensionalArray($role, $roleAssignment['roles'])) {
-                        $isRoleAvailable = true;
-                    } else {
-                        if ($allRoles) {
-                            $isRoleAvailable = false;
-                        }
+        } else {
+            foreach ($this->role_assignments as $roleAssignment) {
+                if (in_array($roleAssignmentId, $roleAssignment)) {
+                    foreach ($roleAssignment['roles'] as $value) {
+                        array_push($roleArray, $value['name']);
                     }
                 }
             }
         }
 
-        return $isRoleAvailable;
+        if ($allRoles) {
+            if (count(array_intersect($roles, $roleArray)) == count($roles)) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } else {
+            if (count(array_intersect($roles, $roleArray)) > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 
     /**
@@ -288,9 +299,14 @@ trait HasRoles
      */
     public function hasAnyRole($roles, $organization): bool
     {
-        $roleAssignment = RoleAssignment::where('organization_id', $organization->_id)->first();
+        $roleAssignmentID = null;
 
-        return $this->hasRole($roles, $roleAssignment->_id, false);
+        if (!empty($organization)) {
+            $roleAssignment = RoleAssignment::where('organization_id', $organization->_id)->first();
+            $roleAssignmentID = $organization->_id;
+        }
+
+        return $this->hasRole($roles, $roleAssignmentID, false);
     }
 
     /**
@@ -302,9 +318,14 @@ trait HasRoles
      */
     public function hasAllRoles($roles, $organization): bool
     {
-        $roleAssignment = RoleAssignment::where('organization_id', $organization->_id)->first();
+        $roleAssignmentID = null;
 
-        return $this->hasRole($roles, $roleAssignment->_id, true);
+        if (!empty($organization)) {
+            $roleAssignment = RoleAssignment::where('organization_id', $organization->_id)->first();
+            $roleAssignmentID = $roleAssignment->_id;
+        }
+
+        return $this->hasRole($roles, $roleAssignmentID, true);
     }
 
     /**
