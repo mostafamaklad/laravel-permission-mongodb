@@ -7,6 +7,7 @@ use Closure;
 use Maklad\Permission\Exceptions\UnauthorizedRole;
 use Maklad\Permission\Exceptions\UserNotLoggedIn;
 use Maklad\Permission\Helpers;
+use Maklad\Permission\Models\Organization;
 
 /**
  * Class RoleMiddleware
@@ -29,9 +30,16 @@ class RoleMiddleware
             throw new UserNotLoggedIn(403, $helpers->getUserNotLoggedINMessage());
         }
 
-        $roles = \is_array($role) ? $role : \explode('|', $role);
+        $role = \explode(';', $role);
 
-        if (! app('auth')->user()->hasAnyRole($roles)) {
+        $organization = null;
+        if(!empty($role[1])){
+            $organization = Organization::where('_id', $role[1])->first();
+        }
+
+        $roles = \is_string($role[0]) ? \explode('|', $role[0]) : $role[0];
+
+        if (! app('auth')->user()->hasAnyRole($organization, $roles)) {
             $helpers = new Helpers();
             throw new UnauthorizedRole(403, $helpers->getUnauthorizedRoleMessage(implode(', ', $roles)), $roles);
         }
