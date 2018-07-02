@@ -257,25 +257,6 @@ trait HasPermissions
     }
 
     /**
-     * Determine given data present in array or not
-     *
-     * @param $needle
-     * @param $haystack
-     * @param bool $strict
-     * @return bool
-     */
-    public function inMultiDimensionalArray($needle, $haystack, $strict = false)
-    {
-        foreach ($haystack as $item) {
-            if (($strict ? $item === $needle : $item == $needle) ||
-                (is_array($item) && $this->inMultiDimensionalArray($needle, $item, $strict))) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Determine if the model has, via organization, the given permission.
      *
      * @param $permission
@@ -286,16 +267,15 @@ trait HasPermissions
     public function hasPermissionViaOrg($permission, $guardName = null, $organization = null)
     {
         if (empty($organization)) {
-            $isPermissionAvailable = false;
             foreach ($this->role_assignments as $roleAssignment) {
                 foreach ($roleAssignment['roles'] as $role) {
-                    if ($this->inMultiDimensionalArray($permission['name'], $role['permissions'])) {
-                        $isPermissionAvailable = true;
-                    }
+                    $permissionArray[] = array_column($role['permissions'], 'name');
                 }
             }
 
-            return $isPermissionAvailable;
+            $permissionArray = collect($permissionArray)->flatten()->toArray();
+
+            return in_array($permission->name, $permissionArray);
         }
 
         $roleIds = $permission->roles()->pluck('_id')->toArray();
@@ -324,9 +304,11 @@ trait HasPermissions
             $permissions = $permissions[0];
         }
 
-        foreach ($permissions as $permission) {
-            if ($this->hasPermissionTo($permission, null, $organization)) {
-                return true;
+        if (!empty($permissions)) {
+            foreach ($permissions as $permission) {
+                if ($this->hasPermissionTo($permission, null, $organization)) {
+                    return true;
+                }
             }
         }
 
