@@ -23,21 +23,21 @@ class PermissionMiddleware
      * @return mixed
      * @throws \Maklad\Permission\Exceptions\UnauthorizedException
      */
-    public function handle($request, Closure $next, $permission)
+    public function handle($request, Closure $next, $param)
     {
         if (app('auth')->guest()) {
             $helpers = new Helpers();
             throw new UserNotLoggedIn(403, $helpers->getUserNotLoggedINMessage());
         }
 
-        $permission = \explode(';', $permission);
+        $permission = \explode(';', $param);
 
         $organization = null;
         if(!empty($permission[1])){
             $organization = Organization::where('_id', $permission[1])->first();
         }
 
-        $permissions = \is_string($permission[0]) ? \explode('|', $permission[0]) : $permission[0];
+        $permissions = \explode('|', $permission[0]);
 
 
         if (! app('auth')->user()->hasAnyPermission($organization, $permissions)) {

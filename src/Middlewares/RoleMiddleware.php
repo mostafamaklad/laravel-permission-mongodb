@@ -23,21 +23,21 @@ class RoleMiddleware
      * @return mixed
      * @throws \Maklad\Permission\Exceptions\UnauthorizedException
      */
-    public function handle($request, Closure $next, $role)
+    public function handle($request, Closure $next, $param)
     {
         if (app('auth')->guest()) {
             $helpers = new Helpers();
             throw new UserNotLoggedIn(403, $helpers->getUserNotLoggedINMessage());
         }
 
-        $role = \explode(';', $role);
+        $role = \explode(';', $param);
 
         $organization = null;
         if(!empty($role[1])){
             $organization = Organization::where('_id', $role[1])->first();
         }
 
-        $roles = \is_string($role[0]) ? \explode('|', $role[0]) : $role[0];
+        $roles = \explode('|', $role[0]);
 
         if (! app('auth')->user()->hasAnyRole($organization, $roles)) {
             $helpers = new Helpers();
