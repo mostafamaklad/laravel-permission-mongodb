@@ -236,37 +236,24 @@ trait HasRoles
             $roles = \explode('|', $roles);
         }
 
-        $roleArray = [];
         if (empty($roleAssignmentId)) {
             foreach ($this->role_assignments as $roleAssignment) {
-                foreach ($roleAssignment['roles'] as $value) {
-                    array_push($roleArray, $value['name']);
-                }
+                $roleArray[] = array_column($roleAssignment['roles'], 'name');
             }
-
         } else {
             foreach ($this->role_assignments as $roleAssignment) {
                 if (in_array($roleAssignmentId, $roleAssignment)) {
-                    foreach ($roleAssignment['roles'] as $value) {
-                        array_push($roleArray, $value['name']);
-                    }
+                    $roleArray[] = array_column($roleAssignment['roles'], 'name');
                 }
             }
         }
 
-        if ($allRoles) {
-            if (count(array_intersect($roles, $roleArray)) == count($roles)) {
-                return true;
-            } else {
-                return false;
-            }
+        $roleArray = collect($roleArray)->flatten()->toArray();
 
+        if ($allRoles) {
+            return (count(array_intersect($roles, $roleArray)) == count($roles));
         } else {
-            if (count(array_intersect($roles, $roleArray)) > 0) {
-                return true;
-            } else {
-                return false;
-            }
+            return (count(array_intersect($roles, $roleArray)) > 0);
         }
     }
 
