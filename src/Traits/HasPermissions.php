@@ -238,11 +238,11 @@ trait HasPermissions
      *
      * @param $permission
      * @param null $guardName
-     * @param null $orgId
+     * @param null $organization
      * @return bool
      * @throws \ReflectionException
      */
-    public function hasPermissionTo($permission, $guardName = null, $orgId = null): bool
+    public function hasPermissionTo($permission, $guardName = null, $organization = null): bool
     {
         if (\is_string($permission)) {
             $permission = \app(Permission::class)->findByName(
@@ -251,7 +251,8 @@ trait HasPermissions
             );
         }
 
-        return $this->hasDirectPermission($permission) || $this->hasPermissionViaRole($permission) || $this->hasPermissionViaOrg($permission, null, $orgId);
+        return $this->hasPermissionViaRole($permission)
+            || $this->hasPermissionViaOrg($permission, null, $organization);
     }
 
     /**
@@ -259,18 +260,31 @@ trait HasPermissions
      *
      * @param $permission
      * @param null $guardName
-     * @param null $orgId
+     * @param null $organization
      * @return bool
      */
-    public function hasPermissionViaOrg($permission, $guardName = null, $orgId = null)
+    public function hasPermissionViaOrg($permission, $guardName = null, $organization = null)
     {
-        $organization = \app(Organization::class)->where('_id', $orgId)->first();
-        if(empty($organization)){
-            return false;
+        if (empty($organization)) {
+            foreach ($this->role_assignments as $roleAssignment) {
+                foreach ($roleAssignment['roles'] as $role) {
+                    $permissionArray[] = array_column($role['permissions'], 'name');
+                }
+            }
+
+            $permissionArray = collect($permissionArray)->flatten()->toArray();
+
+            return in_array($permission->name, $permissionArray);
         }
 
         $roleIds = $permission->roles()->pluck('_id')->toArray();
-        $roleAssignments = \app(RoleAssignment::class)->where('organization_id', $orgId)->where('weight', '<=', $organization->weight)->whereIn('_id', $this->role_assignment_ids)->whereIn('role_ids', $roleIds)->get();
+
+        $roleAssignments = \app(RoleAssignment::class)
+            ->where('organization_id', $organization->_id)
+            ->where('weight', '<=', $organization->weight)
+            ->whereIn('_id', $this->role_assignment_ids)
+            ->whereIn('role_ids', $roleIds)
+            ->get();
 
         return $roleAssignments->count() > 0;
     }
@@ -278,20 +292,22 @@ trait HasPermissions
     /**
      * Determine if the model has any of the given permissions.
      *
-     * @param array ...$permissions
-     *
+     * @param null $organization
+     * @param mixed ...$permissions
      * @return bool
      * @throws \ReflectionException
      */
-    public function hasAnyPermission(...$permissions): bool
+    public function hasAnyPermission($organization, ...$permissions): bool
     {
         if (\is_array($permissions[0])) {
             $permissions = $permissions[0];
         }
 
-        foreach ($permissions as $permission) {
-            if ($this->hasPermissionTo($permission)) {
-                return true;
+        if (!empty($permissions)) {
+            foreach ($permissions as $permission) {
+                if ($this->hasPermissionTo($permission, null, $organization)) {
+                    return true;
+                }
             }
         }
 
