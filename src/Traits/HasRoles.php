@@ -236,6 +236,8 @@ trait HasRoles
             $roles = \explode('|', $roles);
         }
 
+        $roleArray = [];
+
         if (empty($roleAssignmentId)) {
             foreach ($this->role_assignments as $roleAssignment) {
                 $roleArray[] = array_column($roleAssignment['roles'], 'name');
@@ -244,6 +246,7 @@ trait HasRoles
             foreach ($this->role_assignments as $roleAssignment) {
                 if (in_array($roleAssignmentId, $roleAssignment)) {
                     $roleArray[] = array_column($roleAssignment['roles'], 'name');
+                    break;
                 }
             }
         }
@@ -252,9 +255,8 @@ trait HasRoles
 
         if ($allRoles) {
             return (count(array_intersect($roles, $roleArray)) == count($roles));
-        } else {
-            return (count(array_intersect($roles, $roleArray)) > 0);
         }
+        return (count(array_intersect($roles, $roleArray)) > 0);
     }
 
     /**
