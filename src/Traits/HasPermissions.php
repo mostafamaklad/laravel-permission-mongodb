@@ -251,8 +251,7 @@ trait HasPermissions
             );
         }
 
-        return $this->hasDirectPermission($permission)
-            || $this->hasPermissionViaRole($permission)
+        return $this->hasPermissionViaRole($permission)
             || $this->hasPermissionViaOrg($permission, null, $organization);
     }
 
@@ -298,7 +297,7 @@ trait HasPermissions
      * @return bool
      * @throws \ReflectionException
      */
-    public function hasAnyPermission($organization = null, ...$permissions): bool
+    public function hasAnyPermission($organization, ...$permissions): bool
     {
         if (\is_array($permissions[0])) {
             $permissions = $permissions[0];
