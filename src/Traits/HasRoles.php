@@ -225,61 +225,76 @@ trait HasRoles
     /**
      * Determine if the model has (one of) the given role(s).
      *
-     * @param string|array|Role|\Illuminate\Support\Collection $roles
-     *
+     * @param $roles
+     * @param $roleAssignmentId
+     * @param $allRoles
      * @return bool
      */
-    public function hasRole($roles): bool
+    public function hasRole($roles, $roleAssignmentId, $allRoles): bool
     {
         if (\is_string($roles) && false !== \strpos($roles, '|')) {
             $roles = \explode('|', $roles);
         }
 
-        if (\is_string($roles) || $roles instanceof Role) {
-            return $this->roles->contains('name', $roles->name ?? $roles);
+        $roleArray = [];
+
+        if (empty($roleAssignmentId)) {
+            foreach ($this->role_assignments as $roleAssignment) {
+                $roleArray[] = array_column($roleAssignment['roles'], 'name');
+            }
+        } else {
+            foreach ($this->role_assignments as $roleAssignment) {
+                if (in_array($roleAssignmentId, $roleAssignment)) {
+                    $roleArray[] = array_column($roleAssignment['roles'], 'name');
+                    break;
+                }
+            }
         }
 
-        $roles = \collect()->make($roles)->map(function ($role) {
-            return $role instanceof Role ? $role->name : $role;
-        });
+        $roleArray = collect($roleArray)->flatten()->toArray();
 
-        return ! $roles->intersect($this->roles->pluck('name'))->isEmpty();
+        if ($allRoles) {
+            return (count(array_intersect($roles, $roleArray)) == count($roles));
+        }
+        return (count(array_intersect($roles, $roleArray)) > 0);
     }
 
     /**
      * Determine if the model has any of the given role(s).
      *
-     * @param string|array|Role|\Illuminate\Support\Collection $roles
-     *
+     * @param $roles
+     * @param $organization
      * @return bool
      */
-    public function hasAnyRole($roles): bool
+    public function hasAnyRole($roles, $organization): bool
     {
-        return $this->hasRole($roles);
+        $roleAssignmentID = null;
+
+        if (!empty($organization)) {
+            $roleAssignment = RoleAssignment::where('organization_id', $organization->_id)->first();
+            $roleAssignmentID = $organization->_id;
+        }
+
+        return $this->hasRole($roles, $roleAssignmentID, false);
     }
 
     /**
      * Determine if the model has all of the given role(s).
      *
-     * @param string|Role|\Illuminate\Support\Collection $roles
-     *
+     * @param $roles
+     * @param $organization
      * @return bool
      */
-    public function hasAllRoles($roles): bool
+    public function hasAllRoles($roles, $organization): bool
     {
-        if (\is_string($roles) && false !== strpos($roles, '|')) {
-            $roles = \explode('|', $roles);
+        $roleAssignmentID = null;
+
+        if (!empty($organization)) {
+            $roleAssignment = RoleAssignment::where('organization_id', $organization->_id)->first();
+            $roleAssignmentID = $roleAssignment->_id;
         }
 
-        if (\is_string($roles) || $roles instanceof Role) {
-            return $this->hasRole($roles);
-        }
-
-        $roles = \collect()->make($roles)->map(function ($role) {
-            return $role instanceof Role ? $role->name : $role;
-        });
-
-        return $roles->intersect($this->roles->pluck('name')) == $roles;
+        return $this->hasRole($roles, $roleAssignmentID, true);
     }
 
     /**
