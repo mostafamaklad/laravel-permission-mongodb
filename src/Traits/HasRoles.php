@@ -152,8 +152,9 @@ trait HasRoles
             ->whereIn('role_ids', $roleIds)
             ->first();
 
-        if (empty($roleAssignment) ||
-            (!empty($this->role_assignment_ids) && in_array($roleAssignment->_id, $this->role_assignment_ids))) {
+        if (empty($roleAssignment)
+            || (!empty($this->role_assignment_ids) && in_array($roleAssignment->_id, $this->role_assignment_ids))
+            || count(array_intersect($roleIds, $roleAssignment->role_ids)) != count($roles)) {
             return false;
         }
 
