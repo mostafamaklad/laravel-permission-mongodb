@@ -153,9 +153,12 @@ trait HasRoles
             ->first();
 
         if (empty($roleAssignment)
-            || (!empty($this->role_assignment_ids) && in_array($roleAssignment->_id, $this->role_assignment_ids))
             || count(array_intersect($roleIds, $roleAssignment->role_ids)) != count($roles)) {
             return false;
+        }
+
+        if ((!empty($this->role_assignment_ids) && in_array($roleAssignment->_id, $this->role_assignment_ids))) {
+            return $this->updateAssignOrgRole($roles, $roleAssignment);
         }
 
         $roleAssignmentIds = [];
@@ -176,6 +179,52 @@ trait HasRoles
         ];
         $this->role_assignments = $roleAssignmentObjs;
 
+        $isSaved = $this->save();
+        $this->forgetCachedPermissions();
+
+        return $isSaved;
+    }
+
+    /**
+     * Update assign organizational role to user
+     *
+     * @param $roles
+     * @param $roleAssignment
+     * @return bool
+     */
+    function updateAssignOrgRole($roles, $roleAssignment)
+    {
+        $userRoles = [];
+        $userRoleAssignments = [];
+        $targetRoleAssignment = [];
+
+        $userRoleAssignments = $this->role_assignments;
+
+        $roleIds = array_column($roles, '_id');
+
+        foreach ($userRoleAssignments as $key => $userRoleAssignment) {
+            if (in_array($roleAssignment->_id, $userRoleAssignment)) {
+
+                $userRoleIds = array_column($userRoleAssignment['roles'], '_id');
+                if (count(array_intersect($roleIds, $userRoleIds)) > 0) {
+                    return false;
+                }
+
+                $targetRoleAssignment = $userRoleAssignment;
+                $userRoles = array_merge($userRoleAssignment['roles'], $roles);
+                break;
+            }
+        }
+
+        $targetRoleAssignment['roles'] = $userRoles;
+
+        foreach ($userRoleAssignments as $key => $value) {
+            if ($value['_id'] == $targetRoleAssignment['_id']) {
+                $userRoleAssignments[$key] = $targetRoleAssignment;
+            }
+        }
+
+        $this->role_assignments = $userRoleAssignments;
         $isSaved = $this->save();
         $this->forgetCachedPermissions();
 
