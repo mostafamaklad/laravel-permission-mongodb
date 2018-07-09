@@ -67,11 +67,11 @@ trait HasRoles
         $class = get_class($this);
         $organization = \app(Organization::class)->where('class', $class)->first();
 
-        $roleAssignment = \app(RoleAssignment::class)->where('organization_id', $organization->_id)->first();
+        $roleAssignment = \app(RoleAssignment::class)->where('organization_id', $this->_id)->first();
 
         if (empty($roleAssignment)) {
             $roleAssignment = \app(RoleAssignment::class)->create([
-                'organization_id' => $organization->_id,
+                'organization_id' => $this->_id,
                 'weight' => $organization->weight
             ]);
         }
@@ -263,13 +263,16 @@ trait HasRoles
      */
     public function syncRoles(...$roles)
     {
-        $class = get_class($this);
-        $organization = Organization::where('class', $class)->first();
-        $roleAssignment = RoleAssignment::where('organization_id', $organization->_id)->first();
-
-        $roleAssignment->roles()->sync([]);
-
-        return $this->assignRole($roles);
+//        $roleAssignment = RoleAssignment::where('organization_id', $this->_id)->first();
+//
+//        if (empty($roleAssignment)) {
+//            return [];
+//        }
+//
+//        $roleAssignment->roles()->sync([]);
+//
+//        return $this->assignRole($roles);
+        return [];
     }
 
     /**

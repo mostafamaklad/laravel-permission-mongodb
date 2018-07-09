@@ -260,12 +260,12 @@ trait HasPermissions
      *
      * @param $permission
      * @param null $guardName
-     * @param null $organization
+     * @param null $userOrganization
      * @return bool
      */
-    public function hasPermissionViaOrg($permission, $guardName = null, $organization = null)
+    public function hasPermissionViaOrg($permission, $guardName = null, $userOrganization = null)
     {
-        if (empty($organization)) {
+        if (empty($userOrganization)) {
             foreach ($this->role_assignments as $roleAssignment) {
                 foreach ($roleAssignment['roles'] as $role) {
                     $permissionArray[] = array_column($role['permissions'], 'name');
@@ -279,8 +279,15 @@ trait HasPermissions
 
         $roleIds = $permission->roles()->pluck('_id')->toArray();
 
+        $class = get_class($userOrganization);
+        $organization = Organization::where('class', $class)->first();
+
+        if (empty($organization)) {
+            return false;
+        }
+
         $roleAssignments = \app(RoleAssignment::class)
-            ->where('organization_id', $organization->_id)
+            ->where('organization_id', $userOrganization->_id)
             ->where('weight', '<=', $organization->weight)
             ->whereIn('_id', $this->role_assignment_ids)
             ->whereIn('role_ids', $roleIds)
@@ -323,7 +330,7 @@ trait HasPermissions
      */
     protected function hasPermissionViaRole(Permission $permission): bool
     {
-        return $this->hasRole($permission->roles);
+        return $this->hasRole(array_column($permission->roles->toArray(), 'name'), null, false);
     }
 
     /**
