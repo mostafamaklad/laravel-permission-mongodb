@@ -251,8 +251,11 @@ trait HasPermissions
             );
         }
 
-        return $this->hasPermissionViaRole($permission)
-            || $this->hasPermissionViaOrg($permission, null, $organization);
+        if(!empty($organization)){
+            return $this->hasPermissionViaOrg($permission, null, $organization);
+        }
+
+        return $this->hasPermissionViaRole($permission);
     }
 
     /**
