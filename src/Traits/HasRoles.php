@@ -5,7 +5,6 @@ namespace Maklad\Permission\Traits;
 use Illuminate\Support\Collection;
 use Jenssegers\Mongodb\Eloquent\Builder;
 use Jenssegers\Mongodb\Eloquent\Model;
-use Jenssegers\Mongodb\Relations\BelongsToMany;
 use Maklad\Permission\Contracts\RoleInterface as Role;
 use ReflectionException;
 
@@ -31,7 +30,7 @@ trait HasRoles
     /**
      * A model may have multiple roles.
      */
-    public function roles(): BelongsToMany
+    public function roles()
     {
         return $this->belongsToMany(\config('permission.models.role'))->withTimestamps();
     }
