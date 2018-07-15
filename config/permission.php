@@ -26,7 +26,6 @@ return [
 
         'role' => Maklad\Permission\Models\Role::class,
 
-
     ],
 
     'collection_names' => [
