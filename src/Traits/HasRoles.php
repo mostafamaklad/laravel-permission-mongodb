@@ -32,7 +32,7 @@ trait HasRoles
      */
     public function roles()
     {
-        return $this->belongsToMany(\config('permission.models.role'))->withTimestamps();
+        return $this->belongsToMany(config('permission.models.role'));
     }
 
     /**
