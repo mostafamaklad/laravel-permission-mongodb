@@ -53,12 +53,12 @@ abstract class TestCase extends Orchestra
         $this->reloadPermissions();
 
         $this->testUser = User::first();
-        $this->testUserRole = \app(Role::class)->where('name', 'testRole')->first();
-        $this->testUserPermission = \app(Permission::class)->where('name', 'edit-articles')->first();
+        $this->testUserRole = \app(\config('permission.models.role'))->where('name', 'testRole')->first();
+        $this->testUserPermission = \app(\config('permission.models.permission'))->where('name', 'edit-articles')->first();
 
         $this->testAdmin = Admin::first();
-        $this->testAdminRole = \app(Role::class)->where('name', 'testAdminRole')->first();
-        $this->testAdminPermission = \app(Permission::class)->where('name', 'admin-permission')->first();
+        $this->testAdminRole = \app(\config('permission.models.role'))->where('name', 'testAdminRole')->first();
+        $this->testAdminPermission = \app(\config('permission.models.permission'))->where('name', 'admin-permission')->first();
 
         $this->clearLogTestHandler();
 

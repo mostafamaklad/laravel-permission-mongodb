@@ -184,7 +184,7 @@ trait HasRoles
     protected function getStoredRole($role): Role
     {
         if (\is_string($role)) {
-            return \app(Role::class)->findByName($role, $this->getDefaultGuardName());
+            return \app(\config('permission.models.role'))->findByName($role, $this->getDefaultGuardName());
         }
 
         return $role;

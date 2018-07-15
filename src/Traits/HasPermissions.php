@@ -122,7 +122,7 @@ trait HasPermissions
     protected function getStoredPermission($permission): Permission
     {
         if (\is_string($permission)) {
-            return \app(Permission::class)->findByName($permission, $this->getDefaultGuardName());
+            return \app(config('permission.models.permission'))->findByName($permission, $this->getDefaultGuardName());
         }
 
         return $permission;
@@ -213,7 +213,7 @@ trait HasPermissions
         return $this->load('roles', 'roles.permissions')
             ->roles->flatMap(function (Role $role) {
                 return $role->permissions->flatMap(function(PermissionRole $permissionRole) {
-                    return [\app(Permission::class)->find($permissionRole->permission_id)];
+                    return [\app(\config('permission.models.permission'))->find($permissionRole->permission_id)];
                 });
             });
     }
@@ -241,7 +241,7 @@ trait HasPermissions
     public function hasPermissionTo($permission, $guardName = null): bool
     {
         if (\is_string($permission)) {
-            $permission = \app(Permission::class)->findByName(
+            $permission = \app(\config('permission.models.permission'))->findByName(
                 $permission,
                 $guardName ?? $this->getDefaultGuardName()
             );
@@ -296,7 +296,7 @@ trait HasPermissions
     public function hasDirectPermission($permission): bool
     {
         if (\is_string($permission)) {
-            $permission = \app(Permission::class)->findByName($permission, $this->getDefaultGuardName());
+            $permission = \app(\config('permission.models.permission'))->findByName($permission, $this->getDefaultGuardName());
         }
 
         return $this->permissions->contains('id', $permission->id);
