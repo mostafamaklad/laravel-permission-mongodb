@@ -10,6 +10,7 @@ use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\Guard;
 use Maklad\Permission\Helpers;
 use Maklad\Permission\Models\Role;
+use Maklad\Permission\Models\PermissionRole;
 use Maklad\Permission\PermissionRegistrar;
 
 /**
@@ -211,8 +212,10 @@ trait HasPermissions
     {
         return $this->load('roles', 'roles.permissions')
             ->roles->flatMap(function (Role $role) {
-                return $role->permissions;
-            })->sort()->values();
+                return $role->permissions->flatMap(function(PermissionRole $permissionRole) {
+                    return [\app(Permission::class)->find($permissionRole->permission_id)];
+                });
+            });
     }
 
     /**
