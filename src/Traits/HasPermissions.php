@@ -210,12 +210,7 @@ trait HasPermissions
      */
     public function getPermissionsViaRoles(): Collection
     {
-        return $this->load('roles', 'roles.permissions')
-            ->roles->flatMap(function (Role $role) {
-                return $role->permissions->flatMap(function(PermissionRole $permissionRole) {
-                    return [\app(\config('permission.models.permission'))->find($permissionRole->permission_id)];
-                });
-            });
+        return \app(\config('permission.models.permission'))->whereIn('role_id', $this->role_ids)->get()->sort()->values();
     }
 
     /**
@@ -227,6 +222,16 @@ trait HasPermissions
             ->merge($this->getPermissionsViaRoles())
             ->sort()
             ->values();
+    }
+
+    /**
+     * Return all the permissions names the model has, both directly and via roles.
+     */
+    public function getAllPermissionsNames(): Collection
+    {
+        return $this->getAllPermissions()->map(function ($permission) {
+            return $permission->name;
+        });
     }
 
     /**

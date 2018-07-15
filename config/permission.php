@@ -26,13 +26,6 @@ return [
 
         'role' => Maklad\Permission\Models\Role::class,
 
-        /*
-         * Relation model to glue permission and role together.
-         */
-
-        'permission_role' => Maklad\Permission\Models\PermissionRole::class,
-
-
 
     ],
 

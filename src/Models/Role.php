@@ -146,13 +146,4 @@ class Role extends Model implements RoleInterface
 
         return $this->permissions->contains('id', $permission->id);
     }
-
-    /**
-     * A role may have multiple permissions
-     * @return hasMany
-     */
-    public function permissions()
-    {
-        return $this->hasMany(config('permission.models.permission_role'));
-    }
 }
