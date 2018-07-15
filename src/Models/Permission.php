@@ -4,6 +4,7 @@ namespace Maklad\Permission\Models;
 
 use Illuminate\Support\Collection;
 use Jenssegers\Mongodb\Eloquent\Model;
+use Jenssegers\Mongodb\Relations\BelongsToMany;
 use Maklad\Permission\Contracts\PermissionInterface;
 use Maklad\Permission\Exceptions\PermissionAlreadyExists;
 use Maklad\Permission\Exceptions\PermissionDoesNotExist;
@@ -103,9 +104,9 @@ class Permission extends Model implements PermissionInterface
      * A permission can be applied to roles.
      * @return BelongsToMany
      */
-    public function roles()
+    public function roles(): BelongsToMany
     {
-        return $this->belongsToMany(config('permission.models.role'));
+        return Model::belongsToMany(config('permission.models.role'));
     }
 
     /**

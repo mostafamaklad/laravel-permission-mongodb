@@ -3,6 +3,7 @@
 namespace Maklad\Permission\Models;
 
 use Jenssegers\Mongodb\Eloquent\Model;
+use Jenssegers\Mongodb\Relations\BelongsToMany;
 use Maklad\Permission\Contracts\RoleInterface;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\Exceptions\RoleAlreadyExists;
@@ -145,5 +146,14 @@ class Role extends Model implements RoleInterface
         }
 
         return $this->permissions->contains('id', $permission->id);
+    }
+
+    /**
+     * A role can have many permissions.
+     * @return BelongsToMany
+     */
+    public function permissions(): BelongsToMany
+    {
+        return Model::belongsToMany(config('permission.models.permission'));
     }
 }
