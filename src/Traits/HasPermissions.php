@@ -90,9 +90,10 @@ trait HasPermissions
      */
     public function syncPermissions(...$permissions)
     {
-        $this->permissions()->sync([]);
-
-        return $this->givePermissionTo($permissions);
+//        $this->permissions()->sync([]);
+//
+//        return $this->givePermissionTo($permissions);
+        return [];
     }
 
     /**
