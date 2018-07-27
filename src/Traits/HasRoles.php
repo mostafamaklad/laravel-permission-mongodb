@@ -255,6 +255,7 @@ trait HasRoles
     }
 
     /**
+     * @deprecated
      * Remove all current roles and set the given ones.
      *
      * @param array ...$roles

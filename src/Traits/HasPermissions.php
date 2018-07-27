@@ -81,6 +81,7 @@ trait HasPermissions
     }
 
     /**
+     * @deprecated
      * Remove all current permissions and set the given ones.
      *
      * @param string|array|Permission|\Illuminate\Support\Collection $permissions
