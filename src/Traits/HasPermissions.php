@@ -81,6 +81,7 @@ trait HasPermissions
     }
 
     /**
+     * @deprecated
      * Remove all current permissions and set the given ones.
      *
      * @param string|array|Permission|\Illuminate\Support\Collection $permissions
@@ -90,9 +91,10 @@ trait HasPermissions
      */
     public function syncPermissions(...$permissions)
     {
-        $this->permissions()->sync([]);
-
-        return $this->givePermissionTo($permissions);
+//        $this->permissions()->sync([]);
+//
+//        return $this->givePermissionTo($permissions);
+        return [];
     }
 
     /**

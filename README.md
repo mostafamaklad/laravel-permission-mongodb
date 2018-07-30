@@ -14,7 +14,7 @@
 This package allows you to manage user permissions and roles in a database.
 It is inspired from [laravel-permission][link-laravel-permission]. Same code same every thing but it is compatible with [laravel-mongodb][link-laravel-mongodb]
 
-Once installed you can do stuff like this:
+Once installed you can do like this:
 
 ```php
 // Adding permissions to a user
@@ -26,20 +26,11 @@ $user->assignRole('writer');
 $role->givePermissionTo('edit articles');
 ```
 
-If you're using multiple guards we've got you covered as well. Every guard will have its own set of permissions and roles that can be assigned to the guard's users. Read about it in the [using multiple guards](#using-multiple-guards) section of the readme.
-
-Because all permissions will be registered on [Laravel's gate](https://laravel.com/docs/5.5/authorization), you can test if a user has a permission with Laravel's default `can` function:
-
-```php
-$user->can('edit articles');
-```
-
 ## Table of contents
 * [Installation](#installation)
     * [Laravel](#laravel)
-    * [Lumen](#lumen)
 * [Usage](#usage)
-    * [Using "direct" permissions](#using-direct-permissions)
+    * [Midified Functions](#modified-functions)
     * [Using permissions via roles](#using-permissions-via-roles)
     * [Using Blade directives](#using-blade-directives)
 * [Using multiple guards](#using-multiple-guards)
@@ -54,11 +45,7 @@ $user->can('edit articles');
 * [Cache](#cache)
     * [Manual cache reset](#manual-cache-reset)
     * [Cache Identifier](#cache-identifier)
-* [Need a UI?](#need-a-ui)
-* [Change log](#change-log)
 * [Testing](#testing)
-* [Contributing](#contributing)
-* [Security](#security)
 * [Credits](#credits)
 * [License](#license)
 
@@ -164,43 +151,6 @@ return [
 ];
 ```
 
-### Lumen
-
-You can install the package via Composer:
-
-``` bash
-composer require mostafamaklad/laravel-permission-mongodb
-```
-
-Copy the required files:
-
-```bash
-cp vendor/mostafamaklad/laravel-permission-mongodb/config/permission.php config/permission.php
-```
-
-You will also need to create another configuration file at `config/auth.php`. Get it on the Laravel repository or just run the following command:
-
-```bash
-curl -Ls https://raw.githubusercontent.com/laravel/lumen-framework/5.5/config/auth.php -o config/auth.php
-```
-
-Then, in `bootstrap/app.php`, register the middlewares:
-
-```php
-$app->routeMiddleware([
-    'auth'       => App\Http\Middleware\Authenticate::class,
-    'permission' => Maklad\Permission\Middlewares\PermissionMiddleware::class,
-    'role'       => Maklad\Permission\Middlewares\RoleMiddleware::class,
-]);
-```
-
-As well as the configuration and the service provider:
-
-```php
-$app->configure('permission');
-$app->register(Maklad\Permission\PermissionServiceProvider::class);
-```
-
 ## Usage
 
 First, add the `Maklad\Permission\Traits\HasRoles` trait to your `User` model(s):
@@ -300,51 +250,99 @@ $users = User::permission('edit articles')->get(); // Returns only users with th
 The scope can accept a string, a `\Maklad\Permission\Models\Role` object, a `\Maklad\Permission\Models\Permission` object or an `\Illuminate\Support\Collection` object.
 
 
-### Using "direct" permissions
+###Modified Functions
 
-A permission can be given to any user with the `HasRoles` trait:
+Following functions are modified by MetaCloud developer, those are:
 
-```php
-$user->givePermissionTo('edit articles');
+- **hasPermissionTo:** It will determine if the model has the given permission or not.
+    
+    _Parameters are:_ `$permission` (type: String, e.g. 'Create PR'), `$guardName` (type: String, e.g. 'api'), `$organization` (type: Collection e.g. company or cost center collection)
 
-// You can also give multiple permission at once
-$user->givePermissionTo('edit articles', 'delete articles');
+    _Return:_ Boolean
 
-// You may also pass an array
-$user->givePermissionTo(['edit articles', 'delete articles']);
-```
+    ```php
+    $data = $user->hasPermissionTo('Create PR', 'api', $organization);
+    ```
+    If we pass `$organization` = null, then `hasPermissionTo` will search given permission in all available role assignments of user.
 
-A permission can be revoked from a user:
 
-```php
-$user->revokePermissionTo('edit articles');
-```
+- **assignRole:** Assign the given role to the Role Assignment (if available, otherwise it will create role assignment first then assign the roles)
 
-Or revoke & add new permissions in one go:
+    _Parameters are:_ `$roles` (type: Array, e.g. ['role1', 'role2'])
+    
+    _Return:_ role collections
+    
+    ```php
+    $data = $company->assignRole(['role1', 'role2']);
+    ```
 
-```php
-$user->syncPermissions(['edit articles', 'delete articles']);
-```
 
-You can test if a user has a permission:
+- **assignOrgRole:** Assign the given role (role assignment) to the User.
 
-```php
-$user->hasPermissionTo('edit articles');
-```
+    _Parameters are:_ `$organization` (type: Collection, e.g. company or cost center collection), $roles` (type: Array, e.g. ['role1', 'role2'])
 
-...or if a user has multiple permissions:
+    _Return:_ Boolean
 
-```php
-$user->hasAnyPermission(['edit articles', 'publish articles', 'unpublish articles']);
-```
+    ```php
+    $data = $user->assignOrgRole($organization, ['role1', 'role2']);
+    ```
 
-Saved permissions will be registered with the `Illuminate\Auth\Access\Gate` class for the default guard. So you can
-test if a user has a permission with Laravel's default `can` function:
 
-```php
-$user->can('edit articles');
-```
+- **syncPermissions:** Remove all current permissions and set the given permissions.
 
+    _Parameters are:_ `$permissions` (type: Array, e.g. ['permission1', 'permission2'])
+    
+    _Return:_ permission collections
+    
+    ```php
+    $data = $role->syncPermissions(['permission1', 'permission2']);
+    ```
+
+
+- **syncRoles:** Remove all current roles and set the given roles.
+
+    _Parameters are:_ `$roles` (type: Array, e.g. ['role1', 'role2'])
+    
+    _Return:_ role collections
+    
+    ```php
+    $data = $company->syncRoles(['role1', 'role2']);
+    ```    
+
+
+- **hasAllRoles:** Determine if the model has all of the given roles.
+
+    _Parameters are:_ `$roles` (type: Array, e.g. ['role1', 'role2']), `$organization` (type: Collection, e.g. company or cost center collection)
+
+    _Return:_ Boolean
+
+    ```php
+    $data = $user->hasAllRoles(['role1', 'role2'], $organization);
+    ``` 
+
+
+- **hasAnyPermission:** Determine if the model has any of the given permissions.
+
+    _Parameters are:_ `$organization` (type: Collection, e.g. company or cost center collection), `$permissions` (type: Array, e.g. ['permission1', 'permission2'])
+
+    _Return:_ Boolean
+
+    ```php
+    $data = $user->hasAnyPermission($organization, ['permission1', 'permission2']);
+    ``` 
+
+
+- **hasRole:** Determine if the model has (one of) the given role(s).
+
+    _Parameters are:_ `$roles` (type: Array, e.g. ['role1', 'role2']), `$roleAssignmentId` (type: String, e.g. '5689e3a1961a354f018b4702'), `$allRoles` (type: Boolean, e.g. true)
+
+    _Return:_ Boolean
+
+    ```php
+    $data = $this->hasRole(['role1', 'role2'], '5689e3a1961a354f018b4702', true);
+    ``` 
+    
+    
 ### Using permissions via roles
 
 A role can be assigned to any user:
@@ -729,33 +727,15 @@ php artisan cache:forget maklad.permission.cache
 
 > Note: If you are leveraging a caching service such as `redis` or `memcached` and there are other sites running on your server, you could run into cache clashes. It is prudent to set your own cache `prefix` in `/config/cache.php` for each application uniquely. This will prevent other applications from accidentally using/changing your cached data.
 
-## Need a UI?
-
-As we are based on [laravel-permission][link-laravel-permission]. The package doesn't come with any screens out of the box, you should build that yourself. To get started check out [this extensive tutorial](https://scotch.io/tutorials/user-authorization-in-laravel-54-with-spatie-laravel-permission) by [Caleb Oki](http://www.caleboki.com/).
-
-## Change log
-
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-
 ## Testing
 
 ``` bash
 composer test
 ```
 
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) and [CONDUCT](CONDUCT.md) for details.
-
-## Security
-
-If you discover any security-related issues, please email dev.mostafa.maklad@gmail.com instead of using the issue tracker.
-
 ## Credits
 
-- [Freek Van der Herten][link-freekmurze]
-- [Mostafa Maklad][link-author]
-- [All Contributors][link-contributors]
+- [MetaCloud][link-metacloud]
 
 ## License
 
@@ -816,3 +796,4 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [link-laravel-permission]: https://github.com/spatie/laravel-permission
 [link-laravel-mongodb]: https://github.com/jenssegers/laravel-mongodb
 [link-freekmurze]: https://github.com/freekmurze
+[link-metacloud]: https://github.com/Metabuyer
