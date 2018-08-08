@@ -20,4 +20,10 @@ class Organization extends Model
 
         $this->setTable(\config('permission.collection_names.organizations'));
     }
+
+    protected $fillable = [
+        'name',
+        'class',
+        'weight'
+    ];
 }
