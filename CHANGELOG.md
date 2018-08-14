@@ -2,6 +2,10 @@
 
 All Notable changes to `laravel-permission-mongodb` will be documented in this file.
 
+## 1.8.2 - 2018-08-14
+
+### Changed
+ - Exclude yml files from export
 
 ## 1.8.1 - 2018-06-24
 
