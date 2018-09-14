@@ -401,4 +401,28 @@ trait HasRoles
 
         return $roles;
     }
+
+    /**
+     * Check permission (e.g. Read PR, Read PO etc.) for given user
+     *
+     * @param $permission
+     * @param $user
+     * @return array
+     */
+    public function checkPermissionForUser($permission, $user)
+    {
+        $organizations = Organization::all();
+
+        $organizationArray = [];
+        foreach ($organizations as $organization) {
+            foreach ($user['role_assignments'] as $roleAssignment) {
+                if ($organization->weight == $roleAssignment['weight']) {
+                    $organizationArray[$organization->name][] = $roleAssignment['organization_id'];
+                }
+
+            }
+        }
+
+        return $organizationArray;
+    }
 }
