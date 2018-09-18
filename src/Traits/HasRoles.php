@@ -409,7 +409,7 @@ trait HasRoles
      * @param $user
      * @return array
      */
-    public function checkPermissionForUser($permission, $user)
+    public function getOrganizationsPermission($permission, $user)
     {
         $organizations = Organization::all();
 
