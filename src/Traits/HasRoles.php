@@ -416,8 +416,15 @@ trait HasRoles
         $organizationArray = [];
         foreach ($organizations as $organization) {
             foreach ($user['role_assignments'] as $roleAssignment) {
+                $permissionName = [];
                 if ($organization->weight == $roleAssignment['weight']) {
-                    $organizationArray[$organization->name][] = $roleAssignment['organization_id'];
+                    foreach ($roleAssignment['roles'] as $roles){
+                        $names = array_column($roles['permissions'], 'name');
+                        $permissionName = array_merge($permissionName, $names);
+                    }
+                    if(in_array($permission, $permissionName)){
+                        $organizationArray[$organization->name][] = $roleAssignment['organization_id'];
+                    }
                 }
 
             }
