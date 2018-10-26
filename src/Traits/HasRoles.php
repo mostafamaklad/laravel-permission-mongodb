@@ -124,9 +124,9 @@ trait HasRoles
     /**
      * Assign the given role to the User.
      *
-     * @param null $organization
+     * @param $organization
      * @param mixed ...$roles
-     * @return bool
+     * @return array|bool
      */
     public function assignOrgRole($organization, ...$roles)
     {
@@ -171,18 +171,24 @@ trait HasRoles
         $roleAssignmentIds[] = $roleAssignment->_id;
         $this->role_assignment_ids = $roleAssignmentIds;
 
-        $roleAssignmentObjs[] = [
+        $preparedRoleAssignment = [
             '_id' => $roleAssignment->_id,
             'weight' => $roleAssignment->weight,
             'organization_id' => $roleAssignment->organization_id,
             'roles' => $roles
         ];
+
+        $roleAssignmentObjs[] = $preparedRoleAssignment;
         $this->role_assignments = $roleAssignmentObjs;
 
         $isSaved = $this->save();
         $this->forgetCachedPermissions();
 
-        return $isSaved;
+        if($isSaved){
+            return $preparedRoleAssignment;
+        }
+
+        return false;
     }
 
     /**
@@ -431,5 +437,110 @@ trait HasRoles
         }
 
         return $organizationArray;
+    }
+
+    /**
+     * Update user's role assignment with given role assignments payload
+     *
+     * @param $givenRoleAssignments
+     * @return mixed
+     * @throws \Exception
+     */
+    public function updateUserRoleAssignments($givenRoleAssignments)
+    {
+        if (empty($givenRoleAssignments)) {
+            return false;
+        }
+
+        $userRoleAssignments = $this->role_assignments;
+        $userOrganizationIds = array_column($userRoleAssignments, 'organization_id');
+
+        foreach ($givenRoleAssignments as $key => $givenRoleAssignment) {
+            if (!RoleAssignment::where('organization_id', $givenRoleAssignment['organization_id'])->exists()) {
+                throw new \Exception('Role Assignment is not found.');
+            } else {
+                if (!in_array($givenRoleAssignment['organization_id'], $userOrganizationIds) && !$givenRoleAssignment['is_deleted']) {
+                    if (!$this->checkRolesInRoleAssignment($givenRoleAssignment['roles'], $givenRoleAssignment['organization_id'])) {
+                        throw new \Exception('Roles does not belongs to given organization');
+                    }
+
+                    $savedRoleAssignment = $this->assignOrgRole($givenRoleAssignment['organization_id'], $givenRoleAssignment['roles']);
+
+                    if (!is_array($savedRoleAssignment)) {
+                        throw new \Exception('Something went wrong.');
+                    }
+                    $userRoleAssignments[] = $savedRoleAssignment;
+                } else {
+                    $userRoleAssignments = $this->prepareUserRoleAssignment($userRoleAssignments, $givenRoleAssignment);
+                }
+            }
+        }
+
+        $this->role_assignments = $userRoleAssignments;
+
+        $newRoleAssignmentIds = array_column($userRoleAssignments, '_id');
+        $this->role_assignment_ids = $newRoleAssignmentIds;
+
+        return $this->save();
+    }
+
+    /**
+     * Prepared (edit and delete) user role assignments with given parameters
+     *
+     * @param $userRoleAssignments
+     * @param $givenRoleAssignment
+     * @return array
+     * @throws \Exception
+     */
+    public function prepareUserRoleAssignment($userRoleAssignments, $givenRoleAssignment)
+    {
+        foreach ($userRoleAssignments as $index => $roleAssignment) {
+            if (!$this->checkRolesInRoleAssignment($givenRoleAssignment['roles'], $givenRoleAssignment['organization_id'])) {
+                throw new \Exception('Roles does not belongs to given organization');
+            }
+
+            if ($givenRoleAssignment['organization_id'] == $roleAssignment['organization_id']) {
+                if (!$givenRoleAssignment['is_deleted']) {
+                    $roles = \collect($givenRoleAssignment['roles'])
+                        ->flatten()
+                        ->map(function ($role) {
+                            $role = $this->getStoredRole($role);
+
+                            return $this->prepareRoles($role);
+                        })
+                        ->toArray($givenRoleAssignment['roles']);
+
+                    $userRoleAssignments[$index]['roles'] = $roles;
+                } else {
+                    unset($userRoleAssignments[$index]);
+                }
+            }
+        }
+
+        return $userRoleAssignments;
+    }
+
+    /**
+     * Check given roles belongs to given organization
+     *
+     * @param $roles
+     * @param $organizationId
+     * @return bool
+     */
+    public function checkRolesInRoleAssignment($roles, $organizationId)
+    {
+        $roles = \collect($roles)
+            ->flatten()
+            ->map(function ($role) {
+                return $this->getStoredRole($role);
+            })
+            ->toArray($roles);
+        $roleIds = array_column($roles, '_id');
+
+        $roleAssignmentCount = RoleAssignment::where('organization_id', $organizationId)
+            ->whereIn('role_ids', $roleIds)
+            ->count();
+
+        return $roleAssignmentCount > 0;
     }
 }
