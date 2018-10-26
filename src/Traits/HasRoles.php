@@ -452,8 +452,6 @@ trait HasRoles
             return false;
         }
 
-        $deletedRoleAssignments = [];
-
         $userRoleAssignments = $this->role_assignments;
         $userOrganizationIds = array_column($userRoleAssignments, 'organization_id');
 
@@ -463,7 +461,7 @@ trait HasRoles
             } else {
                 if (!in_array($givenRoleAssignment['organization_id'], $userOrganizationIds) && !$givenRoleAssignment['is_deleted']) {
                     if (!$this->checkRolesInRoleAssignment($givenRoleAssignment['roles'], $givenRoleAssignment['organization_id'])) {
-                        throw new \Exception('Roles are not belongs to given organization');
+                        throw new \Exception('Roles does not belongs to given organization');
                     }
 
                     $savedRoleAssignment = $this->assignOrgRole($givenRoleAssignment['organization_id'], $givenRoleAssignment['roles']);
@@ -496,11 +494,9 @@ trait HasRoles
      */
     public function prepareUserRoleAssignment($userRoleAssignments, $givenRoleAssignment)
     {
-        $deletedRoleAssignments = [];
-
         foreach ($userRoleAssignments as $index => $roleAssignment) {
             if (!$this->checkRolesInRoleAssignment($givenRoleAssignment['roles'], $givenRoleAssignment['organization_id'])) {
-                throw new \Exception('Roles are not belongs to given organization');
+                throw new \Exception('Roles does not belongs to given organization');
             }
 
             if ($givenRoleAssignment['organization_id'] == $roleAssignment['organization_id']) {
