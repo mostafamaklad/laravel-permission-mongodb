@@ -420,7 +420,7 @@ trait HasRoles
 
         $organizationArray = [];
         foreach ($organizations as $organization) {
-            foreach ($this['role_assignments'] as $roleAssignment) {
+            foreach ($this->role_assignments as $roleAssignment) {
                 $permissionName = [];
                 if ($organization->weight == $roleAssignment['weight']) {
                     if(!empty($permission)){
