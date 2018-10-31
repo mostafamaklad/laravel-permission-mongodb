@@ -411,24 +411,28 @@ trait HasRoles
     /**
      * Check permission (e.g. Read PR, Read PO etc.) for given user
      *
-     * @param $permission
-     * @param $user
+     * @param null $permission
      * @return array
      */
-    public function getOrganizationsPermission($permission, $user)
+    public function getOrganizationsPermission($permission = null)
     {
         $organizations = Organization::all();
 
         $organizationArray = [];
         foreach ($organizations as $organization) {
-            foreach ($user['role_assignments'] as $roleAssignment) {
+            foreach ($this->role_assignments as $roleAssignment) {
                 $permissionName = [];
                 if ($organization->weight == $roleAssignment['weight']) {
-                    foreach ($roleAssignment['roles'] as $roles){
-                        $names = array_column($roles['permissions'], 'name');
-                        $permissionName = array_merge($permissionName, $names);
+                    if(!empty($permission)){
+                        foreach ($roleAssignment['roles'] as $roles){
+                            $names = array_column($roles['permissions'], 'name');
+                            $permissionName = array_merge($permissionName, $names);
+                        }
+                        if(in_array($permission, $permissionName)){
+                            $organizationArray[$organization->name][] = $roleAssignment['organization_id'];
+                        }
                     }
-                    if(in_array($permission, $permissionName)){
+                    else{
                         $organizationArray[$organization->name][] = $roleAssignment['organization_id'];
                     }
                 }
