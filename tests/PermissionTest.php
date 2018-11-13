@@ -19,8 +19,8 @@ class PermissionTest extends TestCase
             try {
                 $this->expectException(PermissionAlreadyExists::class);
 
-                \app(Permission::class)->create(['name' => 'test-permission']);
-                \app(Permission::class)->create(['name' => 'test-permission']);
+                \app(\config('permission.models.permission'))->create(['name' => 'test-permission']);
+                \app(\config('permission.models.permission'))->create(['name' => 'test-permission']);
             } finally {
                 $message = $this->helpers->getPermissionAlreadyExistsMessage('test-permission', 'web');
                 $this->assertLogMessage($message, Logger::ALERT);
@@ -31,7 +31,7 @@ class PermissionTest extends TestCase
     /** @test */
     public function it_belongs_to_a_guard()
     {
-        $permission = \app(Permission::class)->create(['name' => 'can-edit', 'guard_name' => 'admin']);
+        $permission = \app(\config('permission.models.permission'))->create(['name' => 'can-edit', 'guard_name' => 'admin']);
 
         $this->assertEquals('admin', $permission->guard_name);
     }
