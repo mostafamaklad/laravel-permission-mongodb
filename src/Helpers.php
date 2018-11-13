@@ -119,6 +119,6 @@ class Helpers
 
     public function isNotLumen(): bool
     {
-        return ! stripos(app()->version(), 'lumen');
+        return ! (stripos(app()->version(), 'lumen') !== false);
     }
 }
