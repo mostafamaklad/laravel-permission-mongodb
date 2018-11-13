@@ -106,7 +106,7 @@ trait HasRoles
      *
      * @return $this
      */
-    public function syncRoles(...$roles)
+    public function syncRoles(...$roles): Model
     {
         $this->roles()->sync([]);
 

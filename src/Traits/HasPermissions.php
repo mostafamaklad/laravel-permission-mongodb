@@ -34,7 +34,7 @@ trait HasPermissions
      * A role may be given various permissions.
      * @return BelongsToMany
      */
-    public function permissions()
+    public function permissions(): BelongsToMany
     {
         return $this->belongsToMany(config('permission.models.permission'));
     }
@@ -42,7 +42,7 @@ trait HasPermissions
     /**
      * A role belongs to some users of the model associated with its guard.
      */
-    public function users()
+    public function users(): belongsToMany
     {
         return $this->belongsToMany($this->helpers->getModelForGuard($this->attributes['guard_name']));
     }
@@ -55,7 +55,7 @@ trait HasPermissions
      * @return $this
      * @throws GuardDoesNotMatch
      */
-    public function givePermissionTo(...$permissions)
+    public function givePermissionTo(...$permissions): Model
     {
         $permissions = collect($permissions)
             ->flatten()
@@ -82,7 +82,7 @@ trait HasPermissions
      * @return $this
      * @throws GuardDoesNotMatch
      */
-    public function syncPermissions(...$permissions)
+    public function syncPermissions(...$permissions): Model
     {
         $this->permissions()->sync([]);
 
@@ -97,7 +97,7 @@ trait HasPermissions
      * @return $this
      * @throws \Maklad\Permission\Exceptions\GuardDoesNotMatch
      */
-    public function revokePermissionTo(...$permissions)
+    public function revokePermissionTo(...$permissions): Model
     {
         collect($permissions)
             ->flatten()
@@ -295,7 +295,10 @@ trait HasPermissions
     public function hasDirectPermission($permission): bool
     {
         if (\is_string($permission)) {
-            $permission = \app(\config('permission.models.permission'))->findByName($permission, $this->getDefaultGuardName());
+            $permission = \app(
+                \config('permission.models.permission')
+            )
+                    ->findByName($permission, $this->getDefaultGuardName());
         }
 
         return $this->permissions->contains('id', $permission->id);

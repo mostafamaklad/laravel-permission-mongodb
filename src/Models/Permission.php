@@ -106,7 +106,7 @@ class Permission extends Model implements PermissionInterface
      */
     public function roles(): BelongsToMany
     {
-        return Model::belongsToMany(config('permission.models.role'));
+        return $this->belongsToMany(config('permission.models.role'));
     }
 
     /**
