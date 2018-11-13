@@ -13,11 +13,11 @@ trait RefreshesPermissionCache
     public static function bootRefreshesPermissionCache()
     {
         static::saved(function () {
-            \app(PermissionRegistrar::class)->forgetCachedPermissions();
+            \app(\config('permission.models.permission'))->forgetCachedPermissions();
         });
 
         static::deleted(function () {
-            \app(PermissionRegistrar::class)->forgetCachedPermissions();
+            \app(\config('permission.models.permission'))->forgetCachedPermissions();
         });
     }
 }

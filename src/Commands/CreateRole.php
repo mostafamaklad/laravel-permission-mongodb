@@ -20,7 +20,7 @@ class CreateRole extends Command
 
     public function handle()
     {
-        $roleClass       = \app(Role::class);
+        $roleClass       = \app(\config('permission.models.role'));
 
         $name        = $this->argument('name');
         $guard       = $this->argument('guard');

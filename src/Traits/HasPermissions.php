@@ -5,12 +5,12 @@ namespace Maklad\Permission\Traits;
 use Illuminate\Support\Collection;
 use Jenssegers\Mongodb\Eloquent\Builder;
 use Jenssegers\Mongodb\Eloquent\Model;
-use Jenssegers\Mongodb\Relations\BelongsToMany;
 use Maklad\Permission\Contracts\PermissionInterface as Permission;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\Guard;
 use Maklad\Permission\Helpers;
 use Maklad\Permission\Models\Role;
+use Maklad\Permission\Models\PermissionRole;
 use Maklad\Permission\PermissionRegistrar;
 
 /**
@@ -34,7 +34,7 @@ trait HasPermissions
      * A role may be given various permissions.
      * @return BelongsToMany
      */
-    public function permissions(): BelongsToMany
+    public function permissions()
     {
         return $this->belongsToMany(config('permission.models.permission'));
     }
@@ -42,7 +42,7 @@ trait HasPermissions
     /**
      * A role belongs to some users of the model associated with its guard.
      */
-    public function users(): BelongsToMany
+    public function users()
     {
         return $this->belongsToMany($this->helpers->getModelForGuard($this->attributes['guard_name']));
     }
@@ -122,7 +122,7 @@ trait HasPermissions
     protected function getStoredPermission($permission): Permission
     {
         if (\is_string($permission)) {
-            return \app(Permission::class)->findByName($permission, $this->getDefaultGuardName());
+            return \app(config('permission.models.permission'))->findByName($permission, $this->getDefaultGuardName());
         }
 
         return $permission;
@@ -214,6 +214,7 @@ trait HasPermissions
             ->roles->flatMap(function (Role $role) {
                 return $role->permissions;
             })->sort()->values();
+        //return \app(\config('permission.models.permission'))->whereIn('role_id', $this->role_ids)->get();
     }
 
     /**
@@ -239,7 +240,7 @@ trait HasPermissions
     public function hasPermissionTo($permission, $guardName = null): bool
     {
         if (\is_string($permission)) {
-            $permission = \app(Permission::class)->findByName(
+            $permission = \app(\config('permission.models.permission'))->findByName(
                 $permission,
                 $guardName ?? $this->getDefaultGuardName()
             );
@@ -294,7 +295,7 @@ trait HasPermissions
     public function hasDirectPermission($permission): bool
     {
         if (\is_string($permission)) {
-            $permission = \app(Permission::class)->findByName($permission, $this->getDefaultGuardName());
+            $permission = \app(\config('permission.models.permission'))->findByName($permission, $this->getDefaultGuardName());
         }
 
         return $this->permissions->contains('id', $permission->id);

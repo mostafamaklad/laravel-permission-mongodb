@@ -46,8 +46,8 @@ class RoleTest extends TestCase
             try {
                 $this->expectException(RoleAlreadyExists::class);
 
-                \app(Role::class)->create(['name' => 'test-role']);
-                \app(Role::class)->create(['name' => 'test-role']);
+                \app(\config('permission.models.role'))->create(['name' => 'test-role']);
+                \app(\config('permission.models.role'))->create(['name' => 'test-role']);
             } finally {
                 $message = $this->helpers->getRoleAlreadyExistsMessage('test-role', 'web');
                 $this->assertLogMessage($message, Logger::ALERT);
@@ -264,7 +264,7 @@ class RoleTest extends TestCase
     /** @test */
     public function it_belongs_to_a_guard()
     {
-        $role = \app(Role::class)->create(['name' => 'admin', 'guard_name' => 'admin']);
+        $role = \app(\config('permission.models.role'))->create(['name' => 'admin', 'guard_name' => 'admin']);
 
         $this->assertEquals('admin', $role->guard_name);
     }
