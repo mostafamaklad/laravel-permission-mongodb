@@ -9,9 +9,15 @@ build:
                 coverage:
                     file: 'coverage'
                     format: 'clover'
+    nodes:
+        analysis:
+            tests:
+                override:
+                - php-scrutinizer-run
 
 filter:
-    excluded_paths: [tests/*]
+    excluded_paths:
+        - "tests/"
 
 checks:
     php:
