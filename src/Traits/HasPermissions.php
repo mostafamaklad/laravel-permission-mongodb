@@ -5,6 +5,7 @@ namespace Maklad\Permission\Traits;
 use Illuminate\Support\Collection;
 use Jenssegers\Mongodb\Eloquent\Builder;
 use Jenssegers\Mongodb\Eloquent\Model;
+use Jenssegers\Mongodb\Relations\BelongsToMany;
 use Maklad\Permission\Contracts\PermissionInterface as Permission;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\Guard;
@@ -42,7 +43,7 @@ trait HasPermissions
     /**
      * A role belongs to some users of the model associated with its guard.
      */
-    public function users(): belongsToMany
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany($this->helpers->getModelForGuard($this->attributes['guard_name']));
     }
