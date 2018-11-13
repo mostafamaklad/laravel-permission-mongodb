@@ -56,7 +56,7 @@ trait HasPermissions
      * @return $this
      * @throws GuardDoesNotMatch
      */
-    public function givePermissionTo(...$permissions): Model
+    public function givePermissionTo(...$permissions): self
     {
         $permissions = collect($permissions)
             ->flatten()
@@ -83,7 +83,7 @@ trait HasPermissions
      * @return $this
      * @throws GuardDoesNotMatch
      */
-    public function syncPermissions(...$permissions): Model
+    public function syncPermissions(...$permissions): self
     {
         $this->permissions()->sync([]);
 
@@ -98,7 +98,7 @@ trait HasPermissions
      * @return $this
      * @throws \Maklad\Permission\Exceptions\GuardDoesNotMatch
      */
-    public function revokePermissionTo(...$permissions): Model
+    public function revokePermissionTo(...$permissions): self
     {
         collect($permissions)
             ->flatten()
