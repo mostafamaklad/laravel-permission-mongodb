@@ -21,11 +21,14 @@ class Guard
      */
     public function getNames($model) : Collection
     {
+        $guardName = null;
+        $class = null;
+
         if (\is_object($model)) {
             $guardName = $model->guard_name ?? null;
         }
 
-        if (! isset($guardName)) {
+        if ($guardName === null) {
             $class = \is_object($model) ? \get_class($model) : $model;
             $guardName = (new \ReflectionClass($class))->getDefaultProperties()['guard_name'] ?? null;
         }
@@ -33,6 +36,7 @@ class Guard
         if ($guardName) {
             return collect($guardName);
         }
+
         return collect(config('auth.guards'))
             ->map(function ($guard) {
                 if (! isset($guard['provider'])) {
