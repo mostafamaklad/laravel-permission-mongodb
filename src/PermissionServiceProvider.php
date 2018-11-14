@@ -22,10 +22,11 @@ class PermissionServiceProvider extends ServiceProvider
                 __DIR__ . '/../config/permission.php' => $this->app->configPath() . '/permission.php',
             ], 'config');
 
-            if (! class_exists('CreatePermissionTables')) {
+            if (!class_exists('CreatePermissionTables')) {
                 $timestamp = date('Y_m_d_His');
+                $mFilePath = $this->app->databasePath() . "/migrations/{$timestamp}_create_permission_collections.php";
                 $this->publishes([
-                    __DIR__.'/../database/migrations/create_permission_collections.php.stub' => $this->app->databasePath()."/migrations/{$timestamp}_create_permission_collections.php",
+                    __DIR__ . '/../database/migrations/create_permission_collections.php.stub' => $mFilePath,
                 ], 'migrations');
             }
         }
