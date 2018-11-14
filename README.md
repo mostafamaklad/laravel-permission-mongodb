@@ -81,13 +81,23 @@ In Laravel 5.5 the service provider will automatically get registered. In older 
 ];
 ```
 
+You can publish [the migration](database/migrations/create_permission_collections.php.stub) with:
+
+```bash
+php artisan vendor:publish --provider="Maklad\Permission\PermissionServiceProvider" --tag="migrations"
+```
+
+```bash
+php artisan migrate
+```
+
 You can publish the config file with:
 
 ```bash
 php artisan vendor:publish --provider="Maklad\Permission\PermissionServiceProvider" --tag="config"
 ```
 
-When published, the [`config/permission.php`](https://github.com/mostafamaklad/laravel-permission-mongodb/blob/master/config/permission.php) config file contains:
+When published, the [`config/permission.php`](config/permission.php) config file contains:
 
 ```php
 return [
@@ -175,6 +185,7 @@ Copy the required files:
 
 ```bash
 cp vendor/mostafamaklad/laravel-permission-mongodb/config/permission.php config/permission.php
+cp vendor/mostafamaklad/laravel-permission-mongodb/database/migrations/create_permission_collections.php.stub database/migrations/2018_01_01_000000_create_permission_collections.php
 ```
 
 You will also need to create another configuration file at `config/auth.php`. Get it on the Laravel repository or just run the following command:
@@ -198,6 +209,12 @@ As well as the configuration and the service provider:
 ```php
 $app->configure('permission');
 $app->register(Maklad\Permission\PermissionServiceProvider::class);
+```
+
+Now, run your migrations:
+
+```bash
+php artisan migrate
 ```
 
 ## Usage

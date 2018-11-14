@@ -113,6 +113,9 @@ abstract class TestCase extends Orchestra
      */
     protected function setUpDatabase($app)
     {
+        include_once __DIR__.'/../database/migrations/create_permission_collections.php.stub';
+        (new \CreatePermissionCollections())->up();
+
         User::create(['email' => 'test@user.com']);
         Admin::create(['email' => 'admin@user.com']);
         $app[Role::class]->create(['name' => 'testRole']);
