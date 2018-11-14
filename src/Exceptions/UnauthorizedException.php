@@ -21,8 +21,12 @@ class UnauthorizedException extends HttpException
      * @param array $requiredRoles
      * @param array $requiredPermissions
      */
-    public function __construct($statusCode, string $message = null, array $requiredRoles = [], array $requiredPermissions = [])
-    {
+    public function __construct(
+        $statusCode,
+        string $message = null,
+        array $requiredRoles = [],
+        array $requiredPermissions = []
+    ) {
         parent::__construct($statusCode, $message);
 
         if (\config('permission.log_registration_exception')) {
