@@ -11,7 +11,6 @@ use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\Guard;
 use Maklad\Permission\Helpers;
 use Maklad\Permission\Models\Role;
-use Maklad\Permission\Models\PermissionRole;
 use Maklad\Permission\PermissionRegistrar;
 
 /**
@@ -317,7 +316,7 @@ trait HasPermissions
      * Scope the model query to certain permissions only.
      *
      * @param Builder $query
-     * @param string|array|Permission|Collection $permissions
+     * @param string|array|\Maklad\Permission\Contracts\PermissionInterface|Collection $permissions
      *
      * @return Builder
      */

@@ -2,6 +2,22 @@
 
 All Notable changes to `laravel-permission-mongodb` will be documented in this file.
 
+## 1.9.0 - 2018-09-14
+
+### Fixed
+ - Fix wrong BelongsTo relationship
+ - Config cleanup
+ - Fixes for Lumen 5.6 compatibility
+ - Fix classes resolution to config values
+ - Fix permissions via roles
+ - Fixed detection of Lumen
+ 
+### Added
+ - Add scrutinizer code intelligence
+ 
+### Changed
+ - Loose typing definitions for BelongsToMany
+
 ## 1.8.2 - 2018-08-14
 
 ### Changed
