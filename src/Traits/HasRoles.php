@@ -420,23 +420,24 @@ trait HasRoles
 
         $organizationArray = [];
         foreach ($organizations as $organization) {
-            foreach ($this->role_assignments as $roleAssignment) {
-                $permissionName = [];
-                if ($organization->weight == $roleAssignment['weight']) {
-                    if(!empty($permission)){
-                        foreach ($roleAssignment['roles'] as $roles){
-                            $names = array_column($roles['permissions'], 'name');
-                            $permissionName = array_merge($permissionName, $names);
+            if(!empty($this->role_assignments)){
+                foreach ($this->role_assignments as $roleAssignment) {
+                    $permissionName = [];
+                    if ($organization->weight == $roleAssignment['weight']) {
+                        if(!empty($permission)){
+                            foreach ($roleAssignment['roles'] as $roles){
+                                $names = array_column($roles['permissions'], 'name');
+                                $permissionName = array_merge($permissionName, $names);
+                            }
+                            if(in_array($permission, $permissionName)){
+                                $organizationArray[$organization->name][] = $roleAssignment['organization_id'];
+                            }
                         }
-                        if(in_array($permission, $permissionName)){
+                        else{
                             $organizationArray[$organization->name][] = $roleAssignment['organization_id'];
                         }
                     }
-                    else{
-                        $organizationArray[$organization->name][] = $roleAssignment['organization_id'];
-                    }
                 }
-
             }
         }
 
