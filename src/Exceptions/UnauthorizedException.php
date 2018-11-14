@@ -17,11 +17,11 @@ class UnauthorizedException extends HttpException
      * UnauthorizedException constructor.
      *
      * @param $statusCode
-     * @param null $message
+     * @param string $message
      * @param array $requiredRoles
      * @param array $requiredPermissions
      */
-    public function __construct($statusCode, $message = null, $requiredRoles = [], $requiredPermissions = [])
+    public function __construct($statusCode, string $message = null, array $requiredRoles = [], array $requiredPermissions = [])
     {
         parent::__construct($statusCode, $message);
 
