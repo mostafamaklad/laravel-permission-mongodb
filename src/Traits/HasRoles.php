@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 use Jenssegers\Mongodb\Eloquent\Builder;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Maklad\Permission\Contracts\RoleInterface as Role;
+use Maklad\Permission\PermissionRegistrar;
 use ReflectionException;
 
 /**
@@ -16,6 +17,8 @@ trait HasRoles
 {
     use HasPermissions;
 
+    private $roleClass;
+
     public static function bootHasRoles()
     {
         static::deleting(function (Model $model) {
@@ -25,6 +28,14 @@ trait HasRoles
 
             $model->roles()->sync([]);
         });
+    }
+
+    public function getRoleClass()
+    {
+        if ($this->roleClass === null) {
+            $this->roleClass = app(PermissionRegistrar::class)->getRoleClass();
+        }
+        return $this->roleClass;
     }
 
     /**
@@ -184,7 +195,7 @@ trait HasRoles
     protected function getStoredRole($role): Role
     {
         if (\is_string($role)) {
-            return \app(\config('permission.models.role'))->findByName($role, $this->getDefaultGuardName());
+            return $this->getRoleClass()->findByName($role, $this->getDefaultGuardName());
         }
 
         return $role;
