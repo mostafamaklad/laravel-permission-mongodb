@@ -1,6 +1,6 @@
 # laravel-permission-mongodb
 
-[![Latest Version on Packagist][ico-version]][link-packagist]
+[![Latest Version on Packagist][ico-version]][link-releases]
 [![Software License][ico-license]](LICENSE.md)
 [![Build Status][ico-travis]][link-travis]
 [![Scrutinizer][ico-scrutinizer]][link-scrutinizer]
@@ -817,6 +817,7 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 
 [link-author]: https://github.com/mostafamaklad
 [link-contributors]: ../../contributors
+[link-releases]: ../../releases
 [link-laravel-permission]: https://github.com/spatie/laravel-permission
 [link-laravel-mongodb]: https://github.com/jenssegers/laravel-mongodb
 [link-freekmurze]: https://github.com/freekmurze
