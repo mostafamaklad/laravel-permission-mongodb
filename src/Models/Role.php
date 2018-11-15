@@ -134,7 +134,7 @@ class Role extends Model implements RoleInterface
     public function hasPermissionTo($permission): bool
     {
         if (\is_string($permission)) {
-            $permission = app(Permission::class)->findByName($permission, $this->getDefaultGuardName());
+            $permission = $this->getPermissionClass()->findByName($permission, $this->getDefaultGuardName());
         }
 
         if (! $this->getGuardNames()->contains($permission->guard_name)) {

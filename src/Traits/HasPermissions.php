@@ -19,6 +19,8 @@ use Maklad\Permission\PermissionRegistrar;
  */
 trait HasPermissions
 {
+    private $permissionClass;
+
     public static function bootHasPermissions()
     {
         static::deleting(function (Model $model) {
@@ -28,6 +30,14 @@ trait HasPermissions
 
             $model->permissions()->sync([]);
         });
+    }
+
+    public function getPermissionClass()
+    {
+        if ($this->permissionClass === null) {
+            $this->permissionClass = app(PermissionRegistrar::class)->getPermissionClass();
+        }
+        return $this->permissionClass;
     }
 
     /**
@@ -122,7 +132,7 @@ trait HasPermissions
     protected function getStoredPermission($permission): Permission
     {
         if (\is_string($permission)) {
-            return \app(config('permission.models.permission'))->findByName($permission, $this->getDefaultGuardName());
+            return $this->getPermissionClass()->findByName($permission, $this->getDefaultGuardName());
         }
 
         return $permission;
@@ -214,7 +224,6 @@ trait HasPermissions
             ->roles->flatMap(function (Role $role) {
                 return $role->permissions;
             })->sort()->values();
-        //return \app(\config('permission.models.permission'))->whereIn('role_id', $this->role_ids)->get();
     }
 
     /**
@@ -240,7 +249,7 @@ trait HasPermissions
     public function hasPermissionTo($permission, $guardName = null): bool
     {
         if (\is_string($permission)) {
-            $permission = \app(\config('permission.models.permission'))->findByName(
+            $permission = $this->getPermissionClass()->findByName(
                 $permission,
                 $guardName ?? $this->getDefaultGuardName()
             );
@@ -295,10 +304,7 @@ trait HasPermissions
     public function hasDirectPermission($permission): bool
     {
         if (\is_string($permission)) {
-            $permission = \app(
-                \config('permission.models.permission')
-            )
-                    ->findByName($permission, $this->getDefaultGuardName());
+            $permission = $this->getPermissionClass()->findByName($permission, $this->getDefaultGuardName());
         }
 
         return $this->permissions->contains('id', $permission->id);
