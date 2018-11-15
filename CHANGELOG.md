@@ -2,6 +2,17 @@
 
 All Notable changes to `laravel-permission-mongodb` will be documented in this file.
 
+## 1.10.0 - 2018-09-15
+ 
+### Added
+ - Add migration files
+ 
+### Changed
+ - Update PermissionRegistrar to use Authorizable
+ - Improve readme description of how defaults work with multiple guards
+ - Replacing static Permission::class and Role::class with dynamic value
+ - Improve speed of findByName
+
 ## 1.9.0 - 2018-09-14
 
 ### Fixed
