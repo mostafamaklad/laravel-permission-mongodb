@@ -21,11 +21,11 @@ interface PermissionInterface
      * Find a permission by its name.
      *
      * @param string $name
-     * @param string|null $guardName
+     * @param string $guardName
      *
      * @throws PermissionDoesNotExist
      *
      * @return PermissionInterface
      */
-    public static function findByName(string $name, $guardName): PermissionInterface;
+    public static function findByName(string $name, string $guardName): PermissionInterface;
 }

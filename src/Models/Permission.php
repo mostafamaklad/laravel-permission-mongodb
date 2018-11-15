@@ -55,15 +55,15 @@ class Permission extends Model implements PermissionInterface
      */
     public static function create(array $attributes = [])
     {
-        $helpers                  = new Helpers();
+        $helpers = new Helpers();
         $attributes['guard_name'] = $attributes['guard_name'] ?? (new Guard())->getDefaultName(static::class);
 
         if (static::getPermissions()->where('name', $attributes['name'])->where(
             'guard_name',
             $attributes['guard_name']
         )->first()) {
-            $name      = (string) $attributes['name'];
-            $guardName = (string) $attributes['guard_name'];
+            $name = (string)$attributes['name'];
+            $guardName = (string)$attributes['guard_name'];
             throw new PermissionAlreadyExists($helpers->getPermissionAlreadyExistsMessage($name, $guardName));
         }
 
@@ -78,22 +78,21 @@ class Permission extends Model implements PermissionInterface
      * Find or create permission by its name (and optionally guardName).
      *
      * @param string $name
-     * @param string|null $guardName
+     * @param string $guardName
      *
      * @return PermissionInterface
      * @throws \Maklad\Permission\Exceptions\PermissionAlreadyExists
      * @throws \ReflectionException
      */
-    public static function findOrCreate(string $name, $guardName = null): PermissionInterface
+    public static function findOrCreate(string $name, string $guardName = null): PermissionInterface
     {
         $guardName = $guardName ?? (new Guard())->getDefaultName(static::class);
 
-        $permission = static::getPermissions()
-                            ->where('name', $name)
-                            ->where('guard_name', $guardName)
-                            ->first();
+        $permission = static::getPermissions()->filter(function ($permission) use ($name, $guardName) {
+            return $permission->name === $name && $permission->guard_name === $guardName;
+        })->first();
 
-        if (! $permission) {
+        if (!$permission) {
             $permission = static::create(['name' => $name, 'guard_name' => $guardName]);
         }
 
@@ -122,19 +121,21 @@ class Permission extends Model implements PermissionInterface
      * Find a permission by its name (and optionally guardName).
      *
      * @param string $name
-     * @param string|null $guardName
+     * @param string $guardName
      *
      * @return PermissionInterface
      * @throws PermissionDoesNotExist
      * @throws \ReflectionException
      */
-    public static function findByName(string $name, $guardName = null): PermissionInterface
+    public static function findByName(string $name, string $guardName = null): PermissionInterface
     {
         $guardName = $guardName ?? (new Guard())->getDefaultName(static::class);
 
-        $permission = static::getPermissions()->where('name', $name)->where('guard_name', $guardName)->first();
+        $permission = static::getPermissions()->filter(function ($permission) use ($name, $guardName) {
+            return $permission->name === $name && $permission->guard_name === $guardName;
+        })->first();
 
-        if (! $permission) {
+        if (!$permission) {
             $helpers = new Helpers();
             throw new PermissionDoesNotExist($helpers->getPermissionDoesNotExistMessage($name, $guardName));
         }
