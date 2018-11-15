@@ -2,10 +2,10 @@
 
 namespace Maklad\Permission;
 
+use Illuminate\Contracts\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Support\Collection;
-use Jenssegers\Mongodb\Eloquent\Model;
 use Maklad\Permission\Contracts\PermissionInterface as Permission;
 
 /**
@@ -25,14 +25,14 @@ class PermissionRegistrar
 
     public function __construct(Gate $gate, Repository $cache)
     {
-        $this->gate  = $gate;
+        $this->gate = $gate;
         $this->cache = $cache;
     }
 
     public function registerPermissions(): bool
     {
         $this->getPermissions()->map(function (Permission $permission) {
-            $this->gate->define($permission->name, function (Model $user) use ($permission) {
+            $this->gate->define($permission->name, function (Authorizable $user) use ($permission) {
                 return $user->hasPermissionTo($permission) ?: null;
             });
         });
