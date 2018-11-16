@@ -117,8 +117,19 @@ class Helpers
         return 'User is not logged in.';
     }
 
+    /**
+     * @return bool
+     */
     public function isNotLumen(): bool
     {
         return ! (stripos(app()->version(), 'lumen') !== false);
+    }
+
+    /**
+     * @return bool
+     */
+    public function checkVersion(): bool
+    {
+        return ($this->isNotLumen() && app()::VERSION < '5.4');
     }
 }
