@@ -2,6 +2,11 @@
 
 All Notable changes to `laravel-permission-mongodb` will be documented in this file.
 
+## 1.10.1 - 2018-09-16
+ 
+### Fixed
+ - Fix test coverage
+
 ## 1.10.0 - 2018-09-15
  
 ### Added
