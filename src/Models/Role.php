@@ -55,19 +55,15 @@ class Role extends Model implements RoleInterface
     public static function create(array $attributes = [])
     {
         $attributes['guard_name'] = $attributes['guard_name'] ?? (new Guard())->getDefaultName(static::class);
-        $helpers                  = new Helpers();
+        $helpers = new Helpers();
 
         if (static::where('name', $attributes['name'])->where('guard_name', $attributes['guard_name'])->first()) {
-            $name      = (string) $attributes['name'];
-            $guardName = (string) $attributes['guard_name'];
+            $name = (string)$attributes['name'];
+            $guardName = (string)$attributes['guard_name'];
             throw new RoleAlreadyExists($helpers->getRoleAlreadyExistsMessage($name, $guardName));
         }
 
-        if ($helpers->isNotLumen() && app()::VERSION < '5.4') {
-            return parent::create($attributes);
-        }
-
-        return static::query()->create($attributes);
+        return $helpers->checkVersion() ? parent::create($attributes) : static::query()->create($attributes);
     }
 
     /**
@@ -85,10 +81,10 @@ class Role extends Model implements RoleInterface
         $guardName = $guardName ?? (new Guard())->getDefaultName(static::class);
 
         $role = static::where('name', $name)
-                      ->where('guard_name', $guardName)
-                      ->first();
+            ->where('guard_name', $guardName)
+            ->first();
 
-        if (! $role) {
+        if (!$role) {
             $role = static::create(['name' => $name, 'guard_name' => $guardName]);
         }
 
@@ -110,10 +106,10 @@ class Role extends Model implements RoleInterface
         $guardName = $guardName ?? (new Guard())->getDefaultName(static::class);
 
         $role = static::where('name', $name)
-                      ->where('guard_name', $guardName)
-                      ->first();
+            ->where('guard_name', $guardName)
+            ->first();
 
-        if (! $role) {
+        if (!$role) {
             $helpers = new Helpers();
             throw new RoleDoesNotExist($helpers->getRoleDoesNotExistMessage($name, $guardName));
         }
@@ -137,9 +133,9 @@ class Role extends Model implements RoleInterface
             $permission = $this->getPermissionClass()->findByName($permission, $this->getDefaultGuardName());
         }
 
-        if (! $this->getGuardNames()->contains($permission->guard_name)) {
+        if (!$this->getGuardNames()->contains($permission->guard_name)) {
             $expected = $this->getGuardNames();
-            $given    = $permission->guard_name;
+            $given = $permission->guard_name;
 
             throw new GuardDoesNotMatch($this->helpers->getGuardDoesNotMatchMessage($expected, $given));
         }
