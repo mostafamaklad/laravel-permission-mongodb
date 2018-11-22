@@ -5,6 +5,14 @@ namespace Maklad\Permission\Models;
 
 use Jenssegers\Mongodb\Eloquent\Model;
 
+/**
+ * Class Organization
+ *
+ * @package Maklad\Permission\Models
+ * @property string $name   Name
+ * @property string $class  Class
+ * @property int    $weight Weight
+ */
 class Organization extends Model
 {
     /**
