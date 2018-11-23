@@ -522,6 +522,8 @@ trait HasRoles
             }
         }
 
+        $userRoleAssignments = array_values($userRoleAssignments);
+
         return $userRoleAssignments;
     }
 
