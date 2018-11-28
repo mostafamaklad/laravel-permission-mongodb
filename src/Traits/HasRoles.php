@@ -296,6 +296,10 @@ trait HasRoles
             $roles = \explode('|', $roles);
         }
 
+        if(empty($this->role_assignments)){
+            return false;
+        }
+
         $roleArray = [];
 
         if (empty($roleAssignmentId)) {
