@@ -291,7 +291,6 @@ trait HasPermissions
      */
     public function hasAllPermissions(... $permissions): bool
     {
-
         if (is_array($permissions[0])) {
             $permissions = $permissions[0];
         }
