@@ -145,7 +145,7 @@ trait HasRoles
             return $role instanceof Role ? $role->name : $role;
         });
 
-        return ! $roles->intersect($this->roles->pluck('name'))->isEmpty();
+        return !$roles->intersect($this->roles->pluck('name'))->isEmpty();
     }
 
     /**
@@ -163,25 +163,26 @@ trait HasRoles
     /**
      * Determine if the model has all of the given role(s).
      *
-     * @param string|Role|\Illuminate\Support\Collection $roles
+     * @param $roles
      *
      * @return bool
      */
-    public function hasAllRoles($roles): bool
+    public function hasAllRoles(... $roles): bool
     {
-        if (\is_string($roles) && false !== strpos($roles, '|')) {
-            $roles = \explode('|', $roles);
+        if (is_array($roles[0])) {
+            $roles = $roles[0];
         }
 
-        if (\is_string($roles) || $roles instanceof Role) {
-            return $this->hasRole($roles);
+        if (is_array($roles) && count($roles) === 1) {
+            $roles = explode('|', $roles[0]);
         }
 
-        $roles = \collect()->make($roles)->map(function ($role) {
-            return $role instanceof Role ? $role->name : $role;
-        });
-
-        return $roles->intersect($this->roles->pluck('name')) == $roles;
+        foreach ($roles as $role) {
+            if (!$this->hasRole($role)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
