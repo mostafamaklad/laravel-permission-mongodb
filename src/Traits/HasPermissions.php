@@ -291,9 +291,7 @@ trait HasPermissions
      */
     public function hasAllPermissions(... $permissions): bool
     {
-        if (is_array($permissions[0])) {
-            $permissions = $permissions[0];
-        }
+        $permissions = collect($permissions)->flatten()->all();
 
         if (is_array($permissions) && count($permissions) === 1) {
             $permissions = explode('|', $permissions[0]);

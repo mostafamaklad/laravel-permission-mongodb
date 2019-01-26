@@ -169,9 +169,7 @@ trait HasRoles
      */
     public function hasAllRoles(... $roles): bool
     {
-        if (is_array($roles[0])) {
-            $roles = $roles[0];
-        }
+        $roles = collect($roles)->flatten()->all();
 
         if (is_array($roles) && count($roles) === 1) {
             $roles = explode('|', $roles[0]);
