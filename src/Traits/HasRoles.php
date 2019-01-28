@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 use Jenssegers\Mongodb\Eloquent\Builder;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Maklad\Permission\Contracts\RoleInterface as Role;
+use Maklad\Permission\Helpers;
 use Maklad\Permission\PermissionRegistrar;
 use ReflectionException;
 
@@ -145,7 +146,7 @@ trait HasRoles
             return $role instanceof Role ? $role->name : $role;
         });
 
-        return ! $roles->intersect($this->roles->pluck('name'))->isEmpty();
+        return !$roles->intersect($this->roles->pluck('name'))->isEmpty();
     }
 
     /**
@@ -163,25 +164,21 @@ trait HasRoles
     /**
      * Determine if the model has all of the given role(s).
      *
-     * @param string|Role|\Illuminate\Support\Collection $roles
+     * @param $roles
      *
      * @return bool
      */
-    public function hasAllRoles($roles): bool
+    public function hasAllRoles(... $roles): bool
     {
-        if (\is_string($roles) && false !== strpos($roles, '|')) {
-            $roles = \explode('|', $roles);
+        $helpers = new Helpers();
+        $roles = $helpers->flattenArray($roles);
+
+        foreach ($roles as $role) {
+            if (!$this->hasRole($role)) {
+                return false;
+            }
         }
-
-        if (\is_string($roles) || $roles instanceof Role) {
-            return $this->hasRole($roles);
-        }
-
-        $roles = \collect()->make($roles)->map(function ($role) {
-            return $role instanceof Role ? $role->name : $role;
-        });
-
-        return $roles->intersect($this->roles->pluck('name')) == $roles;
+        return true;
     }
 
     /**
