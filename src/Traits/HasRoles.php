@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 use Jenssegers\Mongodb\Eloquent\Builder;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Maklad\Permission\Contracts\RoleInterface as Role;
+use Maklad\Permission\Helpers;
 use Maklad\Permission\PermissionRegistrar;
 use ReflectionException;
 
@@ -169,11 +170,8 @@ trait HasRoles
      */
     public function hasAllRoles(... $roles): bool
     {
-        $roles = collect($roles)->flatten()->all();
-
-        if (is_array($roles) && count($roles) === 1) {
-            $roles = explode('|', $roles[0]);
-        }
+        $helpers = new Helpers();
+        $roles = $helpers->flattenArray($roles);
 
         foreach ($roles as $role) {
             if (!$this->hasRole($role)) {
