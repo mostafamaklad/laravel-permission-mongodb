@@ -132,4 +132,15 @@ class Helpers
     {
         return ($this->isNotLumen() && app()::VERSION < '5.4');
     }
+
+    /**
+     * @param array $items
+     * @return array
+     */
+    public function flattenArray(array $items): array
+    {
+        return collect($items)->map(function($item) {
+            return is_string($item) ? explode('|', $item): $item;
+        })->flatten()->all();
+    }
 }
