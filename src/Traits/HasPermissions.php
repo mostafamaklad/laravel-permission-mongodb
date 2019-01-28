@@ -282,6 +282,27 @@ trait HasPermissions
     }
 
     /**
+     * Determine if the model has all of the given permissions(s).
+     *
+     * @param $permissions
+     *
+     * @return bool
+     * @throws \ReflectionException
+     */
+    public function hasAllPermissions(... $permissions): bool
+    {
+        $helpers = new Helpers();
+        $permissions = $helpers->flattenArray($permissions);
+
+        foreach ($permissions as $permission) {
+            if (!$this->hasPermissionTo($permission)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Determine if the model has, via roles, the given permission.
      *
      * @param Permission $permission
