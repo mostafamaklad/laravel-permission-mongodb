@@ -504,11 +504,11 @@ trait HasRoles
     public function prepareUserRoleAssignment($userRoleAssignments, $givenRoleAssignment)
     {
         foreach ($userRoleAssignments as $index => $roleAssignment) {
-            if (!$this->checkRolesInRoleAssignment($givenRoleAssignment['roles'], $givenRoleAssignment['organization_id'])) {
-                throw new \Exception('Roles does not belongs to given organization');
-            }
-
             if ($givenRoleAssignment['organization_id'] == $roleAssignment['organization_id']) {
+                if (!$this->checkRolesInRoleAssignment($givenRoleAssignment['roles'], $givenRoleAssignment['organization_id'])) {
+                    throw new \Exception('Roles does not belongs to given organization');
+                }
+
                 if (!$givenRoleAssignment['is_deleted']) {
                     $roles = \collect($givenRoleAssignment['roles'])
                         ->flatten()
