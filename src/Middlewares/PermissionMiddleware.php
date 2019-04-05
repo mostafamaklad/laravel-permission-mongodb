@@ -30,17 +30,9 @@ class PermissionMiddleware
             throw new UserNotLoggedIn(403, $helpers->getUserNotLoggedINMessage());
         }
 
-        $permission = \explode(';', $param);
+        $permissions = \explode('|', $param);
 
-        $organization = null;
-        if(!empty($permission[1])){
-            $organization = Organization::where('_id', $permission[1])->first();
-        }
-
-        $permissions = \explode('|', $permission[0]);
-
-
-        if (! app('auth')->user()->hasAnyPermission($organization, $permissions)) {
+        if (! app('auth')->user()->hasAnyPermission(null, $permissions)) {
             $helpers = new Helpers();
             throw new UnauthorizedPermission(
                 403,
