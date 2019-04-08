@@ -30,16 +30,9 @@ class RoleMiddleware
             throw new UserNotLoggedIn(403, $helpers->getUserNotLoggedINMessage());
         }
 
-        $role = \explode(';', $param);
+        $roles = \explode('|', $param);
 
-        $organization = null;
-        if(!empty($role[1])){
-            $organization = Organization::where('_id', $role[1])->first();
-        }
-
-        $roles = \explode('|', $role[0]);
-
-        if (! app('auth')->user()->hasAnyRole($organization, $roles)) {
+        if (! app('auth')->user()->hasAnyRole($roles, null)) {
             $helpers = new Helpers();
             throw new UnauthorizedRole(403, $helpers->getUnauthorizedRoleMessage(implode(', ', $roles)), $roles);
         }
