@@ -430,4 +430,10 @@ class HasPermissionsTest extends TestCase
         $this->testUser->assignRole('testRole');
         $this->assertTrue($this->testUser->hasAllPermissions('edit-articles', 'edit-news'));
     }
+
+    /** @test */
+    public function a_model_that_uses_hasPermissions_trait_should_not_have_users_method()
+    {
+        $this->assertFalse(method_exists($this->testUser, 'users'));
+    }
 }
