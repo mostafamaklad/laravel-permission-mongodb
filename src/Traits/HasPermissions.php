@@ -50,14 +50,6 @@ trait HasPermissions
     }
 
     /**
-     * A role belongs to some users of the model associated with its guard.
-     */
-    public function users(): BelongsToMany
-    {
-        return $this->belongsToMany($this->helpers->getModelForGuard($this->attributes['guard_name']));
-    }
-
-    /**
      * Grant the given permission(s) to a role.
      *
      * @param string|array|Permission|\Illuminate\Support\Collection $permissions
