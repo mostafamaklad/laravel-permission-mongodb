@@ -108,7 +108,7 @@ class Permission extends Model implements PermissionInterface
      * A permission belongs to some users of the model associated with its guard.
      * @return BelongsToMany
      */
-    public function users()
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany($this->helpers->getModelForGuard($this->attributes['guard_name']));
     }

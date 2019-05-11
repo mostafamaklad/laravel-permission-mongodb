@@ -347,4 +347,10 @@ class HasRolesTest extends TestCase
 
         $this->assertFalse($this->testUser->hasRole('testRole2'));
     }
+
+    /** @test */
+    public function a_model_that_uses_hasRoles_trait_should_not_have_users_method()
+    {
+        $this->assertFalse(method_exists($this->testUser, 'users'));
+    }
 }
