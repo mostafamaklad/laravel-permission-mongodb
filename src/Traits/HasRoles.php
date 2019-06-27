@@ -60,7 +60,7 @@ trait HasRoles
      *
      * @param array|string|Role ...$roles
      *
-     * @return array|Role|string
+     * @return array|roleAssignment|string
      */
     public function assignRole(...$roles)
     {
@@ -90,7 +90,7 @@ trait HasRoles
 
         $roleAssignment->forgetCachedPermissions();
 
-        return $roles;
+        return $roleAssignment;
     }
 
     /**
