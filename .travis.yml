@@ -1,11 +1,13 @@
 language: php
 
 php:
-  - 7.0
-  - 7.1
+  - 7.2
+  - 7.3
+  - 7.4snapshot
 
 matrix:
-  fast_finish: true
+  allow_failures:
+    - php: 7.4snapshot
 
 env:
   matrix:
@@ -25,7 +27,6 @@ addons:
     - mongodb-org-server
 
 before_script:
-  - pecl install mongodb
   - travis_retry composer self-update
   - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
 
