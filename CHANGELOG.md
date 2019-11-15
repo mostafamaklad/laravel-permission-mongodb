@@ -2,6 +2,11 @@
 
 All Notable changes to `laravel-permission-mongodb` will be documented in this file.
 
+## 2.0.0 - 2018-11-16
+ 
+### Added
+ - Support of Laravel 6
+ 
 ## 1.10.1 - 2018-09-16
  
 ### Fixed
