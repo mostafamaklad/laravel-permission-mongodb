@@ -37,11 +37,11 @@
         "jenssegers/mongodb": "^3.0"
     },
     "require-dev": {
-        "codeclimate/php-test-reporter": "^0.4.4",
-        "monolog/monolog": "^1.23",
-        "orchestra/testbench": "^3.2.0",
+        "codeclimate/php-test-reporter": "0.4.4",
+        "monolog/monolog": "1.25.3",
+        "orchestra/testbench": "3.9.2",
         "phpunit/phpunit": "^5.7|^6.0|^7.0",
-        "squizlabs/php_codesniffer": "^3.1",
+        "squizlabs/php_codesniffer": "3.5.4",
         "codacy/coverage": "dev-master"
     },
     "autoload": {
