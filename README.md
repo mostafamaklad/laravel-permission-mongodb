@@ -64,7 +64,7 @@ $user->can('edit articles');
 ## Installation
 
 ### Laravel
-This package can be used in Laravel 5.2 and up.
+This package can be used in Laravel 6.x and up.
 
 You can install the package via composer:
 
@@ -72,14 +72,7 @@ You can install the package via composer:
 composer require mostafamaklad/laravel-permission-mongodb
 ```
 
-In Laravel 5.5 the service provider will automatically get registered. In older versions of the framework just add the service provider in `config/app.php` file:
-
-```php
-'providers' => [
-    // ...
-    Maklad\Permission\PermissionServiceProvider::class,
-];
-```
+> For Laravel 5 use version 1.x
 
 You can publish [the migration](database/migrations/create_permission_collections.php.stub) with:
 

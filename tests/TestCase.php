@@ -18,7 +18,7 @@ abstract class TestCase extends Orchestra
     /**
      * Flush the database after each test function
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         User::truncate();
         Admin::truncate();
@@ -44,7 +44,7 @@ abstract class TestCase extends Orchestra
     /** @var \Maklad\Permission\Models\Permission */
     protected $testAdminPermission;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -103,7 +103,7 @@ abstract class TestCase extends Orchestra
         // Use test User model for users provider
         $app['config']->set('auth.providers.users.model', User::class);
 
-        $app['log']->getMonolog()->pushHandler(new TestHandler());
+        $app['log']->getLogger()->pushHandler(new TestHandler());
     }
 
     /**
@@ -157,7 +157,7 @@ abstract class TestCase extends Orchestra
 
     protected function clearLogTestHandler()
     {
-        \collect($this->app['log']->getMonolog()->getHandlers())->filter(function ($handler) {
+        \collect($this->app['log']->getLogger()->getHandlers())->filter(function ($handler) {
             return $handler instanceof TestHandler;
         })->first()->clear();
     }
@@ -180,7 +180,7 @@ abstract class TestCase extends Orchestra
      */
     protected function hasLog($message, $level)
     {
-        return \collect($this->app['log']->getMonolog()->getHandlers())->filter(function ($handler) use (
+        return \collect($this->app['log']->getLogger()->getHandlers())->filter(function ($handler) use (
                 $message,
                 $level
             ) {
@@ -208,7 +208,7 @@ abstract class TestCase extends Orchestra
         if (\config('permission.display_permission_in_exception')) {
             $this->assertContains($role_permission, $message);
         } else {
-            $this->assertNotContains($role_permission, $message);
+            $this->assertStringNotContainsString($role_permission, $message);
         }
     }
 
