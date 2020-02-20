@@ -11,7 +11,7 @@ use Monolog\Logger;
 
 class RoleTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
