@@ -281,7 +281,7 @@ trait HasPermissions
      * @return bool
      * @throws \ReflectionException
      */
-    public function hasAllPermissions(... $permissions): bool
+    public function hasAllPermissions(...$permissions): bool
     {
         $helpers = new Helpers();
         $permissions = $helpers->flattenArray($permissions);
