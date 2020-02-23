@@ -2,6 +2,7 @@
 
 namespace Maklad\Permission;
 
+use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\Compilers\BladeCompiler;
 use Maklad\Permission\Contracts\PermissionInterface as Permission;
@@ -14,7 +15,7 @@ use Maklad\Permission\Directives\PermissionDirectives;
  */
 class PermissionServiceProvider extends ServiceProvider
 {
-    public function boot(PermissionRegistrar $permissionLoader)
+    public function boot()
     {
         $helpers = new Helpers();
         if ($helpers->isNotLumen()) {
@@ -40,7 +41,9 @@ class PermissionServiceProvider extends ServiceProvider
 
         $this->registerModelBindings();
 
-        $permissionLoader->registerPermissions();
+        $this->app->afterResolving(Gate::class, function(){
+            app(PermissionRegistrar::class)->registerPermissions();
+        });
     }
 
     public function register()
