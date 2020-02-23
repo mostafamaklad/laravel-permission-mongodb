@@ -168,7 +168,7 @@ trait HasRoles
      *
      * @return bool
      */
-    public function hasAllRoles(... $roles): bool
+    public function hasAllRoles(...$roles): bool
     {
         $helpers = new Helpers();
         $roles = $helpers->flattenArray($roles);

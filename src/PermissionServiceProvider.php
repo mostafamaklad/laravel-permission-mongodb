@@ -41,7 +41,7 @@ class PermissionServiceProvider extends ServiceProvider
 
         $this->registerModelBindings();
 
-        $this->app->afterResolving(Gate::class, function(){
+        $this->app->afterResolving(Gate::class, function () {
             app(PermissionRegistrar::class)->registerPermissions();
         });
     }
