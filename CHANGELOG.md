@@ -2,10 +2,20 @@
 
 All Notable changes to `laravel-permission-mongodb` will be documented in this file.
 
+## 2.1.0 - 2020-03-05
+
+### Added
+ - Support of Laravel 7.x
+
+## 2.0.1 - 2020-02-23
+
+### Changed
+ - Defer registering permissions on the Gate instance until it's resolved
+
 ## 2.0.0 - 2020-02-20
 
 ### Added
- - Support of Laravel 6
+ - Support of Laravel 6.x
  
 ## 1.10.1 - 2018-09-16
  
