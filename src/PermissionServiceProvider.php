@@ -8,6 +8,7 @@ use Maklad\Permission\Contracts\PermissionInterface as Permission;
 use Maklad\Permission\Contracts\RoleInterface as Role;
 use Maklad\Permission\Directives\PermissionDirectives;
 use Illuminate\Support\Facades\DB;
+
 /**
  * Class PermissionServiceProvider
  * @package Maklad\Permission
