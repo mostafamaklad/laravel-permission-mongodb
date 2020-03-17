@@ -2,14 +2,13 @@
 
 namespace Maklad\Permission;
 
-use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\Compilers\BladeCompiler;
 use Maklad\Permission\Contracts\PermissionInterface as Permission;
 use Maklad\Permission\Contracts\RoleInterface as Role;
 use Maklad\Permission\Directives\PermissionDirectives;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Log;
 /**
  * Class PermissionServiceProvider
  * @package Maklad\Permission
@@ -46,7 +45,7 @@ class PermissionServiceProvider extends ServiceProvider
             DB::connection()->getPdo();
             app(PermissionRegistrar::class)->registerPermissions();
         } catch (\Exception $e) {
-            \Log::error("Could not connect to the database.  Please check your configuration. error:" . $e);
+            Log::error("Could not connect to the database.  Please check your configuration. error:" . $e);
         }
     }
 
