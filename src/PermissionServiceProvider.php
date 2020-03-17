@@ -8,6 +8,7 @@ use Illuminate\View\Compilers\BladeCompiler;
 use Maklad\Permission\Contracts\PermissionInterface as Permission;
 use Maklad\Permission\Contracts\RoleInterface as Role;
 use Maklad\Permission\Directives\PermissionDirectives;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class PermissionServiceProvider
@@ -41,9 +42,12 @@ class PermissionServiceProvider extends ServiceProvider
 
         $this->registerModelBindings();
 
-        $this->app->afterResolving(Gate::class, function () {
+        try {
+            DB::connection()->getPdo();
             app(PermissionRegistrar::class)->registerPermissions();
-        });
+        } catch (\Exception $e) {
+            die("Could not connect to the database.  Please check your configuration. error:" . $e);
+        }
     }
 
     public function register()
