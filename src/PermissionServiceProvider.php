@@ -46,7 +46,7 @@ class PermissionServiceProvider extends ServiceProvider
             DB::connection()->getPdo();
             app(PermissionRegistrar::class)->registerPermissions();
         } catch (\Exception $e) {
-            die("Could not connect to the database.  Please check your configuration. error:" . $e);
+            \Log::error("Could not connect to the database.  Please check your configuration. error:" . $e);
         }
     }
 
