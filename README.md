@@ -64,15 +64,12 @@ $user->can('edit articles');
 ## Installation
 
 ### Laravel
-This package can be used in Laravel 6.x and up.
 
 You can install the package via composer:
 
 ``` bash
 composer require mostafamaklad/laravel-permission-mongodb
 ```
-
-> For Laravel 5 use version 1.x
 
 You can publish [the migration](database/migrations/create_permission_collections.php.stub) with:
 
