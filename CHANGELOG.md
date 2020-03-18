@@ -7,6 +7,7 @@ All Notable changes to `laravel-permission-mongodb` will be documented in this f
 ### Added
  - Support of Laravel 7.x
 
+ v2.1
 ## 2.0.1 - 2020-02-23
 
 ### Changed
