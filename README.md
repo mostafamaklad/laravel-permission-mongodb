@@ -35,6 +35,7 @@ $user->can('edit articles');
 
 ## Table of contents
 * [Installation](#installation)
+    * [Laravel Compatibility](#laravel-compatibility)
     * [Laravel](#laravel)
     * [Lumen](#lumen)
 * [Usage](#usage)
@@ -62,6 +63,15 @@ $user->can('edit articles');
 * [License](#license)
 
 ## Installation
+
+### Laravel Compatibility
+
+ Laravel  | Package
+:---------|:----------
+ 5.x      | 1.x or 2.x or 3.x
+ 6.x      | 2.x or 3.x
+ 7.x      | 3.x
+ 8.x      | 3.1.x
 
 ### Laravel
 
