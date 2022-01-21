@@ -253,7 +253,7 @@ trait HasPermissions
     /**
      * An alias to hasPermissionTo(), but avoids throwing an exception.
      *
-     * @param string|int|\Spatie\Permission\Contracts\Permission $permission
+     * @param string|int|Permission $permission
      * @param string|null $guardName
      *
      * @return bool
