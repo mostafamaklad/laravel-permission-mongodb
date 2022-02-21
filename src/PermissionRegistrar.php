@@ -5,6 +5,7 @@ namespace Maklad\Permission;
 use Illuminate\Contracts\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Cache\Repository;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Collection;
 use Maklad\Permission\Contracts\PermissionInterface as Permission;
 
@@ -14,20 +15,15 @@ use Maklad\Permission\Contracts\PermissionInterface as Permission;
  */
 class PermissionRegistrar
 {
-    /** @var \Illuminate\Contracts\Auth\Access\Gate */
-    protected $gate;
+    protected Gate $gate;
 
-    /** @var \Illuminate\Contracts\Cache\Repository */
-    protected $cache;
+    protected Repository $cache;
 
-    /** @var string */
-    protected $cacheKey = 'maklad.permission.cache';
+    protected string $cacheKey = 'maklad.permission.cache';
 
-    /** @var string */
-    protected $permissionClass;
+    protected mixed $permissionClass;
 
-    /** @var string */
-    protected $roleClass;
+    protected mixed $roleClass;
 
     /**
      * PermissionRegistrar constructor.
@@ -61,7 +57,7 @@ class PermissionRegistrar
     /**
      * Forget cached permission
      */
-    public function forgetCachedPermissions()
+    public function forgetCachedPermissions(): void
     {
         $this->cache->forget($this->cacheKey);
     }
@@ -81,9 +77,9 @@ class PermissionRegistrar
     /**
      * Get Permission class
      *
-     * @return \Illuminate\Foundation\Application|mixed
+     * @return Application|mixed
      */
-    public function getPermissionClass()
+    public function getPermissionClass(): mixed
     {
         return app($this->permissionClass);
     }
@@ -91,9 +87,9 @@ class PermissionRegistrar
     /**
      * Get Role class
      *
-     * @return \Illuminate\Foundation\Application|mixed
+     * @return Application|mixed
      */
-    public function getRoleClass()
+    public function getRoleClass(): mixed
     {
         return app($this->roleClass);
     }

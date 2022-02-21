@@ -10,14 +10,14 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  */
 class UnauthorizedException extends HttpException
 {
-    private $requiredRoles = [];
-    private $requiredPermissions = [];
+    private array $requiredRoles = [];
+    private array $requiredPermissions = [];
 
     /**
      * UnauthorizedException constructor.
      *
      * @param $statusCode
-     * @param string $message
+     * @param string|null $message
      * @param array $requiredRoles
      * @param array $requiredPermissions
      */
