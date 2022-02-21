@@ -2,18 +2,24 @@
 
 namespace Maklad\Permission\Test;
 
+use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Jenssegers\Mongodb\MongodbServiceProvider;
 use Maklad\Permission\Helpers;
 use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Models\Role;
 use Maklad\Permission\PermissionRegistrar;
 use Maklad\Permission\PermissionServiceProvider;
+use Monolog\Handler\StreamHandler;
 use Monolog\Handler\TestHandler;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
 {
-    protected $helpers;
+    use DatabaseMigrations;
+    protected Helpers $helpers;
+
+    protected string $seeder = TestSeeder::class;
 
     /**
      * Flush the database after each test function
@@ -26,29 +32,23 @@ abstract class TestCase extends Orchestra
         $this->app[Permission::class]::truncate();
     }
 
-    /** @var \Maklad\Permission\Test\User */
-    protected $testUser;
+    protected User $testUser;
 
-    /** @var \Maklad\Permission\Test\Admin */
-    protected $testAdmin;
+    protected Admin $testAdmin;
 
-    /** @var \Maklad\Permission\Models\Role */
-    protected $testUserRole;
+    protected Role $testUserRole;
 
-    /** @var \Maklad\Permission\Models\Role */
-    protected $testAdminRole;
+    protected Role $testAdminRole;
 
-    /** @var \Maklad\Permission\Models\Permission */
-    protected $testUserPermission;
+    protected Permission $testUserPermission;
 
-    /** @var \Maklad\Permission\Models\Permission */
-    protected $testAdminPermission;
+    protected Permission $testAdminPermission;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->setUpDatabase($this->app);
+        // $this->setUpDatabase($this->app);
 
         $this->reloadPermissions();
 
@@ -66,12 +66,11 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * @param \Illuminate\Foundation\Application $app
+     * @param Application $app
      *
      * @return array
      */
-    protected function getPackageProviders($app)
-    {
+    protected function getPackageProviders($app): array {
         return [
             PermissionServiceProvider::class,
             MongodbServiceProvider::class,
@@ -81,7 +80,7 @@ abstract class TestCase extends Orchestra
     /**
      * Set up the environment.
      *
-     * @param \Illuminate\Foundation\Application $app
+     * @param Application $app
      */
     protected function getEnvironmentSetUp($app)
     {
@@ -104,27 +103,6 @@ abstract class TestCase extends Orchestra
         $app['config']->set('auth.providers.users.model', User::class);
 
         $app['log']->getLogger()->pushHandler(new TestHandler());
-    }
-
-    /**
-     * Set up the database.
-     *
-     * @param \Illuminate\Foundation\Application $app
-     */
-    protected function setUpDatabase($app)
-    {
-        include_once __DIR__.'/../database/migrations/create_permission_collections.php.stub';
-        (new \CreatePermissionCollections())->up();
-
-        User::create(['email' => 'test@user.com']);
-        Admin::create(['email' => 'admin@user.com']);
-        $app[Role::class]->create(['name' => 'testRole']);
-        $app[Role::class]->create(['name' => 'testRole2']);
-        $app[Role::class]->create(['name' => 'testAdminRole', 'guard_name' => 'admin']);
-        $app[Permission::class]->create(['name' => 'edit-articles']);
-        $app[Permission::class]->create(['name' => 'edit-news']);
-        $app[Permission::class]->create(['name' => 'edit-categories']);
-        $app[Permission::class]->create(['name' => 'admin-permission', 'guard_name' => 'admin']);
     }
 
     /**
@@ -178,8 +156,7 @@ abstract class TestCase extends Orchestra
      *
      * @return bool
      */
-    protected function hasLog($message, $level)
-    {
+    protected function hasLog($message, $level): bool {
         return \collect($this->app['log']->getLogger()->getHandlers())->filter(function ($handler) use (
                 $message,
                 $level
