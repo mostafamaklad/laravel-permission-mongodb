@@ -12,8 +12,8 @@ use Monolog\Logger;
 
 class MiddlewareTest extends TestCase
 {
-    protected $roleMiddleware;
-    protected $permissionMiddleware;
+    protected RoleMiddleware $roleMiddleware;
+    protected PermissionMiddleware $permissionMiddleware;
 
     public function setUp(): void
     {
