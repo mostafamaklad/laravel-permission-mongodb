@@ -12,6 +12,8 @@ use Maklad\Permission\Guard;
 use Maklad\Permission\Helpers;
 use Maklad\Permission\Models\Role;
 use Maklad\Permission\PermissionRegistrar;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
 /**
  * Trait HasPermissions
@@ -121,7 +123,7 @@ trait HasPermissions
      * @return Permission
      * @throws \ReflectionException
      */
-    protected function getStoredPermission($permission): Permission
+    protected function getStoredPermission(string|Permission $permission): Permission
     {
         if (\is_string($permission)) {
             return $this->getPermissionClass()->findByName($permission, $this->getDefaultGuardName());
@@ -136,7 +138,7 @@ trait HasPermissions
      * @throws GuardDoesNotMatch
      * @throws \ReflectionException
      */
-    protected function ensureModelSharesGuard(Model $roleOrPermission)
+    protected function ensureModelSharesGuard(Model $roleOrPermission): void
     {
         if (! $this->getGuardNames()->contains($roleOrPermission->guard_name)) {
             $expected = $this->getGuardNames();
@@ -168,7 +170,7 @@ trait HasPermissions
     /**
      * Forget the cached permissions.
      */
-    public function forgetCachedPermissions()
+    public function forgetCachedPermissions(): void
     {
         app(PermissionRegistrar::class)->forgetCachedPermissions();
     }
@@ -176,11 +178,11 @@ trait HasPermissions
     /**
      * Convert to Permission Models
      *
-     * @param string|array|Collection $permissions
+     * @param mixed $permissions
      *
      * @return Collection
      */
-    private function convertToPermissionModels($permissions): Collection
+    private function convertToPermissionModels(mixed $permissions): Collection
     {
         if (\is_array($permissions)) {
             $permissions = collect($permissions);
@@ -190,11 +192,9 @@ trait HasPermissions
             $permissions = collect([$permissions]);
         }
 
-        $permissions = $permissions->map(function ($permission) {
+        return $permissions->map(function ($permission) {
             return $this->getStoredPermission($permission);
         });
-
-        return $permissions;
     }
 
     /**
@@ -238,7 +238,7 @@ trait HasPermissions
      * @return bool
      * @throws \ReflectionException
      */
-    public function hasPermissionTo($permission, $guardName = null): bool
+    public function hasPermissionTo(string|Permission $permission, string $guardName = null): bool
     {
         if (\is_string($permission)) {
             $permission = $this->getPermissionClass()->findByName(
@@ -314,7 +314,7 @@ trait HasPermissions
      * @return bool
      * @throws \ReflectionException
      */
-    public function hasDirectPermission($permission): bool
+    public function hasDirectPermission(string|Permission $permission): bool
     {
         if (\is_string($permission)) {
             $permission = $this->getPermissionClass()->findByName($permission, $this->getDefaultGuardName());
@@ -335,11 +335,11 @@ trait HasPermissions
      * Scope the model query to certain permissions only.
      *
      * @param Builder $query
-     * @param string|array|\Maklad\Permission\Contracts\PermissionInterface|Collection $permissions
+     * @param array|string|\Maklad\Permission\Contracts\PermissionInterface|Collection $permissions
      *
      * @return Builder
      */
-    public function scopePermission(Builder $query, $permissions): Builder
+    public function scopePermission(Builder $query, array|string|Collection|Permission $permissions): Builder
     {
         $permissions = $this->convertToPermissionModels($permissions);
 

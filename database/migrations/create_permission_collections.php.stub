@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 use Jenssegers\Mongodb\Schema\Blueprint;
 
-class CreatePermissionCollections extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -33,7 +33,7 @@ class CreatePermissionCollections extends Migration
     {
         $collectionNames = config('permission.collection_names');
 
-        Schema::drop($collectionNames['roles']);
-        Schema::drop($collectionNames['permissions']);
+        Schema::dropIfExists($collectionNames['roles']);
+        Schema::dropIfExists($collectionNames['permissions']);
     }
-}
+};

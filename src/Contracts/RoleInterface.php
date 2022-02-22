@@ -27,7 +27,7 @@ interface RoleInterface
      *
      * @throws RoleDoesNotExist
      */
-    public static function findByName(string $name, $guardName): RoleInterface;
+    public static function findByName(string $name, ?string $guardName): RoleInterface;
 
     /**
      * Determine if the user may perform the given permission.
@@ -36,5 +36,5 @@ interface RoleInterface
      *
      * @return bool
      */
-    public function hasPermissionTo($permission): bool;
+    public function hasPermissionTo(string|PermissionInterface $permission): bool;
 }

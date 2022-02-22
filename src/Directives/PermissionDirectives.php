@@ -10,7 +10,7 @@ use Illuminate\View\Compilers\BladeCompiler;
  */
 class PermissionDirectives
 {
-    private $bladeCompiler;
+    private BladeCompiler $bladeCompiler;
 
     public function __construct(BladeCompiler $bladeCompiler)
     {
@@ -20,7 +20,7 @@ class PermissionDirectives
     /**
      * Declare role directive
      */
-    public function roleDirective()
+    public function roleDirective(): void
     {
         $this->bladeCompiler->directive('role', function ($arguments) {
             list($role, $guard) = $this->extractRoleGuard($arguments);
@@ -36,7 +36,7 @@ class PermissionDirectives
     /**
      * Declare hasrole directive
      */
-    public function hasroleDirective()
+    public function hasroleDirective(): void
     {
         $this->bladeCompiler->directive('hasrole', function ($arguments) {
             list($role, $guard) = $this->extractRoleGuard($arguments);
@@ -51,7 +51,7 @@ class PermissionDirectives
     /**
      * Declare hasanyrole directive
      */
-    public function hasanyroleDirective()
+    public function hasanyroleDirective(): void
     {
         $this->bladeCompiler->directive('hasanyrole', function ($arguments) {
             list($roles, $guard) = $this->extractRoleGuard($arguments);
@@ -66,7 +66,7 @@ class PermissionDirectives
     /**
      * Declare hasallroles directive
      */
-    public function hasallrolesDirective()
+    public function hasallrolesDirective(): void
     {
         $this->bladeCompiler->directive('hasallroles', function ($arguments) {
             list($roles, $guard) = $this->extractRoleGuard($arguments);

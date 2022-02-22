@@ -9,7 +9,7 @@ use Maklad\Permission\Models\Permission;
 
 class CacheTest extends TestCase
 {
-    protected $registrar;
+    protected mixed $registrar;
 
     public function setUp(): void
     {
