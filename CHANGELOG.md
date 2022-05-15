@@ -2,6 +2,15 @@
 
 All Notable changes to `laravel-permission-mongodb` will be documented in this file.
 
+## 4.0.0 - 2022-05-15
+
+### Added
+- Support of Laravel 9.x
+- Added some return toward PHP 8 transitioning to require return types
+- Use of DatabaseMigration and Seeder in tests
+- Fix some tests (api guard is no more in auth.php by default)
+
+
 ## 3.1.0 - 2020-10-04
 
 ### Added

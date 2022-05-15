@@ -72,13 +72,22 @@ $user->can('edit articles');
  6.x      | 2.x or 3.x
  7.x      | 3.x
  8.x      | 3.1.x
+ 9.x      | 4.x
 
 ### Laravel
 
 You can install the package via composer:
 
+For laravel 9.x use
+
 ``` bash
 composer require mostafamaklad/laravel-permission-mongodb
+```
+
+For laravel 8.x and older use
+
+``` bash
+composer require mostafamaklad/laravel-permission-mongodb:"^3.1"
 ```
 
 You can publish [the migration](database/migrations/create_permission_collections.php.stub) with:

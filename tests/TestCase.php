@@ -2,63 +2,63 @@
 
 namespace Maklad\Permission\Test;
 
+use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Jenssegers\Mongodb\MongodbServiceProvider;
 use Maklad\Permission\Helpers;
 use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Models\Role;
 use Maklad\Permission\PermissionRegistrar;
 use Maklad\Permission\PermissionServiceProvider;
+use Monolog\Handler\StreamHandler;
 use Monolog\Handler\TestHandler;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
 {
-    protected $helpers;
+    use DatabaseMigrations;
+    protected Helpers $helpers;
+
+    protected string $seeder = TestSeeder::class;
 
     /**
      * Flush the database after each test function
      */
     public function tearDown(): void
     {
-        User::truncate();
-        Admin::truncate();
+        User::query()->truncate();
+        Admin::query()->truncate();
         $this->app[Role::class]::truncate();
         $this->app[Permission::class]::truncate();
     }
 
-    /** @var \Maklad\Permission\Test\User */
-    protected $testUser;
+    protected User $testUser;
 
-    /** @var \Maklad\Permission\Test\Admin */
-    protected $testAdmin;
+    protected Admin $testAdmin;
 
-    /** @var \Maklad\Permission\Models\Role */
-    protected $testUserRole;
+    protected Role $testUserRole;
 
-    /** @var \Maklad\Permission\Models\Role */
-    protected $testAdminRole;
+    protected Role $testAdminRole;
 
-    /** @var \Maklad\Permission\Models\Permission */
-    protected $testUserPermission;
+    protected Permission $testUserPermission;
 
-    /** @var \Maklad\Permission\Models\Permission */
-    protected $testAdminPermission;
+    protected Permission $testAdminPermission;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->setUpDatabase($this->app);
+        // $this->setUpDatabase($this->app);
 
         $this->reloadPermissions();
 
         $this->testUser = User::first();
-        $this->testUserRole = \app(\config('permission.models.role'))->where('name', 'testRole')->first();
-        $this->testUserPermission = \app(\config('permission.models.permission'))->where('name', 'edit-articles')->first();
+        $this->testUserRole = app(config('permission.models.role'))->where('name', 'testRole')->first();
+        $this->testUserPermission = app(config('permission.models.permission'))->where('name', 'edit-articles')->first();
 
         $this->testAdmin = Admin::first();
-        $this->testAdminRole = \app(\config('permission.models.role'))->where('name', 'testAdminRole')->first();
-        $this->testAdminPermission = \app(\config('permission.models.permission'))->where('name', 'admin-permission')->first();
+        $this->testAdminRole = app(config('permission.models.role'))->where('name', 'testAdminRole')->first();
+        $this->testAdminPermission = app(config('permission.models.permission'))->where('name', 'admin-permission')->first();
 
         $this->clearLogTestHandler();
 
@@ -66,11 +66,11 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * @param \Illuminate\Foundation\Application $app
+     * @param Application $app
      *
      * @return array
      */
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [
             PermissionServiceProvider::class,
@@ -81,7 +81,7 @@ abstract class TestCase extends Orchestra
     /**
      * Set up the environment.
      *
-     * @param \Illuminate\Foundation\Application $app
+     * @param Application $app
      */
     protected function getEnvironmentSetUp($app)
     {
@@ -107,36 +107,15 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * Set up the database.
-     *
-     * @param \Illuminate\Foundation\Application $app
-     */
-    protected function setUpDatabase($app)
-    {
-        include_once __DIR__.'/../database/migrations/create_permission_collections.php.stub';
-        (new \CreatePermissionCollections())->up();
-
-        User::create(['email' => 'test@user.com']);
-        Admin::create(['email' => 'admin@user.com']);
-        $app[Role::class]->create(['name' => 'testRole']);
-        $app[Role::class]->create(['name' => 'testRole2']);
-        $app[Role::class]->create(['name' => 'testAdminRole', 'guard_name' => 'admin']);
-        $app[Permission::class]->create(['name' => 'edit-articles']);
-        $app[Permission::class]->create(['name' => 'edit-news']);
-        $app[Permission::class]->create(['name' => 'edit-categories']);
-        $app[Permission::class]->create(['name' => 'admin-permission', 'guard_name' => 'admin']);
-    }
-
-    /**
      * Reload the permissions.
      *
      * @return bool
      */
-    protected function reloadPermissions()
+    protected function reloadPermissions(): bool
     {
-        \app(PermissionRegistrar::class)->forgetCachedPermissions();
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
 
-        return \app(PermissionRegistrar::class)->registerPermissions();
+        return app(PermissionRegistrar::class)->registerPermissions();
     }
 
     /**
@@ -157,7 +136,7 @@ abstract class TestCase extends Orchestra
 
     protected function clearLogTestHandler()
     {
-        \collect($this->app['log']->getLogger()->getHandlers())->filter(function ($handler) {
+        collect($this->app['log']->getLogger()->getHandlers())->filter(function ($handler) {
             return $handler instanceof TestHandler;
         })->first()->clear();
     }
@@ -178,22 +157,23 @@ abstract class TestCase extends Orchestra
      *
      * @return bool
      */
-    protected function hasLog($message, $level)
+    protected function hasLog($message, $level): bool
     {
-        return \collect($this->app['log']->getLogger()->getHandlers())->filter(function ($handler) use (
-                $message,
-                $level
-            ) {
+        return collect($this->app['log']->getLogger()->getHandlers())->filter(function ($handler) use (
+            $message,
+            $level
+        ) {
             return $handler instanceof TestHandler && $handler->hasRecordThatContains($message, $level);
         })->count() > 0;
     }
 
     /**
      * @param $message
+     * @param $level
      */
     protected function assertLogMessage($message, $level)
     {
-        if (\config('permission.log_registration_exception')) {
+        if (config('permission.log_registration_exception')) {
             $this->assertLogged($message, $level);
         } else {
             $this->assertNotLogged($message, $level);
@@ -202,10 +182,11 @@ abstract class TestCase extends Orchestra
 
     /**
      * @param $message
+     * @param $role_permission
      */
     protected function assertShowPermission($message, $role_permission)
     {
-        if (\config('permission.display_permission_in_exception')) {
+        if (config('permission.display_permission_in_exception')) {
             $this->assertContains($role_permission, $message);
         } else {
             $this->assertStringNotContainsString($role_permission, $message);

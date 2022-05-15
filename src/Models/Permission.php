@@ -24,7 +24,7 @@ class Permission extends Model implements PermissionInterface
     use RefreshesPermissionCache;
 
     public $guarded = ['id'];
-    protected $helpers;
+    protected Helpers $helpers;
 
     /**
      * Permission constructor.
@@ -49,7 +49,7 @@ class Permission extends Model implements PermissionInterface
      *
      * @param array $attributes
      *
-     * @return $this|\Illuminate\Database\Eloquent\Model
+     * @return $this|mixed
      * @throws \Maklad\Permission\Exceptions\PermissionAlreadyExists
      * @throws \ReflectionException
      */
@@ -74,7 +74,7 @@ class Permission extends Model implements PermissionInterface
      * Find or create permission by its name (and optionally guardName).
      *
      * @param string $name
-     * @param string $guardName
+     * @param string|null $guardName
      *
      * @return PermissionInterface
      * @throws \Maklad\Permission\Exceptions\PermissionAlreadyExists
@@ -117,7 +117,7 @@ class Permission extends Model implements PermissionInterface
      * Find a permission by its name (and optionally guardName).
      *
      * @param string $name
-     * @param string $guardName
+     * @param string|null $guardName
      *
      * @return PermissionInterface
      * @throws PermissionDoesNotExist

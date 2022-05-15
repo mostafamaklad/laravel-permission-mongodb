@@ -6,6 +6,7 @@ use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\Exceptions\PermissionDoesNotExist;
 use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Models\Role;
+use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
 class HasPermissionsTest extends TestCase
@@ -52,7 +53,7 @@ class HasPermissionsTest extends TestCase
 
                 $this->testUser->givePermissionTo($this->testAdminPermission);
             } finally {
-                $message = $this->helpers->getGuardDoesNotMatchMessage(collect(['web', 'api']), 'admin');
+                $message = $this->helpers->getGuardDoesNotMatchMessage(collect(['web']), 'admin');
                 $this->assertLogMessage($message, Logger::ALERT);
             }
         }

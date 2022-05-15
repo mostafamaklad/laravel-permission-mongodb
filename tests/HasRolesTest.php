@@ -110,7 +110,7 @@ class HasRolesTest extends TestCase
 
                 $this->testUser->assignRole($this->testAdminRole);
             } finally {
-                $message = $this->helpers->getGuardDoesNotMatchMessage(collect(['web', 'api']), 'admin');
+                $message = $this->helpers->getGuardDoesNotMatchMessage(collect(['web']), 'admin');
                 $this->assertLogMessage($message, Logger::ALERT);
             }
         }
@@ -175,7 +175,7 @@ class HasRolesTest extends TestCase
 
                 $this->testUser->syncRoles('testRole', $this->testAdminRole);
             } finally {
-                $message = $this->helpers->getGuardDoesNotMatchMessage(collect(['web', 'api']), 'admin');
+                $message = $this->helpers->getGuardDoesNotMatchMessage(collect(['web']), 'admin');
                 $this->assertLogMessage($message, Logger::ALERT);
             }
         }
