@@ -18,7 +18,8 @@ class TestHelper
      *
      * @return int
      */
-    public function testMiddleware(string $middleware, object $parameter): int {
+    public function testMiddleware(string $middleware, object $parameter): int
+    {
         try {
             return $middleware->handle(new Request(), function () {
                 return (new Response())->setContent('<html></html>');

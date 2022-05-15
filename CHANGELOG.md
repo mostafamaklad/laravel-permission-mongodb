@@ -2,7 +2,7 @@
 
 All Notable changes to `laravel-permission-mongodb` will be documented in this file.
 
-## 4.0.0 - 2022-02-21
+## 4.0.0 - 2022-05-15
 
 ### Added
 - Support of Laravel 9.x
