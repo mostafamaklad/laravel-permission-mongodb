@@ -54,7 +54,7 @@ class PermissionTest extends TestCase
         $this->assertInstanceOf(User::class, $this->testUserPermission->users->first());
 
         $this->testUser->delete();
-        $this->assertEquals(0, $this->testUserPermission->users()->count());
+        $this->assertEquals(0, $this->testUserPermission->usersQuery()->count());
     }
 
     /** @test */

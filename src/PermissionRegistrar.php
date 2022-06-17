@@ -5,7 +5,6 @@ namespace Maklad\Permission;
 use Illuminate\Contracts\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Cache\Repository;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Collection;
 use Maklad\Permission\Contracts\PermissionInterface as Permission;
 
@@ -15,15 +14,20 @@ use Maklad\Permission\Contracts\PermissionInterface as Permission;
  */
 class PermissionRegistrar
 {
-    protected Gate $gate;
+    /** @var \Illuminate\Contracts\Auth\Access\Gate */
+    protected $gate;
 
-    protected Repository $cache;
+    /** @var \Illuminate\Contracts\Cache\Repository */
+    protected $cache;
 
-    protected string $cacheKey = 'maklad.permission.cache';
+    /** @var string */
+    protected $cacheKey = 'maklad.permission.cache';
 
-    protected mixed $permissionClass;
+    /** @var string */
+    protected $permissionClass;
 
-    protected mixed $roleClass;
+    /** @var string */
+    protected $roleClass;
 
     /**
      * PermissionRegistrar constructor.
@@ -57,7 +61,7 @@ class PermissionRegistrar
     /**
      * Forget cached permission
      */
-    public function forgetCachedPermissions(): void
+    public function forgetCachedPermissions()
     {
         $this->cache->forget($this->cacheKey);
     }
@@ -70,16 +74,16 @@ class PermissionRegistrar
     public function getPermissions(): Collection
     {
         return $this->cache->remember($this->cacheKey, config('permission.cache_expiration_time'), function () {
-            return $this->getPermissionClass()->with('roles')->get();
+            return $this->getPermissionClass()->get();
         });
     }
 
     /**
      * Get Permission class
      *
-     * @return Application|mixed
+     * @return \Illuminate\Foundation\Application|mixed
      */
-    public function getPermissionClass(): mixed
+    public function getPermissionClass()
     {
         return app($this->permissionClass);
     }
@@ -87,9 +91,9 @@ class PermissionRegistrar
     /**
      * Get Role class
      *
-     * @return Application|mixed
+     * @return \Illuminate\Foundation\Application|mixed
      */
-    public function getRoleClass(): mixed
+    public function getRoleClass()
     {
         return app($this->roleClass);
     }

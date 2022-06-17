@@ -3,7 +3,6 @@
 namespace Maklad\Permission\Middlewares;
 
 use Closure;
-use Illuminate\Http\Request;
 use Maklad\Permission\Exceptions\UnauthorizedRole;
 use Maklad\Permission\Exceptions\UserNotLoggedIn;
 use Maklad\Permission\Helpers;
@@ -15,14 +14,14 @@ use Maklad\Permission\Helpers;
 class RoleMiddleware
 {
     /**
-     * @param Request $request
+     * @param $request
      * @param Closure $next
-     * @param array|string $role
+     * @param $role
      *
      * @return mixed
      * @throws \Maklad\Permission\Exceptions\UnauthorizedException
      */
-    public function handle(Request $request, Closure $next, array|string $role): mixed
+    public function handle($request, Closure $next, $role)
     {
         if (app('auth')->guest()) {
             $helpers = new Helpers();

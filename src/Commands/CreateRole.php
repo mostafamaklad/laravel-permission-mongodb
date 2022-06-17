@@ -18,7 +18,7 @@ class CreateRole extends Command
 
     protected $description = 'Create a role';
 
-    public function handle(): void
+    public function handle()
     {
         $roleClass       = \app(\config('permission.models.role'));
 

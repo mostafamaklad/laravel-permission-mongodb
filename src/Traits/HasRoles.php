@@ -51,11 +51,11 @@ trait HasRoles
      * Scope the model query to certain roles only.
      *
      * @param Builder $query
-     * @param array|string|Collection|Role $roles
+     * @param string|array|Role|Collection $roles
      *
      * @return Builder
      */
-    public function scopeRole(Builder $query, Role|array|string|Collection $roles): Builder
+    public function scopeRole(Builder $query, $roles): Builder
     {
         $roles = $this->convertToRoleModels($roles);
 
@@ -69,7 +69,7 @@ trait HasRoles
      *
      * @return array|Role|string
      */
-    public function assignRole(...$roles): array|Role|string
+    public function assignRole(...$roles)
     {
         $roles = \collect($roles)
             ->flatten()
@@ -95,7 +95,7 @@ trait HasRoles
      *
      * @return array|Role|string
      */
-    public function removeRole(...$roles): array|Role|string
+    public function removeRole(...$roles)
     {
         \collect($roles)
             ->flatten()
@@ -118,7 +118,7 @@ trait HasRoles
      *
      * @return array|Role|string
      */
-    public function syncRoles(...$roles): array|Role|string
+    public function syncRoles(...$roles)
     {
         $this->roles()->sync([]);
 
@@ -128,11 +128,11 @@ trait HasRoles
     /**
      * Determine if the model has (one of) the given role(s).
      *
-     * @param array|string|Collection|Role $roles
+     * @param string|array|Role|\Illuminate\Support\Collection $roles
      *
      * @return bool
      */
-    public function hasRole(Role|array|string|Collection $roles): bool
+    public function hasRole($roles): bool
     {
         if (\is_string($roles) && false !== \strpos($roles, '|')) {
             $roles = \explode('|', $roles);
@@ -152,11 +152,11 @@ trait HasRoles
     /**
      * Determine if the model has any of the given role(s).
      *
-     * @param array|string|Collection|Role $roles
+     * @param string|array|Role|\Illuminate\Support\Collection $roles
      *
      * @return bool
      */
-    public function hasAnyRole(Role|array|string|Collection $roles): bool
+    public function hasAnyRole($roles): bool
     {
         return $this->hasRole($roles);
     }
@@ -189,7 +189,7 @@ trait HasRoles
      * @return Role
      * @throws ReflectionException
      */
-    protected function getStoredRole(Role|string $role): Role
+    protected function getStoredRole($role): Role
     {
         if (\is_string($role)) {
             return $this->getRoleClass()->findByName($role, $this->getDefaultGuardName());

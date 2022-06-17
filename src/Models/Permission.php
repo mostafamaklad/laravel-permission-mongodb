@@ -24,7 +24,7 @@ class Permission extends Model implements PermissionInterface
     use RefreshesPermissionCache;
 
     public $guarded = ['id'];
-    protected Helpers $helpers;
+    protected $helpers;
 
     /**
      * Permission constructor.
@@ -49,7 +49,7 @@ class Permission extends Model implements PermissionInterface
      *
      * @param array $attributes
      *
-     * @return $this|mixed
+     * @return $this|\Illuminate\Database\Eloquent\Model
      * @throws \Maklad\Permission\Exceptions\PermissionAlreadyExists
      * @throws \ReflectionException
      */
@@ -74,7 +74,7 @@ class Permission extends Model implements PermissionInterface
      * Find or create permission by its name (and optionally guardName).
      *
      * @param string $name
-     * @param string|null $guardName
+     * @param string $guardName
      *
      * @return PermissionInterface
      * @throws \Maklad\Permission\Exceptions\PermissionAlreadyExists
@@ -97,27 +97,47 @@ class Permission extends Model implements PermissionInterface
 
     /**
      * A permission can be applied to roles.
-     * @return BelongsToMany
+     * @return mixed
      */
-    public function roles(): BelongsToMany
+    public function rolesQuery()
     {
-        return $this->belongsToMany(config('permission.models.role'));
+        $roleClass = $this->getRoleClass();
+        return $roleClass->query()->where('permission_ids', 'all', [$this->_id]);
+    }
+
+    /**
+     * A permission can be applied to roles.
+     * @return mixed
+     */
+    public function getRolesAttribute()
+    {
+        return $this->rolesQuery()->get();
     }
 
     /**
      * A permission belongs to some users of the model associated with its guard.
-     * @return BelongsToMany
+     * @return mixed
      */
-    public function users(): BelongsToMany
+    public function usersQuery()
     {
-        return $this->belongsToMany($this->helpers->getModelForGuard($this->attributes['guard_name']));
+        $usersClass = app($this->helpers->getModelForGuard($this->attributes['guard_name']));
+        return $usersClass->query()->where('permission_ids', 'all', [$this->_id]);
+    }
+
+    /**
+     * A permission belongs to some users of the model associated with its guard.
+     * @return mixed
+     */
+    public function getUsersAttribute()
+    {
+        return $this->usersQuery()->get();
     }
 
     /**
      * Find a permission by its name (and optionally guardName).
      *
      * @param string $name
-     * @param string|null $guardName
+     * @param string $guardName
      *
      * @return PermissionInterface
      * @throws PermissionDoesNotExist

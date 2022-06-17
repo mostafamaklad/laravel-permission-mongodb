@@ -15,7 +15,7 @@ class Helpers
      *
      * @return string|null
      */
-    public function getModelForGuard(string $guard): ?string
+    public function getModelForGuard(string $guard)
     {
         return \collect(\config('auth.guards'))
             ->map(function ($guard) {

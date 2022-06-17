@@ -14,7 +14,7 @@ class MakladException extends InvalidArgumentException
     /**
      * MakladException constructor.
      *
-     * @param string|null $message
+     * @param string $message
      * @param int $code
      * @param Throwable|null $previous
      */
