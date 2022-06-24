@@ -97,7 +97,7 @@ trait HasPermissions
         $permissions = $this->getPermissionIds($permissions);
 
         $this->permission_ids = collect($this->permission_ids ?? [])
-            ->filter(function($permission) use ($permissions) {
+            ->filter(function ($permission) use ($permissions) {
                 return ! in_array($permission, $permissions, true);
             })
             ->all();
@@ -357,7 +357,7 @@ trait HasPermissions
     {
         return collect($permissions)
             ->flatten()
-            ->map(function($permission) {
+            ->map(function ($permission) {
                 $permission = $this->getStoredPermission($permission);
                 $this->ensureModelSharesGuard($permission);
                 return $permission->_id;
