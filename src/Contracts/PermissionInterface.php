@@ -2,7 +2,6 @@
 
 namespace Maklad\Permission\Contracts;
 
-use Jenssegers\Mongodb\Relations\BelongsToMany;
 use Maklad\Permission\Exceptions\PermissionDoesNotExist;
 
 /**

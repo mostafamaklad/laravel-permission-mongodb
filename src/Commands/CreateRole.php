@@ -3,7 +3,6 @@
 namespace Maklad\Permission\Commands;
 
 use Illuminate\Console\Command;
-use Maklad\Permission\Contracts\RoleInterface as Role;
 
 /**
  * Class CreateRole

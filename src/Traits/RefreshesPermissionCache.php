@@ -2,8 +2,6 @@
 
 namespace Maklad\Permission\Traits;
 
-use Maklad\Permission\PermissionRegistrar;
-
 /**
  * Trait RefreshesPermissionCache
  * @package Maklad\Permission\Traits

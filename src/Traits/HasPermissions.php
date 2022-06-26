@@ -10,7 +10,6 @@ use Maklad\Permission\Contracts\PermissionInterface as Permission;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\Guard;
 use Maklad\Permission\Helpers;
-use Maklad\Permission\Models\Role;
 use Maklad\Permission\PermissionRegistrar;
 use ReflectionException;
 

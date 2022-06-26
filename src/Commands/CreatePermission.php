@@ -3,7 +3,6 @@
 namespace Maklad\Permission\Commands;
 
 use Illuminate\Console\Command;
-use Maklad\Permission\Contracts\PermissionInterface as Permission;
 
 /**
  * Class CreatePermission
@@ -11,8 +10,8 @@ use Maklad\Permission\Contracts\PermissionInterface as Permission;
  */
 class CreatePermission extends Command
 {
-    protected $signature = 'permission:create-permission 
-                {name : The name of the permission} 
+    protected $signature = 'permission:create-permission
+                {name : The name of the permission}
                 {guard? : The name of the guard}';
 
     protected $description = 'Create a permission';
