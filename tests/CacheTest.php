@@ -3,9 +3,9 @@
 namespace Maklad\Permission\Test;
 
 use Illuminate\Support\Facades\DB;
+use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Models\Role;
 use Maklad\Permission\PermissionRegistrar;
-use Maklad\Permission\Models\Permission;
 
 class CacheTest extends TestCase
 {

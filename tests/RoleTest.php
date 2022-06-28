@@ -2,11 +2,11 @@
 
 namespace Maklad\Permission\Test;
 
-use Maklad\Permission\Models\Role;
-use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
-use Maklad\Permission\Exceptions\RoleAlreadyExists;
 use Maklad\Permission\Exceptions\PermissionDoesNotExist;
+use Maklad\Permission\Exceptions\RoleAlreadyExists;
+use Maklad\Permission\Models\Permission;
+use Maklad\Permission\Models\Role;
 use Monolog\Logger;
 
 class RoleTest extends TestCase
