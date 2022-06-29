@@ -12,9 +12,12 @@ use Maklad\Permission\Helpers;
 use Maklad\Permission\PermissionRegistrar;
 use Maklad\Permission\Traits\HasRoles;
 use Maklad\Permission\Traits\RefreshesPermissionCache;
+use ReflectionException;
+use function app;
 
 /**
  * Class Permission
+ * @property string $_id
  * @package Maklad\Permission\Models
  */
 class Permission extends Model implements PermissionInterface
@@ -23,14 +26,14 @@ class Permission extends Model implements PermissionInterface
     use RefreshesPermissionCache;
 
     public $guarded = ['id'];
-    protected $helpers;
+    protected Helpers $helpers;
 
     /**
      * Permission constructor.
      *
      * @param array $attributes
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function __construct(array $attributes = [])
     {
@@ -49,10 +52,10 @@ class Permission extends Model implements PermissionInterface
      * @param array $attributes
      *
      * @return $this|\Illuminate\Database\Eloquent\Model
-     * @throws \Maklad\Permission\Exceptions\PermissionAlreadyExists
-     * @throws \ReflectionException
+     * @throws PermissionAlreadyExists
+     * @throws ReflectionException
      */
-    public static function create(array $attributes = [])
+    public static function create(array $attributes = []): \Illuminate\Database\Eloquent\Model|static
     {
         $helpers = new Helpers();
         $attributes['guard_name'] = $attributes['guard_name'] ?? (new Guard())->getDefaultName(static::class);
@@ -66,18 +69,17 @@ class Permission extends Model implements PermissionInterface
             throw new PermissionAlreadyExists($helpers->getPermissionAlreadyExistsMessage($name, $guardName));
         }
 
-        return $helpers->checkVersion() ? parent::create($attributes) : static::query()->create($attributes);
+        return static::query()->create($attributes);
     }
 
     /**
      * Find or create permission by its name (and optionally guardName).
      *
      * @param string $name
-     * @param string $guardName
+     * @param string|null $guardName
      *
      * @return PermissionInterface
-     * @throws \Maklad\Permission\Exceptions\PermissionAlreadyExists
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public static function findOrCreate(string $name, string $guardName = null): PermissionInterface
     {
@@ -98,7 +100,7 @@ class Permission extends Model implements PermissionInterface
      * A permission can be applied to roles.
      * @return mixed
      */
-    public function rolesQuery()
+    public function rolesQuery(): mixed
     {
         $roleClass = $this->getRoleClass();
         return $roleClass->query()->where('permission_ids', 'all', [$this->_id]);
@@ -108,7 +110,7 @@ class Permission extends Model implements PermissionInterface
      * A permission can be applied to roles.
      * @return mixed
      */
-    public function getRolesAttribute()
+    public function getRolesAttribute(): mixed
     {
         return $this->rolesQuery()->get();
     }
@@ -117,7 +119,7 @@ class Permission extends Model implements PermissionInterface
      * A permission belongs to some users of the model associated with its guard.
      * @return mixed
      */
-    public function usersQuery()
+    public function usersQuery(): mixed
     {
         $usersClass = app($this->helpers->getModelForGuard($this->attributes['guard_name']));
         return $usersClass->query()->where('permission_ids', 'all', [$this->_id]);
@@ -127,7 +129,7 @@ class Permission extends Model implements PermissionInterface
      * A permission belongs to some users of the model associated with its guard.
      * @return mixed
      */
-    public function getUsersAttribute()
+    public function getUsersAttribute(): mixed
     {
         return $this->usersQuery()->get();
     }
@@ -136,11 +138,10 @@ class Permission extends Model implements PermissionInterface
      * Find a permission by its name (and optionally guardName).
      *
      * @param string $name
-     * @param string $guardName
+     * @param string|null $guardName
      *
      * @return PermissionInterface
-     * @throws PermissionDoesNotExist
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public static function findByName(string $name, string $guardName = null): PermissionInterface
     {
@@ -164,6 +165,6 @@ class Permission extends Model implements PermissionInterface
      */
     protected static function getPermissions(): Collection
     {
-        return \app(PermissionRegistrar::class)->getPermissions();
+        return app(PermissionRegistrar::class)->getPermissions();
     }
 }

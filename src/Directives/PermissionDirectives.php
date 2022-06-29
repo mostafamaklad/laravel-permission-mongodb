@@ -3,6 +3,7 @@
 namespace Maklad\Permission\Directives;
 
 use Illuminate\View\Compilers\BladeCompiler;
+use function explode;
 
 /**
  * Class PermissionDirectives
@@ -10,7 +11,7 @@ use Illuminate\View\Compilers\BladeCompiler;
  */
 class PermissionDirectives
 {
-    private $bladeCompiler;
+    private BladeCompiler $bladeCompiler;
 
     public function __construct(BladeCompiler $bladeCompiler)
     {
@@ -20,12 +21,12 @@ class PermissionDirectives
     /**
      * Declare role directive
      */
-    public function roleDirective()
+    public function roleDirective(): void
     {
         $this->bladeCompiler->directive('role', function ($arguments) {
             list($role, $guard) = $this->extractRoleGuard($arguments);
 
-            return "<?php if(auth({$guard})->check() && auth({$guard})->user()->hasRole({$role})): ?>";
+            return "<?php if(auth($guard)->check() && auth($guard)->user()->hasRole($role)): ?>";
         });
 
         $this->bladeCompiler->directive('endrole', function () {
@@ -36,12 +37,12 @@ class PermissionDirectives
     /**
      * Declare hasrole directive
      */
-    public function hasroleDirective()
+    public function hasroleDirective(): void
     {
         $this->bladeCompiler->directive('hasrole', function ($arguments) {
             list($role, $guard) = $this->extractRoleGuard($arguments);
 
-            return "<?php if(auth({$guard})->check() && auth({$guard})->user()->hasRole({$role})): ?>";
+            return "<?php if(auth($guard)->check() && auth($guard)->user()->hasRole($role)): ?>";
         });
         $this->bladeCompiler->directive('endhasrole', function () {
             return '<?php endif; ?>';
@@ -51,12 +52,12 @@ class PermissionDirectives
     /**
      * Declare hasanyrole directive
      */
-    public function hasanyroleDirective()
+    public function hasanyroleDirective(): void
     {
         $this->bladeCompiler->directive('hasanyrole', function ($arguments) {
             list($roles, $guard) = $this->extractRoleGuard($arguments);
 
-            return "<?php if(auth({$guard})->check() && auth({$guard})->user()->hasAnyRole({$roles})): ?>";
+            return "<?php if(auth($guard)->check() && auth($guard)->user()->hasAnyRole($roles)): ?>";
         });
         $this->bladeCompiler->directive('endhasanyrole', function () {
             return '<?php endif; ?>';
@@ -66,12 +67,12 @@ class PermissionDirectives
     /**
      * Declare hasallroles directive
      */
-    public function hasallrolesDirective()
+    public function hasallrolesDirective(): void
     {
         $this->bladeCompiler->directive('hasallroles', function ($arguments) {
             list($roles, $guard) = $this->extractRoleGuard($arguments);
 
-            return "<?php if(auth({$guard})->check() && auth({$guard})->user()->hasAllRoles({$roles})): ?>";
+            return "<?php if(auth($guard)->check() && auth($guard)->user()->hasAllRoles($roles)): ?>";
         });
         $this->bladeCompiler->directive('endhasallroles', function () {
             return '<?php endif; ?>';
@@ -85,8 +86,8 @@ class PermissionDirectives
      */
     private function extractRoleGuard($arguments): array
     {
-        $arguments = preg_replace('(\(|\)| )', '', $arguments);
+        $arguments = preg_replace('([() ])', '', $arguments);
 
-        return \explode(',', $arguments . ',');
+        return explode(',', $arguments . ',');
     }
 }

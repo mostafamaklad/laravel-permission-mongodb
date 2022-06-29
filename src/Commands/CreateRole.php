@@ -3,6 +3,8 @@
 namespace Maklad\Permission\Commands;
 
 use Illuminate\Console\Command;
+use function app;
+use function config;
 
 /**
  * Class CreateRole
@@ -19,7 +21,7 @@ class CreateRole extends Command
 
     public function handle()
     {
-        $roleClass       = \app(\config('permission.models.role'));
+        $roleClass       = app(config('permission.models.role'));
 
         $name        = $this->argument('name');
         $guard       = $this->argument('guard');
@@ -30,10 +32,10 @@ class CreateRole extends Command
             'guard_name' => $guard
         ]);
 
-        $this->info("Role `{$role->name}` created");
+        $this->info("Role `$role->name` created");
 
         $role->givePermissionTo($permissions);
         $permissionsStr = $role->permissions->implode('name', '`, `');
-        $this->info("Permissions `{$permissionsStr}` has been given to role `{$role->name}`");
+        $this->info("Permissions `$permissionsStr` has been given to role `$role->name`");
     }
 }

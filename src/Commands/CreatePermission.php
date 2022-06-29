@@ -3,6 +3,8 @@
 namespace Maklad\Permission\Commands;
 
 use Illuminate\Console\Command;
+use function app;
+use function config;
 
 /**
  * Class CreatePermission
@@ -18,13 +20,13 @@ class CreatePermission extends Command
 
     public function handle()
     {
-        $permissionClass = \app(\config('permission.models.permission'));
+        $permissionClass = app(config('permission.models.permission'));
 
         $permission = $permissionClass::create([
             'name'       => $this->argument('name'),
             'guard_name' => $this->argument('guard')
         ]);
 
-        $this->info("Permission `{$permission->name}` created");
+        $this->info("Permission `$permission->name` created");
     }
 }

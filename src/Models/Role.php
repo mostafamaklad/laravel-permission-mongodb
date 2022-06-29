@@ -2,6 +2,7 @@
 
 namespace Maklad\Permission\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Maklad\Permission\Contracts\PermissionInterface;
 use Maklad\Permission\Contracts\RoleInterface;
@@ -13,9 +14,11 @@ use Maklad\Permission\Helpers;
 use Maklad\Permission\Traits\HasPermissions;
 use Maklad\Permission\Traits\RefreshesPermissionCache;
 use ReflectionException;
+use function is_string;
 
 /**
  * Class Role
+ * @property string $_id
  * @package Maklad\Permission\Models
  */
 class Role extends Model implements RoleInterface
@@ -24,7 +27,7 @@ class Role extends Model implements RoleInterface
     use RefreshesPermissionCache;
 
     public $guarded = ['id'];
-    protected $helpers;
+    protected Helpers $helpers;
 
     /**
      * Role constructor.
@@ -47,23 +50,23 @@ class Role extends Model implements RoleInterface
     /**
      * @param array $attributes
      *
-     * @return RoleInterface
+     * @return Builder|\Illuminate\Database\Eloquent\Model|RoleInterface
      *
      * @throws RoleAlreadyExists
      * @throws ReflectionException
      */
-    public static function create(array $attributes = [])
+    public static function create(array $attributes = []): \Illuminate\Database\Eloquent\Model|RoleInterface|Builder
     {
         $attributes['guard_name'] = $attributes['guard_name'] ?? (new Guard())->getDefaultName(static::class);
         $helpers = new Helpers();
 
-        if (static::where('name', $attributes['name'])->where('guard_name', $attributes['guard_name'])->first()) {
+        if (static::query()->where('name', $attributes['name'])->where('guard_name', $attributes['guard_name'])->first()) {
             $name = (string)$attributes['name'];
             $guardName = (string)$attributes['guard_name'];
             throw new RoleAlreadyExists($helpers->getRoleAlreadyExistsMessage($name, $guardName));
         }
 
-        return $helpers->checkVersion() ? parent::create($attributes) : static::query()->create($attributes);
+        return static::query()->create($attributes);
     }
 
     /**
@@ -102,7 +105,7 @@ class Role extends Model implements RoleInterface
      * @throws RoleDoesNotExist
      * @throws ReflectionException
      */
-    public static function findByName(string $name, $guardName = null): RoleInterface
+    public static function findByName(string $name, string $guardName = null): RoleInterface
     {
         $guardName = $guardName ?? (new Guard())->getDefaultName(static::class);
 
@@ -123,7 +126,7 @@ class Role extends Model implements RoleInterface
      * A permission belongs to some users of the model associated with its guard.
      * @return mixed
      */
-    public function usersQuery()
+    public function usersQuery(): mixed
     {
         $usersClass = app($this->helpers->getModelForGuard($this->attributes['guard_name']));
         return $usersClass->query()->where('role_ids', 'all', [$this->_id]);
@@ -133,7 +136,7 @@ class Role extends Model implements RoleInterface
      * A permission belongs to some users of the model associated with its guard.
      * @return mixed
      */
-    public function getUsersAttribute()
+    public function getUsersAttribute(): mixed
     {
         return $this->usersQuery()->get();
     }
@@ -141,7 +144,7 @@ class Role extends Model implements RoleInterface
     /**
      * Determine if the user may perform the given permission.
      *
-     * @param string|PermissionInterface $permission
+     * @param string|Permission $permission
      *
      * @return bool
      *
@@ -150,7 +153,7 @@ class Role extends Model implements RoleInterface
      */
     public function hasPermissionTo(string|PermissionInterface $permission): bool
     {
-        if (\is_string($permission)) {
+        if (is_string($permission)) {
             $permission = $this->getPermissionClass()->findByName($permission, $this->getDefaultGuardName());
         }
 

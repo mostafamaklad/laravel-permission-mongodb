@@ -3,6 +3,8 @@
 namespace Maklad\Permission;
 
 use Illuminate\Support\Collection;
+use function collect;
+use function config;
 
 /**
  * Class Helpers
@@ -15,11 +17,11 @@ class Helpers
      *
      * @return string|null
      */
-    public function getModelForGuard(string $guard)
+    public function getModelForGuard(string $guard): ?string
     {
-        return \collect(\config('auth.guards'))
+        return collect(config('auth.guards'))
             ->map(function ($guard) {
-                return \config("auth.providers.{$guard['provider']}.model");
+                return config("auth.providers.{$guard['provider']}.model");
             })->get($guard);
     }
 
@@ -31,7 +33,8 @@ class Helpers
      */
     public function getGuardDoesNotMatchMessage(Collection $expected, string $given): string
     {
-        return "The given role or permission should use guard `{$expected->implode(', ')}` instead of `{$given}`.";
+        $expectedStr = $expected->implode(', ');
+        return "The given role or permission should use guard `$expectedStr` instead of `$given`.";
     }
 
     /**
@@ -42,7 +45,7 @@ class Helpers
      */
     public function getPermissionAlreadyExistsMessage(string $name, string $guardName): string
     {
-        return "A permission `{$name}` already exists for guard `{$guardName}`.";
+        return "A permission `$name` already exists for guard `$guardName`.";
     }
 
     /**
@@ -53,7 +56,7 @@ class Helpers
      */
     public function getPermissionDoesNotExistMessage(string $name, string $guardName): string
     {
-        return "There is no permission named `{$name}` for guard `{$guardName}`.";
+        return "There is no permission named `$name` for guard `$guardName`.";
     }
 
     /**
@@ -64,7 +67,7 @@ class Helpers
      */
     public function getRoleAlreadyExistsMessage(string $name, string $guardName): string
     {
-        return "A role `{$name}` already exists for guard `{$guardName}`.";
+        return "A role `$name` already exists for guard `$guardName`.";
     }
 
     /**
@@ -76,7 +79,7 @@ class Helpers
      */
     public function getRoleDoesNotExistMessage(string $name, string $guardName): string
     {
-        return "There is no role named `{$name}` for guard `{$guardName}`.";
+        return "There is no role named `$name` for guard `$guardName`.";
     }
 
     /**
@@ -86,7 +89,7 @@ class Helpers
      */
     public function getUnauthorizedRoleMessage(string $roles): string
     {
-        $message = "User does not have the right roles `{$roles}`.";
+        $message = "User does not have the right roles `$roles`.";
         if (! config('permission.display_permission_in_exception')) {
             $message = 'User does not have the right roles.';
         }
@@ -101,7 +104,7 @@ class Helpers
      */
     public function getUnauthorizedPermissionMessage(string $permissions): string
     {
-        $message = "User does not have the right permissions `{$permissions}`.";
+        $message = "User does not have the right permissions `$permissions`.";
         if (! config('permission.display_permission_in_exception')) {
             $message = 'User does not have the right permissions.';
         }

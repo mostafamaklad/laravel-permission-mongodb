@@ -41,11 +41,8 @@ class PermissionServiceProvider extends ServiceProvider
 
         $this->registerModelBindings();
 
-        try {
-            DB::connection()->getPdo();
-            app(PermissionRegistrar::class)->registerPermissions();
-        } catch (\Exception $e) {
-        }
+        DB::connection()->getPdo();
+        app(PermissionRegistrar::class)->registerPermissions();
     }
 
     public function register()
