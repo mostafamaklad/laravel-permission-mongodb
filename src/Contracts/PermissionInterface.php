@@ -2,7 +2,6 @@
 
 namespace Maklad\Permission\Contracts;
 
-use Jenssegers\Mongodb\Relations\BelongsToMany;
 use Maklad\Permission\Exceptions\PermissionDoesNotExist;
 
 /**
@@ -13,9 +12,8 @@ interface PermissionInterface
 {
     /**
      * A permission can be applied to roles.
-     * @return BelongsToMany
      */
-    public function roles(): BelongsToMany;
+    public function rolesQuery();
 
     /**
      * Find a permission by its name.

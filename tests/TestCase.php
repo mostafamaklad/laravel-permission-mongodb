@@ -10,7 +10,6 @@ use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Models\Role;
 use Maklad\Permission\PermissionRegistrar;
 use Maklad\Permission\PermissionServiceProvider;
-use Monolog\Handler\StreamHandler;
 use Monolog\Handler\TestHandler;
 use Orchestra\Testbench\TestCase as Orchestra;
 

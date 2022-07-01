@@ -6,7 +6,6 @@ use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\Exceptions\PermissionDoesNotExist;
 use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Models\Role;
-use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
 class HasPermissionsTest extends TestCase
@@ -183,9 +182,9 @@ class HasPermissionsTest extends TestCase
     public function it_can_give_and_revoke_multiple_permissions()
     {
         $this->testUserRole->givePermissionTo(['edit-articles', 'edit-news']);
-        $this->assertEquals(2, $this->testUserRole->permissions()->count());
+        $this->assertEquals(2, $this->testUserRole->permissionsQuery()->count());
         $this->testUserRole->revokePermissionTo(['edit-articles', 'edit-news']);
-        $this->assertEquals(0, $this->testUserRole->permissions()->count());
+        $this->assertEquals(0, $this->testUserRole->permissionsQuery()->count());
     }
 
     /** @test */

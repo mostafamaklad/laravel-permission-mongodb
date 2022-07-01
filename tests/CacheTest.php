@@ -3,9 +3,9 @@
 namespace Maklad\Permission\Test;
 
 use Illuminate\Support\Facades\DB;
+use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Models\Role;
 use Maklad\Permission\PermissionRegistrar;
-use Maklad\Permission\Models\Permission;
 
 class CacheTest extends TestCase
 {
@@ -25,7 +25,7 @@ class CacheTest extends TestCase
 
         $this->registrar->registerPermissions();
 
-        $this->assertCount(2, DB::getQueryLog());
+        $this->assertCount(1, DB::getQueryLog());
 
         DB::flushQueryLog();
     }
@@ -45,20 +45,20 @@ class CacheTest extends TestCase
         $this->assertCount(1, DB::getQueryLog());
 
         $this->registrar->registerPermissions();
-        $this->assertCount(3, DB::getQueryLog());
+        $this->assertCount(2, DB::getQueryLog());
 
         $permission->name = 'other name';
         $permission->save();
+        $this->assertCount(3, DB::getQueryLog());
+
+        $this->registrar->registerPermissions();
         $this->assertCount(4, DB::getQueryLog());
+
+        $permission->delete();
+        $this->assertCount(5, DB::getQueryLog());
 
         $this->registrar->registerPermissions();
         $this->assertCount(6, DB::getQueryLog());
-
-        $permission->delete();
-        $this->assertCount(7, DB::getQueryLog());
-
-        $this->registrar->registerPermissions();
-        $this->assertCount(9, DB::getQueryLog());
     }
 
     /** @test */
@@ -68,20 +68,20 @@ class CacheTest extends TestCase
         $this->assertCount(2, DB::getQueryLog());
 
         $this->registrar->registerPermissions();
-        $this->assertCount(4, DB::getQueryLog());
+        $this->assertCount(3, DB::getQueryLog());
 
         $role->name = 'other name';
         $role->save();
+        $this->assertCount(4, DB::getQueryLog());
+
+        $this->registrar->registerPermissions();
         $this->assertCount(5, DB::getQueryLog());
+
+        $role->delete();
+        $this->assertCount(6, DB::getQueryLog());
 
         $this->registrar->registerPermissions();
         $this->assertCount(7, DB::getQueryLog());
-
-        $role->delete();
-        $this->assertCount(8, DB::getQueryLog());
-
-        $this->registrar->registerPermissions();
-        $this->assertCount(10, DB::getQueryLog());
     }
 
     /** @test */
@@ -98,10 +98,10 @@ class CacheTest extends TestCase
     public function adding_a_permission_to_a_role_should_flush_the_cache()
     {
         $this->testUserRole->givePermissionTo($this->testUserPermission);
-        $this->assertCount(2, DB::getQueryLog());
+        $this->assertCount(1, DB::getQueryLog());
 
         $this->registrar->registerPermissions();
-        $this->assertCount(4, DB::getQueryLog());
+        $this->assertCount(2, DB::getQueryLog());
     }
 
     /** @test */
@@ -109,13 +109,13 @@ class CacheTest extends TestCase
     {
         $this->testUserRole->givePermissionTo(['edit-articles', 'edit-news']);
         $this->testUser->assignRole('testRole');
-        $this->assertCount(7, DB::getQueryLog());
+        $this->assertCount(4, DB::getQueryLog());
 
         $this->assertTrue($this->testUser->hasPermissionTo('edit-articles'));
-        $this->assertCount(11, DB::getQueryLog());
+        $this->assertCount(8, DB::getQueryLog());
 
         $this->assertTrue($this->testUser->hasPermissionTo('edit-news'));
-        $this->assertCount(11, DB::getQueryLog());
+        $this->assertCount(10, DB::getQueryLog());
 
         $this->assertTrue($this->testUser->hasPermissionTo('edit-articles'));
         $this->assertCount(11, DB::getQueryLog());

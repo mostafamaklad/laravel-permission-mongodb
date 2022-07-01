@@ -3,6 +3,8 @@
 namespace Maklad\Permission\Exceptions;
 
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use function app;
+use function config;
 
 /**
  * Class UnauthorizedException
@@ -10,8 +12,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  */
 class UnauthorizedException extends HttpException
 {
-    private array $requiredRoles = [];
-    private array $requiredPermissions = [];
+    private array $requiredRoles;
+    private array $requiredPermissions;
 
     /**
      * UnauthorizedException constructor.
@@ -29,8 +31,8 @@ class UnauthorizedException extends HttpException
     ) {
         parent::__construct($statusCode, $message);
 
-        if (\config('permission.log_registration_exception')) {
-            $logger = \app('log');
+        if (config('permission.log_registration_exception')) {
+            $logger = app('log');
             $logger->alert($message);
         }
 

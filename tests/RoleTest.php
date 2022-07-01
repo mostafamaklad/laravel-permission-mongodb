@@ -2,11 +2,11 @@
 
 namespace Maklad\Permission\Test;
 
-use Maklad\Permission\Models\Role;
-use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
-use Maklad\Permission\Exceptions\RoleAlreadyExists;
 use Maklad\Permission\Exceptions\PermissionDoesNotExist;
+use Maklad\Permission\Exceptions\RoleAlreadyExists;
+use Maklad\Permission\Models\Permission;
+use Maklad\Permission\Models\Role;
 use Monolog\Logger;
 
 class RoleTest extends TestCase
@@ -32,7 +32,7 @@ class RoleTest extends TestCase
         $this->assertInstanceOf(User::class, $this->testUserRole->users->first());
 
         $this->testUser->delete();
-        $this->assertEquals(0, $this->testUserRole->users()->count());
+        $this->assertEquals(0, $this->testUserRole->usersQuery()->count());
     }
 
     /** @test */

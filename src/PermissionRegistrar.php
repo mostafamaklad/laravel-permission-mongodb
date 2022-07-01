@@ -21,9 +21,9 @@ class PermissionRegistrar
 
     protected string $cacheKey = 'maklad.permission.cache';
 
-    protected mixed $permissionClass;
+    protected string $permissionClass;
 
-    protected mixed $roleClass;
+    protected string $roleClass;
 
     /**
      * PermissionRegistrar constructor.
@@ -70,7 +70,7 @@ class PermissionRegistrar
     public function getPermissions(): Collection
     {
         return $this->cache->remember($this->cacheKey, config('permission.cache_expiration_time'), function () {
-            return $this->getPermissionClass()->with('roles')->get();
+            return $this->getPermissionClass()->get();
         });
     }
 

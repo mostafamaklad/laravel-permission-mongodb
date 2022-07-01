@@ -4,6 +4,8 @@ namespace Maklad\Permission\Exceptions;
 
 use InvalidArgumentException;
 use Throwable;
+use function app;
+use function config;
 
 /**
  * Class MakladException
@@ -22,8 +24,8 @@ class MakladException extends InvalidArgumentException
     {
         parent::__construct($message, $code, $previous);
 
-        if (\config('permission.log_registration_exception')) {
-            $logger = \app('log');
+        if (config('permission.log_registration_exception')) {
+            $logger = app('log');
             $logger->alert($message);
         }
     }

@@ -2,7 +2,6 @@
 
 namespace Maklad\Permission\Contracts;
 
-use Jenssegers\Mongodb\Relations\BelongsToMany;
 use Maklad\Permission\Exceptions\RoleDoesNotExist;
 
 /**
@@ -13,9 +12,8 @@ interface RoleInterface
 {
     /**
      * A role may be given various permissions.
-     * @return BelongsToMany
      */
-    public function permissions(): BelongsToMany;
+    public function permissionsQuery();
 
     /**
      * Find a role by its name and guard name.

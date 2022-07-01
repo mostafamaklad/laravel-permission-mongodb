@@ -5,10 +5,12 @@ namespace Maklad\Permission\Traits;
 use Illuminate\Support\Collection;
 use Jenssegers\Mongodb\Eloquent\Builder;
 use Jenssegers\Mongodb\Eloquent\Model;
+use Jenssegers\Mongodb\Relations\BelongsToMany;
 use Maklad\Permission\Contracts\RoleInterface as Role;
 use Maklad\Permission\Helpers;
 use Maklad\Permission\PermissionRegistrar;
 use ReflectionException;
+use function collect;
 
 /**
  * Trait HasRoles
@@ -20,7 +22,7 @@ trait HasRoles
 
     private $roleClass;
 
-    public static function bootHasRoles()
+    public static function bootHasRoles(): void
     {
         static::deleting(function (Model $model) {
             if (isset($model->forceDeleting) && !$model->forceDeleting) {
@@ -42,7 +44,7 @@ trait HasRoles
     /**
      * A model may have multiple roles.
      */
-    public function roles()
+    public function roles(): BelongsToMany|\Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(config('permission.models.role'));
     }
@@ -51,11 +53,11 @@ trait HasRoles
      * Scope the model query to certain roles only.
      *
      * @param Builder $query
-     * @param array|string|Collection|Role $roles
+     * @param string|array|Role|Collection $roles
      *
      * @return Builder
      */
-    public function scopeRole(Builder $query, Role|array|string|Collection $roles): Builder
+    public function scopeRole(Builder $query, $roles): Builder
     {
         $roles = $this->convertToRoleModels($roles);
 
@@ -68,10 +70,11 @@ trait HasRoles
      * @param array|string|Role ...$roles
      *
      * @return array|Role|string
+     * @throws ReflectionException
      */
-    public function assignRole(...$roles): array|Role|string
+    public function assignRole(...$roles)
     {
-        $roles = \collect($roles)
+        $roles = collect($roles)
             ->flatten()
             ->map(function ($role) {
                 return $this->getStoredRole($role);
@@ -95,9 +98,9 @@ trait HasRoles
      *
      * @return array|Role|string
      */
-    public function removeRole(...$roles): array|Role|string
+    public function removeRole(...$roles)
     {
-        \collect($roles)
+        collect($roles)
             ->flatten()
             ->map(function ($role) {
                 $role = $this->getStoredRole($role);
@@ -117,8 +120,9 @@ trait HasRoles
      * @param array ...$roles
      *
      * @return array|Role|string
+     * @throws ReflectionException
      */
-    public function syncRoles(...$roles): array|Role|string
+    public function syncRoles(...$roles): Role|array|string
     {
         $this->roles()->sync([]);
 
@@ -128,13 +132,13 @@ trait HasRoles
     /**
      * Determine if the model has (one of) the given role(s).
      *
-     * @param array|string|Collection|Role $roles
+     * @param string|array|Role|Collection $roles
      *
      * @return bool
      */
-    public function hasRole(Role|array|string|Collection $roles): bool
+    public function hasRole($roles): bool
     {
-        if (\is_string($roles) && false !== \strpos($roles, '|')) {
+        if (\is_string($roles) && str_contains($roles, '|')) {
             $roles = \explode('|', $roles);
         }
 
@@ -142,7 +146,7 @@ trait HasRoles
             return $this->roles->contains('name', $roles->name ?? $roles);
         }
 
-        $roles = \collect()->make($roles)->map(function ($role) {
+        $roles = collect()->make($roles)->map(function ($role) {
             return $role instanceof Role ? $role->name : $role;
         });
 
@@ -152,17 +156,17 @@ trait HasRoles
     /**
      * Determine if the model has any of the given role(s).
      *
-     * @param array|string|Collection|Role $roles
+     * @param string|array|Role|Collection $roles
      *
      * @return bool
      */
-    public function hasAnyRole(Role|array|string|Collection $roles): bool
+    public function hasAnyRole($roles): bool
     {
         return $this->hasRole($roles);
     }
 
     /**
-     * Determine if the model has all of the given role(s).
+     * Determine if the model has all the given role(s).
      *
      * @param $roles
      *
@@ -189,7 +193,7 @@ trait HasRoles
      * @return Role
      * @throws ReflectionException
      */
-    protected function getStoredRole(Role|string $role): Role
+    protected function getStoredRole($role): Role
     {
         if (\is_string($role)) {
             return $this->getRoleClass()->findByName($role, $this->getDefaultGuardName());
@@ -225,10 +229,8 @@ trait HasRoles
             $roles = collect([$roles]);
         }
 
-        $roles = $roles->map(function ($role) {
+        return $roles->map(function ($role) {
             return $this->getStoredRole($role);
         });
-
-        return $roles;
     }
 }
