@@ -2,6 +2,13 @@
 
 All Notable changes to `laravel-permission-mongodb` will be documented in this file.
 
+## 5.0.0-alpha - 2022-07-01
+
+### Added
+- Support of PHP 8.0
+- Update Relations between models
+
+
 ## 4.0.0 - 2022-05-15
 
 ### Added
