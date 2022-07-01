@@ -9,7 +9,6 @@ use Maklad\Permission\Models\Role;
 
 class TestSeeder extends Seeder
 {
-
     private Application $app;
 
     public function __construct(Application $app)
