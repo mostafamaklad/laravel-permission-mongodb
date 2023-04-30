@@ -1,4 +1,5 @@
 build:
+    image: default-bionic
     environment:
         mongodb: true
         selenium: true
