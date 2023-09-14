@@ -232,7 +232,7 @@ First, add the `Maklad\Permission\Traits\HasRoles` trait to your `User` model(s)
 
 ```php
 use Illuminate\Auth\Authenticatable;
-use Jenssegers\Mongodb\Eloquent\Model as Model;
+use MongoDB\Laravel\Eloquent\Model as Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -249,7 +249,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 > Note: that if you need to use `HasRoles` trait with another model ex.`Page` you will also need to add `protected $guard_name = 'web';` as well to that model or you would get an error
 
 ```php
-use Jenssegers\Mongodb\Eloquent\Model as Model;
+use MongoDB\Laravel\Eloquent\Model as Model;
 use Maklad\Permission\Traits\HasRoles;
 
 class Page extends Model
