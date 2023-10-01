@@ -34,7 +34,7 @@
         "illuminate/auth": "^10.0",
         "illuminate/container": "^10.0",
         "illuminate/contracts": "^10.0",
-        "jenssegers/mongodb": "^3.9"
+        "mongodb/laravel-mongodb": "^4.0"
     },
     "require-dev": {
         "monolog/monolog": "^3.2",
