@@ -1,5 +1,5 @@
 {
-    "name": "mostafamaklad/laravel-permission-mongodb",
+    "name": "zoltech/laravel-permission-mongodb",
     "description": "Permission handling for Laravel 5.2 and up using mongodb",
     "keywords": [
         "laravel",
@@ -10,10 +10,9 @@
         "mostafamaklad",
         "maklad",
         "mostafa",
-        "spatie",
-        "jenssegers"
+        "spatie"
     ],
-    "homepage": "https://github.com/mostafamaklad/laravel-permission-mongodb",
+    "homepage": "https://github.com/zoltech/laravel-permission-mongodb",
     "license": "MIT",
     "authors": [
         {
@@ -34,7 +33,7 @@
         "illuminate/auth": "^10.0",
         "illuminate/container": "^10.0",
         "illuminate/contracts": "^10.0",
-        "jenssegers/mongodb": "^3.9"
+        "mongodb/laravel-mongodb": "^4.0"
     },
     "require-dev": {
         "monolog/monolog": "^3.2",
