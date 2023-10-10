@@ -1,5 +1,5 @@
 {
-    "name": "mostafamaklad/laravel-permission-mongodb",
+    "name": "webrek/laravel-permission-mongodb",
     "description": "Permission handling for Laravel 5.2 and up using mongodb",
     "keywords": [
         "laravel",
@@ -10,12 +10,17 @@
         "mostafamaklad",
         "maklad",
         "mostafa",
-        "spatie",
-        "jenssegers"
+        "spatie"
     ],
-    "homepage": "https://github.com/mostafamaklad/laravel-permission-mongodb",
+    "homepage": "https://github.com/webrek/laravel-permission-mongodb",
     "license": "MIT",
     "authors": [
+        {
+            "name": "Arturo Hernandez",
+            "email": "arturo.webrek@gmail.com",
+            "homepage": "https://github.com/webrek",
+            "role": "Developer"
+        },
         {
             "name": "Mostafa Maklad",
             "email": "dev.mostafa.maklad@gmail.com",
@@ -34,7 +39,7 @@
         "illuminate/auth": "^10.0",
         "illuminate/container": "^10.0",
         "illuminate/contracts": "^10.0",
-        "jenssegers/mongodb": "^3.9"
+        "mongodb/laravel-mongodb": "v4.0.0"
     },
     "require-dev": {
         "monolog/monolog": "^3.2",
