@@ -4,7 +4,7 @@ namespace Maklad\Permission\Test;
 
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Jenssegers\Mongodb\MongodbServiceProvider;
+use MongoDB\Laravel\MongoDBServiceProvider;
 use Maklad\Permission\Helpers;
 use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Models\Role;
@@ -91,6 +91,8 @@ abstract class TestCase extends Orchestra
             'driver' => 'mongodb',
             'database' => 'laravel_permission_mongodb_test',
             'prefix' => '',
+            'username' => 'admin',
+            'password' => 'password',
         ]);
 
         $app['config']->set('view.paths', [__DIR__ . '/resources/views']);

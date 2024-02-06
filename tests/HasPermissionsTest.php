@@ -2,6 +2,7 @@
 
 namespace Maklad\Permission\Test;
 
+use Monolog\Level;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\Exceptions\PermissionDoesNotExist;
 use Maklad\Permission\Models\Permission;
@@ -34,7 +35,7 @@ class HasPermissionsTest extends TestCase
                 $this->testUser->givePermissionTo('permission-does-not-exist');
             } finally {
                 $message = $this->helpers->getPermissionDoesNotExistMessage('permission-does-not-exist', 'web');
-                $this->assertLogMessage($message, Logger::ALERT);
+                $this->assertLogMessage($message, Level::Alert);
             }
         }
     }
@@ -53,7 +54,7 @@ class HasPermissionsTest extends TestCase
                 $this->testUser->givePermissionTo($this->testAdminPermission);
             } finally {
                 $message = $this->helpers->getGuardDoesNotMatchMessage(collect(['web']), 'admin');
-                $this->assertLogMessage($message, Logger::ALERT);
+                $this->assertLogMessage($message, Level::Alert);
             }
         }
     }
@@ -327,7 +328,7 @@ class HasPermissionsTest extends TestCase
                 $this->testUser->hasPermissionTo('does-not-exist');
             } finally {
                 $message = $this->helpers->getPermissionDoesNotExistMessage('does-not-exist', 'web');
-                $this->assertLogMessage($message, Logger::ALERT);
+                $this->assertLogMessage($message, Level::Alert);
             }
         }
     }
@@ -346,7 +347,7 @@ class HasPermissionsTest extends TestCase
                 $this->testUser->hasPermissionTo('admin-permission');
             } finally {
                 $message = $this->helpers->getPermissionDoesNotExistMessage('admin-permission', 'web');
-                $this->assertLogMessage($message, Logger::ALERT);
+                $this->assertLogMessage($message, Level::Alert);
             }
         }
     }
