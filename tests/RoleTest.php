@@ -7,7 +7,7 @@ use Maklad\Permission\Exceptions\PermissionDoesNotExist;
 use Maklad\Permission\Exceptions\RoleAlreadyExists;
 use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Models\Role;
-use Monolog\Logger;
+use Monolog\Level;
 
 class RoleTest extends TestCase
 {
@@ -50,7 +50,7 @@ class RoleTest extends TestCase
                 \app(\config('permission.models.role'))->create(['name' => 'test-role']);
             } finally {
                 $message = $this->helpers->getRoleAlreadyExistsMessage('test-role', 'web');
-                $this->assertLogMessage($message, Logger::ALERT);
+                $this->assertLogMessage($message, Level::Alert);
             }
         }
     }
@@ -77,7 +77,7 @@ class RoleTest extends TestCase
                 $this->testUserRole->givePermissionTo('create-evil-empire');
             } finally {
                 $message = $this->helpers->getPermissionDoesNotExistMessage('create-evil-empire', 'web');
-                $this->assertLogMessage($message, Logger::ALERT);
+                $this->assertLogMessage($message, Level::Alert);
             }
         }
     }
@@ -96,7 +96,7 @@ class RoleTest extends TestCase
                 $this->testUserRole->givePermissionTo($this->testAdminPermission);
             } finally {
                 $message = $this->helpers->getGuardDoesNotMatchMessage(collect(['web']), 'admin');
-                $this->assertLogMessage($message, Logger::ALERT);
+                $this->assertLogMessage($message, Level::Alert);
             }
         }
     }
@@ -147,7 +147,7 @@ class RoleTest extends TestCase
                 $this->testUserRole->syncPermissions('permission-does-not-exist');
             } finally {
                 $message = $this->helpers->getPermissionDoesNotExistMessage('permission-does-not-exist', 'web');
-                $this->assertLogMessage($message, Logger::ALERT);
+                $this->assertLogMessage($message, Level::Alert);
             }
         }
     }
@@ -166,7 +166,7 @@ class RoleTest extends TestCase
                 $this->testUserRole->syncPermissions($this->testAdminPermission);
             } finally {
                 $message = $this->helpers->getGuardDoesNotMatchMessage(collect(['web']), 'admin');
-                $this->assertLogMessage($message, Logger::ALERT);
+                $this->assertLogMessage($message, Level::Alert);
             }
         }
     }
@@ -227,7 +227,7 @@ class RoleTest extends TestCase
                 $this->testUserRole->hasPermissionTo('doesnt-exist');
             } finally {
                 $message = $this->helpers->getPermissionDoesNotExistMessage('doesnt-exist', 'web');
-                $this->assertLogMessage($message, Logger::ALERT);
+                $this->assertLogMessage($message, Level::Alert);
             }
         }
     }
@@ -256,7 +256,7 @@ class RoleTest extends TestCase
                 $this->testUserRole->hasPermissionTo($permission);
             } finally {
                 $message = $this->helpers->getGuardDoesNotMatchMessage(collect(['web']), 'admin');
-                $this->assertLogMessage($message, Logger::ALERT);
+                $this->assertLogMessage($message, Level::Alert);
             }
         }
     }

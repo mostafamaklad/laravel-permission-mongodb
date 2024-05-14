@@ -10,8 +10,7 @@
         "mostafamaklad",
         "maklad",
         "mostafa",
-        "spatie",
-        "jenssegers"
+        "spatie"
     ],
     "homepage": "https://github.com/mostafamaklad/laravel-permission-mongodb",
     "license": "MIT",
@@ -34,7 +33,7 @@
         "illuminate/auth": "^10.0",
         "illuminate/container": "^10.0",
         "illuminate/contracts": "^10.0",
-        "mongodb/laravel-mongodb": "^3.9"
+        "mongodb/laravel-mongodb": "4.3"
     },
     "require-dev": {
         "monolog/monolog": "^3.2",
