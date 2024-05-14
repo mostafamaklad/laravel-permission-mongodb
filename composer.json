@@ -10,8 +10,7 @@
         "mostafamaklad",
         "maklad",
         "mostafa",
-        "spatie",
-        "jenssegers"
+        "spatie"
     ],
     "homepage": "https://github.com/mostafamaklad/laravel-permission-mongodb",
     "license": "MIT",

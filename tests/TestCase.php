@@ -4,7 +4,7 @@ namespace Maklad\Permission\Test;
 
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Jenssegers\Mongodb\MongodbServiceProvider;
+use MongoDB\Laravel\MongoDBServiceProvider;
 use Maklad\Permission\Helpers;
 use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Models\Role;
