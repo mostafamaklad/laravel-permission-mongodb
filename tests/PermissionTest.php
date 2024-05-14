@@ -4,7 +4,7 @@ namespace Maklad\Permission\Test;
 
 use Maklad\Permission\Exceptions\PermissionAlreadyExists;
 use Maklad\Permission\Models\Permission;
-use Monolog\Logger;
+use Monolog\Level;
 
 class PermissionTest extends TestCase
 {
@@ -23,7 +23,7 @@ class PermissionTest extends TestCase
                 \app(\config('permission.models.permission'))->create(['name' => 'test-permission']);
             } finally {
                 $message = $this->helpers->getPermissionAlreadyExistsMessage('test-permission', 'web');
-                $this->assertLogMessage($message, Logger::ALERT);
+                $this->assertLogMessage($message, Level::Alert);
             }
         }
     }

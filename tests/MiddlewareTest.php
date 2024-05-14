@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Maklad\Permission\Exceptions\UnauthorizedException;
 use Maklad\Permission\Middlewares\PermissionMiddleware;
 use Maklad\Permission\Middlewares\RoleMiddleware;
-use Monolog\Logger;
+use Monolog\Level;
 
 class MiddlewareTest extends TestCase
 {
@@ -41,7 +41,7 @@ class MiddlewareTest extends TestCase
             );
 
             $message = $this->helpers->getUserNotLoggedINMessage();
-            $this->assertLogMessage($message, Logger::ALERT);
+            $this->assertLogMessage($message, Level::Alert);
         }
     }
 
@@ -109,7 +109,7 @@ class MiddlewareTest extends TestCase
                 config('permission.display_permission_in_exception', $show_permission);
                 $message = $this->helpers->getUnauthorizedRoleMessage('testRole2');
                 $this->assertShowPermission($message, 'testRole2');
-                $this->assertLogMessage($message, Logger::ALERT);
+                $this->assertLogMessage($message, Level::Alert);
             }
         }
     }
@@ -138,7 +138,7 @@ class MiddlewareTest extends TestCase
                 $message = $this->helpers->getUnauthorizedRoleMessage('testRole, testRole2');
                 $this->assertShowPermission($message, 'testRole');
                 $this->assertShowPermission($message, 'testRole2');
-                $this->assertLogMessage($message, Logger::ALERT);
+                $this->assertLogMessage($message, Level::Alert);
             }
         }
     }
@@ -166,7 +166,7 @@ class MiddlewareTest extends TestCase
                 config('permission.display_permission_in_exception', $show_permission);
                 $message = $this->helpers->getUnauthorizedRoleMessage('test');
                 $this->assertShowPermission($message, 'test');
-                $this->assertLogMessage($message, Logger::ALERT);
+                $this->assertLogMessage($message, Level::Alert);
             }
         }
     }
@@ -188,7 +188,7 @@ class MiddlewareTest extends TestCase
             );
 
             $message = $this->helpers->getUserNotLoggedINMessage();
-            $this->assertLogMessage($message, Logger::ALERT);
+            $this->assertLogMessage($message, Level::Alert);
         }
     }
 
@@ -257,7 +257,7 @@ class MiddlewareTest extends TestCase
                 config('permission.display_permission_in_exception', $show_permission);
                 $message = $this->helpers->getUnauthorizedPermissionMessage('edit-news');
                 $this->assertShowPermission($message, 'edit-news');
-                $this->assertLogMessage($message, Logger::ALERT);
+                $this->assertLogMessage($message, Level::Alert);
             }
         }
     }
@@ -286,7 +286,7 @@ class MiddlewareTest extends TestCase
                 $message = $this->helpers->getUnauthorizedPermissionMessage('edit-articles, edit-news');
                 $this->assertShowPermission($message, 'edit-articles');
                 $this->assertShowPermission($message, 'edit-news');
-                $this->assertLogMessage($message, Logger::ALERT);
+                $this->assertLogMessage($message, Level::Alert);
             }
         }
     }
