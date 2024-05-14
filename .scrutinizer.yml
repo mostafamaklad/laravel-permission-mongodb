@@ -3,6 +3,10 @@ build:
     environment:
         mongodb: true
         selenium: true
+        php:
+            # Install additional extensions from https://pecl.php.net
+            pecl_extensions:
+                - mongodb
     tests:
         override:
             -
