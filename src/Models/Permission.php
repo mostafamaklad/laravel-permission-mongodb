@@ -3,7 +3,6 @@
 namespace Maklad\Permission\Models;
 
 use Illuminate\Support\Collection;
-use Jenssegers\Mongodb\Eloquent\Model;
 use Maklad\Permission\Contracts\PermissionInterface;
 use Maklad\Permission\Exceptions\PermissionAlreadyExists;
 use Maklad\Permission\Exceptions\PermissionDoesNotExist;
@@ -12,6 +11,7 @@ use Maklad\Permission\Helpers;
 use Maklad\Permission\PermissionRegistrar;
 use Maklad\Permission\Traits\HasRoles;
 use Maklad\Permission\Traits\RefreshesPermissionCache;
+use MongoDB\Laravel\Eloquent\Model;
 use ReflectionException;
 use function app;
 

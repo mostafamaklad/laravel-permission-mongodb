@@ -3,12 +3,12 @@
 namespace Maklad\Permission\Traits;
 
 use Illuminate\Support\Collection;
-use Jenssegers\Mongodb\Eloquent\Builder;
-use Jenssegers\Mongodb\Eloquent\Model;
-use Jenssegers\Mongodb\Relations\BelongsToMany;
 use Maklad\Permission\Contracts\RoleInterface as Role;
 use Maklad\Permission\Helpers;
 use Maklad\Permission\PermissionRegistrar;
+use MongoDB\Laravel\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Builder;
+use MongoDB\Laravel\Relations\BelongsToMany;
 use ReflectionException;
 use function collect;
 
