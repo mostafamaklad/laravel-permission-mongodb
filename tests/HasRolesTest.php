@@ -5,6 +5,7 @@ namespace Maklad\Permission\Test;
 use Maklad\Permission\Exceptions\GuardDoesNotMatch;
 use Maklad\Permission\Exceptions\RoleDoesNotExist;
 use Maklad\Permission\Models\Role;
+use Monolog\Level;
 use Monolog\Logger;
 
 class HasRolesTest extends TestCase
@@ -73,7 +74,7 @@ class HasRolesTest extends TestCase
                 $this->testUser->assignRole('evil-emperor');
             } finally {
                 $message = $this->helpers->getRoleDoesNotExistMessage('evil-emperor', 'web');
-                $this->assertLogMessage($message, Logger::ALERT);
+                $this->assertLogMessage($message, Level::Alert);
             }
         }
     }
@@ -92,7 +93,7 @@ class HasRolesTest extends TestCase
                 $this->testUser->assignRole('testAdminRole');
             } finally {
                 $message = $this->helpers->getRoleDoesNotExistMessage('testAdminRole', 'web');
-                $this->assertLogMessage($message, Logger::ALERT);
+                $this->assertLogMessage($message, Level::Alert);
             }
         }
     }
@@ -111,7 +112,7 @@ class HasRolesTest extends TestCase
                 $this->testUser->assignRole($this->testAdminRole);
             } finally {
                 $message = $this->helpers->getGuardDoesNotMatchMessage(collect(['web']), 'admin');
-                $this->assertLogMessage($message, Logger::ALERT);
+                $this->assertLogMessage($message, Level::Alert);
             }
         }
     }
@@ -176,7 +177,7 @@ class HasRolesTest extends TestCase
                 $this->testUser->syncRoles('testRole', $this->testAdminRole);
             } finally {
                 $message = $this->helpers->getGuardDoesNotMatchMessage(collect(['web']), 'admin');
-                $this->assertLogMessage($message, Logger::ALERT);
+                $this->assertLogMessage($message, Level::Alert);
             }
         }
     }

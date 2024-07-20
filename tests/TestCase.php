@@ -4,12 +4,12 @@ namespace Maklad\Permission\Test;
 
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Jenssegers\Mongodb\MongodbServiceProvider;
 use Maklad\Permission\Helpers;
 use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Models\Role;
 use Maklad\Permission\PermissionRegistrar;
 use Maklad\Permission\PermissionServiceProvider;
+use MongoDB\Laravel\MongoDBServiceProvider;
 use Monolog\Handler\TestHandler;
 use Orchestra\Testbench\TestCase as Orchestra;
 
@@ -73,7 +73,7 @@ abstract class TestCase extends Orchestra
     {
         return [
             PermissionServiceProvider::class,
-            MongodbServiceProvider::class,
+            MongoDBServiceProvider::class,
         ];
     }
 

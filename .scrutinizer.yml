@@ -3,6 +3,8 @@ build:
     environment:
         mongodb: true
         selenium: true
+        php:
+            version: 8.1
     tests:
         override:
             -
