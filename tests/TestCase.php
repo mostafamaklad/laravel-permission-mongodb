@@ -86,10 +86,15 @@ abstract class TestCase extends Orchestra
     {
         $app['config']->set('database.default', 'mongodb');
         $app['config']->set('database.connections.mongodb', [
-            'host' => 'localhost',
+            'host' => env('DB_HOST', 'localhost'),
             'port' => '27017',
             'driver' => 'mongodb',
-            'database' => 'laravel_permission_mongodb_test',
+            'database' => env('DB_DATABASE', 'laravel_permission_mongodb_test'),
+            'username' => env('DB_USERNAME', ''),
+            'password' => env('DB_PASSWORD', ''),
+            'options' => [
+                'database' => env('DB_AUTHENTICATION_DATABASE', ''), // required with Mongo 3+
+            ],
             'prefix' => '',
         ]);
 

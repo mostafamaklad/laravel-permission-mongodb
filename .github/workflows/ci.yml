@@ -1,0 +1,58 @@
+name: CI
+
+on:
+    push:
+        branches:
+            - master
+    pull_request:
+        branches:
+            - master
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        services:
+            mongodb:
+                image: mongo:7.0
+                options: >-
+                    --health-cmd "echo 'db.runCommand({ ping: 1 })' | mongosh --quiet"
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+                ports:
+                    - 27017:27017
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: 8.3
+                  extensions: mongodb, mbstring
+                  ini-values: |
+                      memory_limit = 2G
+                  coverage: xdebug
+                  tools: composer
+
+            - name: debug
+              run: docker ps
+
+            - name: Install dependencies
+              run: composer install --prefer-dist --no-progress --no-suggest
+
+            - name: Run PHPCS
+              run: composer check-style
+
+            - name: Run tests
+              run: composer test
+
+            - name: Run tests with coverage
+              run: vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml --coverage-html=coverage-html
+
+#            - name: Upload coverage to GitHub Pages
+#              uses: peaceiris/actions-gh-pages@v3
+#              with:
+#                  github_token: ${{ secrets.GITHUB_TOKEN }}
+#                  publish_dir: ./build/coverage/coverage-html
