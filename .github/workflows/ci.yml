@@ -3,10 +3,10 @@ name: CI
 on:
     push:
         branches:
-            - main
+            - master
     pull_request:
         branches:
-            - main
+            - master
 
 jobs:
     test:
@@ -46,10 +46,13 @@ jobs:
               run: composer check-style
 
             - name: Run tests
-              env:
-                  DB_CONNECTION: mongodb
-                  DB_HOST: mongodb
-                  DB_PORT: 27017
-                  DB_DATABASE: laravel_permission_mongodb_test
-              run: |
-                  composer test
+              run: composer test
+
+            - name: Run tests with coverage
+              run: vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml --coverage-html=coverage-html
+
+#            - name: Upload coverage to GitHub Pages
+#              uses: peaceiris/actions-gh-pages@v3
+#              with:
+#                  github_token: ${{ secrets.GITHUB_TOKEN }}
+#                  publish_dir: ./build/coverage/coverage-html
