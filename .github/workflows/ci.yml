@@ -1,0 +1,55 @@
+name: CI
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        services:
+            mongodb:
+                image: mongo:7.0
+                options: >-
+                    --health-cmd "echo 'db.runCommand({ ping: 1 })' | mongosh --quiet"
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+                ports:
+                    - 27017:27017
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: 8.3
+                  extensions: mongodb, mbstring
+                  ini-values: |
+                      memory_limit = 2G
+                  coverage: xdebug
+                  tools: composer
+
+            - name: debug
+              run: docker ps
+
+            - name: Install dependencies
+              run: composer install --prefer-dist --no-progress --no-suggest
+
+            - name: Run PHPCS
+              run: composer check-style
+
+            - name: Run tests
+              env:
+                  DB_CONNECTION: mongodb
+                  DB_HOST: mongodb
+                  DB_PORT: 27017
+                  DB_DATABASE: laravel_permission_mongodb_test
+              run: |
+                  composer test
