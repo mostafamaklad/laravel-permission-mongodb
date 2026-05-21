@@ -200,6 +200,21 @@ class RoleTest extends TestCase
     }
 
     /** @test */
+    public function it_reindexes_permission_ids_when_revoking_a_middle_permission()
+    {
+        $this->testUserRole->givePermissionTo('edit-articles', 'edit-news', 'edit-categories');
+
+        $this->testUserRole->revokePermissionTo('edit-news');
+
+        $this->testUserRole = $this->testUserRole->fresh();
+
+        $this->assertTrue($this->testUserRole->hasPermissionTo('edit-articles'));
+        $this->assertFalse($this->testUserRole->hasPermissionTo('edit-news'));
+        $this->assertTrue($this->testUserRole->hasPermissionTo('edit-categories'));
+        $this->assertSame([0, 1], array_keys($this->testUserRole->permission_ids));
+    }
+
+    /** @test */
     public function it_can_be_given_a_permission_using_objects()
     {
         $this->testUserRole->givePermissionTo($this->testUserPermission);

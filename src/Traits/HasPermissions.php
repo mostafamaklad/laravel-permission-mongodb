@@ -98,11 +98,13 @@ trait HasPermissions
     {
         $permissions = $this->getPermissionIds($permissions);
 
-        $this->permission_ids = collect($this->permission_ids ?? [])
-            ->filter(function ($permission) use ($permissions) {
-                return ! in_array($permission, $permissions, true);
-            })
-            ->all();
+        $this->permission_ids = array_values(
+            collect($this->permission_ids ?? [])
+                ->filter(function ($permission) use ($permissions) {
+                    return !in_array($permission, $permissions, true);
+                })
+                ->all()
+        );
 
         $this->save();
 
