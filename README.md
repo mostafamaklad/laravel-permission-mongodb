@@ -75,6 +75,7 @@ $user->can('edit articles');
  7.x      | 3.x
  8.x      | 3.1.x
  9.x      | 4.x
+ 11.x - 13.x | master (unreleased)
 
 ### Laravel
 

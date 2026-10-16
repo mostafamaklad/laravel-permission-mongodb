@@ -2,6 +2,16 @@
 
 All Notable changes to `laravel-permission-mongodb` will be documented in this file.
 
+## Unreleased
+
+### Added
+- Support of Laravel 12.x and 13.x
+
+### Changed
+- Require `mongodb/laravel-mongodb` ^5.7, the first release that supports Laravel 11, 12 and 13
+- Tests use the PHPUnit `#[Test]` attribute instead of the `@test` annotation, which PHPUnit 12 no longer reads
+
+
 ## 5.0.0-alpha - 2022-07-01
 
 ### Added
