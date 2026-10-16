@@ -10,6 +10,10 @@ All Notable changes to `laravel-permission-mongodb` will be documented in this f
 ### Changed
 - Require `mongodb/laravel-mongodb` ^5.7, the first release that supports Laravel 11, 12 and 13
 - Tests use the PHPUnit `#[Test]` attribute instead of the `@test` annotation, which PHPUnit 12 no longer reads
+- Permissions are cached under `maklad.permission.cache.v2`, and `forgetCachedPermissions()` also clears the old `maklad.permission.cache` key
+
+### Fixed
+- Cached permissions can be read back when `cache.serializable_classes` forbids objects, the default in new Laravel 12.x and 13.x applications
 
 
 ## 5.0.0-alpha - 2022-07-01
