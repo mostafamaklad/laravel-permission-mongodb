@@ -20,6 +20,8 @@ class CacheTest extends TestCase
 
         $this->registrar->forgetCachedPermissions();
 
+        // Since Laravel 12, migrate:fresh disconnects the connection and the MongoDB one can't log queries until rebuilt
+        DB::purge('mongodb');
         DB::connection('mongodb')->enableQueryLog();
 
         $this->assertCount(0, DB::getQueryLog());
