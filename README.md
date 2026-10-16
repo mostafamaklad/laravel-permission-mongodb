@@ -75,11 +75,18 @@ $user->can('edit articles');
  7.x      | 3.x
  8.x      | 3.1.x
  9.x      | 4.x
+ 10.x     | 6.x
  11.x - 13.x | master (unreleased)
 
 ### Laravel
 
 You can install the package via composer:
+
+For laravel 11.x to 13.x, until a new version is tagged, use
+
+``` bash
+composer require mostafamaklad/laravel-permission-mongodb:dev-master
+```
 
 For laravel 9.x use
 
@@ -669,7 +676,7 @@ public function setUp()
 
 Two notes about Database Seeding:
 
-1. It is best to flush the `maklad.permission.cache` before seeding, to avoid cache conflict errors. This can be done from an Artisan command (see Troubleshooting: Cache section, later) or directly in a seeder class (see example below).
+1. It is best to flush the permission cache before seeding, to avoid cache conflict errors. This can be done from an Artisan command (see Troubleshooting: Cache section, later) or directly in a seeder class (see example below).
 
 2. Here's a sample seeder, which clears the cache, creates permissions, and then assigns permissions to roles:
 ```php
@@ -682,7 +689,7 @@ class RolesAndPermissionsSeeder extends Seeder
     public function run()
     {
         // Reset cached roles and permissions
-        app()['cache']->forget('maklad.permission.cache');
+        app(\Maklad\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
         
         // create permissions
         Permission::firstOrCreate(['name' => 'edit articles']);
@@ -741,7 +748,7 @@ HOWEVER, if you manipulate permission/role data directly in the database instead
 ### Manual cache reset
 To manually reset the cache for this package, run:
 ```bash
-php artisan cache:forget maklad.permission.cache
+php artisan cache:forget maklad.permission.cache.v2
 ```
 
 ### Cache Identifier
