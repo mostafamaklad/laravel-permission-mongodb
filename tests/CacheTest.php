@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Models\Role;
 use Maklad\Permission\PermissionRegistrar;
+use PHPUnit\Framework\Attributes\Test;
 
 class CacheTest extends TestCase
 {
@@ -30,7 +31,7 @@ class CacheTest extends TestCase
         DB::flushQueryLog();
     }
 
-    /** @test */
+    #[Test]
     public function it_can_cache_the_permissions()
     {
         $this->registrar->registerPermissions();
@@ -38,7 +39,7 @@ class CacheTest extends TestCase
         $this->assertCount(0, DB::getQueryLog());
     }
 
-    /** @test */
+    #[Test]
     public function permission_creation_and_updating_and_deleting_should_flush_the_cache()
     {
         $permission = app(Permission::class)->create(['name' => 'new']);
@@ -61,7 +62,7 @@ class CacheTest extends TestCase
         $this->assertCount(6, DB::getQueryLog());
     }
 
-    /** @test */
+    #[Test]
     public function role_creation_and_updating_and_deleting_should_flush_the_cache()
     {
         $role = app(Role::class)->create(['name' => 'new']);
@@ -84,7 +85,7 @@ class CacheTest extends TestCase
         $this->assertCount(7, DB::getQueryLog());
     }
 
-    /** @test */
+    #[Test]
     public function user_creation_should_not_flush_the_cache()
     {
         User::create(['email' => 'new']);
@@ -94,7 +95,7 @@ class CacheTest extends TestCase
         $this->assertCount(1, DB::getQueryLog());
     }
 
-    /** @test */
+    #[Test]
     public function adding_a_permission_to_a_role_should_flush_the_cache()
     {
         $this->testUserRole->givePermissionTo($this->testUserPermission);
@@ -104,7 +105,7 @@ class CacheTest extends TestCase
         $this->assertCount(2, DB::getQueryLog());
     }
 
-    /** @test */
+    #[Test]
     public function has_permission_to_should_use_the_cache()
     {
         $this->testUserRole->givePermissionTo(['edit-articles', 'edit-news']);

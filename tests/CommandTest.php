@@ -5,10 +5,11 @@ namespace Maklad\Permission\Test;
 use Artisan;
 use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Models\Role;
+use PHPUnit\Framework\Attributes\Test;
 
 class CommandTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_create_a_role()
     {
         Artisan::call('permission:create-role', ['name' => 'new-role']);
@@ -16,7 +17,7 @@ class CommandTest extends TestCase
         $this->assertCount(1, Role::where('name', 'new-role')->get());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_create_a_role_with_a_specific_guard()
     {
         Artisan::call('permission:create-role', [
@@ -29,7 +30,7 @@ class CommandTest extends TestCase
             ->get());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_create_a_permission()
     {
         Artisan::call('permission:create-permission', ['name' => 'new-permission']);
@@ -37,7 +38,7 @@ class CommandTest extends TestCase
         $this->assertCount(1, Permission::where('name', 'new-permission')->get());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_create_a_permission_with_a_specific_guard()
     {
         Artisan::call('permission:create-permission', [
@@ -50,7 +51,7 @@ class CommandTest extends TestCase
             ->get());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_create_a_role_and_assign_permissions()
     {
         Artisan::call('permission:create-permission', ['name' => 'test1',]);
@@ -64,7 +65,7 @@ class CommandTest extends TestCase
         $this->assertCount(2, $role->permissions);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_create_a_role_with_guard_and_assign_permissions()
     {
         Artisan::call('permission:create-permission', [
