@@ -38,7 +38,7 @@ trait HasPermissions
     public function permissionsQuery()
     {
         $permission = $this->getPermissionClass();
-        return $permission::whereIn('_id', $this->permission_ids ?? []);
+        return $permission::whereIn('_id', $this->getAttribute(config('permission.user_props_names.permissions')) ?? []);
     }
 
     /**
@@ -59,9 +59,9 @@ trait HasPermissions
      */
     public function givePermissionTo(...$permissions): self
     {
-        $this->permission_ids = collect($this->permission_ids ?? [])
+        $this->setAttribute(config('permission.user_props_names.permissions'), collect($this->getAttribute(config('permission.user_props_names.permissions')) ?? [])
             ->merge($this->getPermissionIds($permissions))
-            ->all();
+            ->all());
 
         $this->save();
 
@@ -80,7 +80,7 @@ trait HasPermissions
      */
     public function syncPermissions(...$permissions): self
     {
-        $this->permission_ids = $this->getPermissionIds($permissions);
+        $this->setAttribute(config('permission.user_props_names.permissions'), $this->getPermissionIds($permissions));
 
         $this->save();
         return $this->givePermissionTo($permissions);
@@ -98,11 +98,11 @@ trait HasPermissions
     {
         $permissions = $this->getPermissionIds($permissions);
 
-        $this->permission_ids = collect($this->permission_ids ?? [])
+        $this->$this->setAttribute(config('permission.user_props_names.permissions'), collect($this->getAttribute(config('permission.user_props_names.permissions')) ?? [])
             ->filter(function ($permission) use ($permissions) {
                 return ! in_array($permission, $permissions, true);
             })
-            ->all();
+            ->all());
 
         $this->save();
 
@@ -206,7 +206,7 @@ trait HasPermissions
      */
     public function getPermissionsViaRoles(): Collection
     {
-        $permissionIds = $this->roles->pluck('permission_ids')->flatten()->unique()->values();
+        $permissionIds = $this->roles->pluck(config('permission.user_props_names.permissions'))->flatten()->unique()->values();
         return $this->getPermissionClass()->query()->whereIn('_id', $permissionIds)->get();
         /*return $this->load('roles', 'roles.permissions')
             ->roles->flatMap(function (Role $role) {
@@ -345,8 +345,8 @@ trait HasPermissions
         }
         $roles = $roles->unique();
 
-        return $query->orWhereIn('permission_ids', $permissions->pluck('_id'))
-            ->orWhereIn('role_ids', $roles->pluck('_id'));
+        return $query->orWhereIn(config('permission.user_props_names.permissions'), $permissions->pluck('_id'))
+            ->orWhereIn(config('permission.user_props_names.roles'), $roles->pluck('_id'));
     }
 
     /**

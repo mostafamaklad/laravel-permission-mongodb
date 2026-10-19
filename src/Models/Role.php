@@ -129,7 +129,7 @@ class Role extends Model implements RoleInterface
     public function usersQuery(): mixed
     {
         $usersClass = app($this->helpers->getModelForGuard($this->attributes['guard_name']));
-        return $usersClass->query()->where('role_ids', 'all', [$this->_id]);
+        return $usersClass->query()->where(config('permission.user_props_names.roles'), 'all', [$this->_id]);
     }
 
     /**
@@ -164,6 +164,6 @@ class Role extends Model implements RoleInterface
             throw new GuardDoesNotMatch($this->helpers->getGuardDoesNotMatchMessage($expected, $given));
         }
 
-        return in_array($permission->_id, $this->permission_ids ?? [], true);
+        return in_array($permission->_id, $this->getAttribute(config('permission.user_props_names.permissions')) ?? [], true);
     }
 }

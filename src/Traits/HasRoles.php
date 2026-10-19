@@ -61,7 +61,7 @@ trait HasRoles
     {
         $roles = $this->convertToRoleModels($roles);
 
-        return $query->whereIn('role_ids', $roles->pluck('_id'));
+        return $query->whereIn(config('permission.user_props_names.roles'), $roles->pluck('_id'));
     }
 
     /**

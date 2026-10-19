@@ -47,6 +47,25 @@ return [
         'permissions' => 'permissions',
     ],
 
+    'user_props_names' => [
+
+        /*
+         * When using the "HasRoles" trait from this package, we need to know which
+         *Users table property should be used to retrieve their roles. We chose a basic
+         * default value, but you can easily change it to any property you want.
+         */
+
+        'roles' => 'roles_id',
+
+        /*
+         * When using the "HasRoles" trait from this package, we need to know which
+         *Users table property should be used to retrieve their roles. We chose a basic
+         * default value, but you can easily change it to any property you want.
+         */
+
+        'permissions' => 'permissions_id',
+    ],
+
     /*
      * By default all permissions will be cached for 24 hours unless a permission or
      * role is updated. Then the cache will be flushed immediately.

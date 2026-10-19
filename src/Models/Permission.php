@@ -103,7 +103,7 @@ class Permission extends Model implements PermissionInterface
     public function rolesQuery(): mixed
     {
         $roleClass = $this->getRoleClass();
-        return $roleClass->query()->where('permission_ids', 'all', [$this->_id]);
+        return $roleClass->query()->where(config('permission.user_props_names.permissions'), 'all', [$this->_id]);
     }
 
     /**
@@ -122,7 +122,7 @@ class Permission extends Model implements PermissionInterface
     public function usersQuery(): mixed
     {
         $usersClass = app($this->helpers->getModelForGuard($this->attributes['guard_name']));
-        return $usersClass->query()->where('permission_ids', 'all', [$this->_id]);
+        return $usersClass->query()->where(config('permission.user_props_names.permissions'), 'all', [$this->_id]);
     }
 
     /**
