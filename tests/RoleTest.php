@@ -8,6 +8,7 @@ use Maklad\Permission\Exceptions\RoleAlreadyExists;
 use Maklad\Permission\Models\Permission;
 use Maklad\Permission\Models\Role;
 use Monolog\Level;
+use PHPUnit\Framework\Attributes\Test;
 
 class RoleTest extends TestCase
 {
@@ -20,7 +21,7 @@ class RoleTest extends TestCase
         Permission::create(['name' => 'wrong-guard-permission', 'guard_name' => 'admin']);
     }
 
-    /** @test */
+    #[Test]
     public function it_has_user_models_of_the_right_class()
     {
         $this->testAdmin->assignRole($this->testAdminRole);
@@ -35,7 +36,7 @@ class RoleTest extends TestCase
         $this->assertEquals(0, $this->testUserRole->usersQuery()->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_when_the_role_already_exists()
     {
         $can_logs = [true, false];
@@ -55,7 +56,7 @@ class RoleTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_can_be_given_a_permission()
     {
         $this->testUserRole->givePermissionTo('edit-articles');
@@ -63,7 +64,7 @@ class RoleTest extends TestCase
         $this->assertTrue($this->testUserRole->hasPermissionTo('edit-articles'));
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_when_given_a_permission_that_does_not_exist()
     {
         $can_logs = [true, false];
@@ -82,7 +83,7 @@ class RoleTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_when_given_a_permission_that_belongs_to_another_guard()
     {
         $can_logs = [true, false];
@@ -101,7 +102,7 @@ class RoleTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_can_be_given_multiple_permissions_using_an_array()
     {
         $this->testUserRole->givePermissionTo(['edit-articles', 'edit-news']);
@@ -110,7 +111,7 @@ class RoleTest extends TestCase
         $this->assertTrue($this->testUserRole->hasPermissionTo('edit-news'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_be_given_multiple_permissions_using_multiple_arguments()
     {
         $this->testUserRole->givePermissionTo('edit-articles', 'edit-news');
@@ -119,7 +120,7 @@ class RoleTest extends TestCase
         $this->assertTrue($this->testUserRole->hasPermissionTo('edit-news'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_sync_permissions()
     {
         $this->testUserRole->givePermissionTo('edit-articles');
@@ -131,7 +132,7 @@ class RoleTest extends TestCase
         $this->assertTrue($this->testUserRole->hasPermissionTo('edit-news'));
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_when_syncing_permissions_that_do_not_exist()
     {
         $can_logs = [true, false];
@@ -152,7 +153,7 @@ class RoleTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_when_syncing_permissions_that_belong_to_a_different_guard()
     {
         $can_logs = [true, false];
@@ -171,7 +172,7 @@ class RoleTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_will_remove_all_permissions_when_passing_an_empty_array_to_sync_permissions()
     {
         $this->testUserRole->givePermissionTo('edit-articles');
@@ -185,7 +186,7 @@ class RoleTest extends TestCase
         $this->assertFalse($this->testUserRole->hasPermissionTo('edit-news'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_revoked_a_permission()
     {
         $this->testUserRole->givePermissionTo('edit-articles');
@@ -199,7 +200,7 @@ class RoleTest extends TestCase
         $this->assertFalse($this->testUserRole->hasPermissionTo('edit-articles'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_be_given_a_permission_using_objects()
     {
         $this->testUserRole->givePermissionTo($this->testUserPermission);
@@ -207,13 +208,13 @@ class RoleTest extends TestCase
         $this->assertTrue($this->testUserRole->hasPermissionTo($this->testUserPermission));
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_false_if_it_does_not_have_the_permission()
     {
         $this->assertFalse($this->testUserRole->hasPermissionTo('other-permission'));
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_if_the_permission_does_not_exist()
     {
         $can_logs = [true, false];
@@ -232,7 +233,7 @@ class RoleTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_false_if_it_does_not_have_a_permission_object()
     {
         $permission = app(Permission::class)->findByName('other-permission');
@@ -240,7 +241,7 @@ class RoleTest extends TestCase
         $this->assertFalse($this->testUserRole->hasPermissionTo($permission));
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_when_a_permission_of_the_wrong_guard_is_passed_in()
     {
         $can_logs = [true, false];
@@ -261,7 +262,7 @@ class RoleTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_belongs_to_a_guard()
     {
         $role = \app(\config('permission.models.role'))->create(['name' => 'admin', 'guard_name' => 'admin']);
@@ -269,13 +270,13 @@ class RoleTest extends TestCase
         $this->assertEquals('admin', $role->guard_name);
     }
 
-    /** @test */
+    #[Test]
     public function it_belongs_to_the_default_guard_by_default()
     {
         $this->assertEquals($this->app['config']->get('auth.defaults.guard'), $this->testUserRole->guard_name);
     }
 
-    /** @test */
+    #[Test]
     public function it_creates_role_object_with_findOrCreate_if_it_does_not_have_a_role_object()
     {
         $role = app(Role::class)->findOrCreate('another-role');

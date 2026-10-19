@@ -3,10 +3,11 @@
 namespace Maklad\Permission\Test;
 
 use Maklad\Permission\Models\Permission;
+use PHPUnit\Framework\Attributes\Test;
 
 class MultipleGuardsTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_give_a_permission_to_a_model_that_is_used_by_multiple_guards()
     {
         $this->testUser->givePermissionTo(Permission::create([

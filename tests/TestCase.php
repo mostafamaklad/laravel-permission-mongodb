@@ -29,6 +29,8 @@ abstract class TestCase extends Orchestra
         Admin::query()->truncate();
         $this->app[Role::class]::truncate();
         $this->app[Permission::class]::truncate();
+
+        parent::tearDown();
     }
 
     protected User $testUser;
