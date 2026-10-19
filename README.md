@@ -75,10 +75,18 @@ $user->can('edit articles');
  7.x      | 3.x
  8.x      | 3.1.x
  9.x      | 4.x
+ 10.x     | 6.x
+ 11.x - 13.x | master (unreleased)
 
 ### Laravel
 
 You can install the package via composer:
+
+For laravel 11.x to 13.x, until a new version is tagged, use
+
+``` bash
+composer require mostafamaklad/laravel-permission-mongodb:dev-master
+```
 
 For laravel 9.x use
 
@@ -234,7 +242,7 @@ First, add the `Maklad\Permission\Traits\HasRoles` trait to your `User` model(s)
 
 ```php
 use Illuminate\Auth\Authenticatable;
-use Jenssegers\Mongodb\Eloquent\Model as Model;
+use MongoDB\Laravel\Eloquent\Model as Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -251,7 +259,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 > Note: that if you need to use `HasRoles` trait with another model ex.`Page` you will also need to add `protected $guard_name = 'web';` as well to that model or you would get an error
 
 ```php
-use Jenssegers\Mongodb\Eloquent\Model as Model;
+use MongoDB\Laravel\Eloquent\Model as Model;
 use Maklad\Permission\Traits\HasRoles;
 
 class Page extends Model
@@ -668,7 +676,7 @@ public function setUp()
 
 Two notes about Database Seeding:
 
-1. It is best to flush the `maklad.permission.cache` before seeding, to avoid cache conflict errors. This can be done from an Artisan command (see Troubleshooting: Cache section, later) or directly in a seeder class (see example below).
+1. It is best to flush the permission cache before seeding, to avoid cache conflict errors. This can be done from an Artisan command (see Troubleshooting: Cache section, later) or directly in a seeder class (see example below).
 
 2. Here's a sample seeder, which clears the cache, creates permissions, and then assigns permissions to roles:
 ```php
@@ -681,7 +689,7 @@ class RolesAndPermissionsSeeder extends Seeder
     public function run()
     {
         // Reset cached roles and permissions
-        app()['cache']->forget('maklad.permission.cache');
+        app(\Maklad\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
         
         // create permissions
         Permission::firstOrCreate(['name' => 'edit articles']);
@@ -740,7 +748,7 @@ HOWEVER, if you manipulate permission/role data directly in the database instead
 ### Manual cache reset
 To manually reset the cache for this package, run:
 ```bash
-php artisan cache:forget maklad.permission.cache
+php artisan cache:forget maklad.permission.cache.v2
 ```
 
 ### Cache Identifier
@@ -830,5 +838,5 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [link-contributors]: ../../contributors
 [link-releases]: ../../releases
 [link-laravel-permission]: https://github.com/spatie/laravel-permission
-[link-laravel-mongodb]: https://github.com/jenssegers/laravel-mongodb
+[link-laravel-mongodb]: https://github.com/mongodb/laravel-mongodb
 [link-freekmurze]: https://github.com/freekmurze
