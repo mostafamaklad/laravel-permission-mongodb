@@ -8,6 +8,7 @@ use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Collection;
 use Maklad\Permission\Contracts\PermissionInterface as Permission;
+use MongoDB\BSON\Document;
 
 /**
  * Class PermissionRegistrar
@@ -19,7 +20,12 @@ class PermissionRegistrar
 
     protected Repository $cache;
 
-    protected string $cacheKey = 'maklad.permission.cache';
+    protected string $cacheKey = 'maklad.permission.cache.v2';
+
+    /**
+     * Key used by older releases, which cached the models themselves in a format this release can't read back
+     */
+    protected string $legacyCacheKey = 'maklad.permission.cache';
 
     protected string $permissionClass;
 
@@ -60,18 +66,28 @@ class PermissionRegistrar
     public function forgetCachedPermissions(): void
     {
         $this->cache->forget($this->cacheKey);
+        $this->cache->forget($this->legacyCacheKey);
     }
 
     /**
      * Get Permissions
      *
+     * The permissions are cached as Extended JSON strings rather than serialized models, so they can be read back
+     * when the cache does not unserialize objects (cache.serializable_classes) and keep their exact BSON types.
+     *
      * @return Collection
      */
     public function getPermissions(): Collection
     {
-        return $this->cache->remember($this->cacheKey, config('permission.cache_expiration_time'), function () {
-            return $this->getPermissionClass()->get();
+        $documents = $this->cache->remember($this->cacheKey, config('permission.cache_expiration_time'), function () {
+            return $this->getPermissionClass()->get()->map(function ($permission) {
+                return Document::fromPHP($permission->getAttributes())->toCanonicalExtendedJSON();
+            })->all();
         });
+
+        return $this->getPermissionClass()->hydrate(array_map(function (string $document) {
+            return Document::fromJSON($document)->toPHP(['root' => 'array', 'document' => 'array', 'array' => 'array']);
+        }, $documents));
     }
 
     /**
